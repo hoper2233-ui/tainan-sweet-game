@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>臺南甜甜接好運｜Version 10.1A 體驗優化版</title>
+<title>臺南甜甜接好運｜Version 10.1B 答題流暢版</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#132b34}
@@ -115,7 +115,7 @@ font-size:12px;font-weight:900;color:#174f43}
 
 
 
-/* Version 10.1A 體驗優化版 */
+/* Version 10.1B 答題流暢版 */
 #chapterMission{
  position:absolute;
  left:50%;
@@ -154,7 +154,7 @@ font-size:12px;font-weight:900;color:#174f43}
 #chapterMission.compact small{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 
-/* Version 10.1A 體驗優化版 */
+/* Version 10.1B 答題流暢版 */
 #brandBar,#mapLabel,#chapterMission{
  transition:opacity .45s ease,transform .45s ease,filter .45s ease;
 }
@@ -237,7 +237,7 @@ font-size:12px;font-weight:900;color:#174f43}
 }
 
 
-/* Version 10.1A 體驗優化 */
+/* Version 10.1B 答題流暢優化 */
 #start{
   display:block;width:min(100%,360px);margin:18px auto 14px;padding:18px 24px;
   border:0;border-radius:22px;background:linear-gradient(180deg,#ff8a3d,#ed5b2e);
@@ -315,7 +315,7 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 <div id="overlay">
   <div class="card">
     <h1>🎮 臺南甜甜接好運</h1>
-    <div class="versionTag">Version 10.1A 體驗優化版</div>
+    <div class="versionTag">Version 10.1B 答題流暢版</div>
     <div class="subtitle">走訪臺南地標・閃避動畫詐騙・挑戰防詐知識</div>
     <div class="rules">
       🍬 糖果 ＋10　🥭 臺南芒果 ＋20<br>
@@ -641,8 +641,11 @@ function answerQuiz(q,i){
  [...quizChoices.children].forEach(b=>b.disabled=true);
  if(i===q.correct){
   quizCorrect++;score+=100;scoreEl.textContent=score;
-  quizFeedback.style.color='#087a45';quizFeedback.textContent='✅ 答對了！＋100 分\n'+q.explain;
   beep('star');
+  closeQuiz();
+  showScorePopup(W/2,H*.46,'🎉 答對！＋100',false);
+  burst(W/2,H*.48,'＋100 分',false);
+  return;
  }else{
   score=Math.max(0,score-20);scoreEl.textContent=score;
   quizFeedback.style.color='#c52219';quizFeedback.textContent='❌ 再想一下！－20 分\n'+q.explain;
@@ -1046,7 +1049,7 @@ function showToast(msg){
 }
 async function shareGame(){
  const data={
-  title:'臺南甜甜接好運 Version 10.1A 體驗優化版',
+  title:'臺南甜甜接好運 Version 10.1B 答題流暢版',
   text:'接住臺南好物，避開詐騙陷阱！',
   url:location.href
  };
@@ -1092,7 +1095,7 @@ function end(){
  if(score>=1200){rank='👑 臺南防詐守護英雄';msg='詐騙陷阱全都逃不過你的眼睛！'}
  else if(score>=850){rank='🥇 165反詐守護者';msg='你已具備優秀的反詐辨識力！'}
  else if(score>=500){rank='🥈 臺南反詐達人';msg='好物接得準，詐騙也看得清！'}
- overlay.innerHTML=`<div class="card"><h1>四章巡守完成</h1><div class="versionTag">Version 10.1A 體驗優化版</div><div class="rank">${rank}</div>
+ overlay.innerHTML=`<div class="card"><h1>四章巡守完成</h1><div class="versionTag">Version 10.1B 答題流暢版</div><div class="rank">${rank}</div>
  <div style="font-size:52px;font-weight:900;color:#ed6539;margin:8px">${score} 分</div>
  <div class="stats"><div class="stat">接住好物<br>${goodCaught}</div><div class="stat">避開詐騙<br>${scamAvoided}</div><div class="stat">知識答對<br>${quizCorrect}/${quizAsked}</div><div class="stat">巡守進度<br>4／4</div></div>
  <p style="font-weight:900;color:#5a4430">${msg}</p>
