@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>注音接接樂</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#cfefff}
+  body{display:flex;align-items:center;justify-content:center}
+  #game{position:relative;width:min(100vw,520px);height:100vh;max-height:900px;overflow:hidden;
+    background:linear-gradient(#77d9ff 0%,#d9f8ff 62%,#80d875 62%,#57ba58 100%);
+    box-shadow:0 0 24px rgba(0,0,0,.2);touch-action:none}
+  .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85}
+  .cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+  .c1{width:110px;height:32px;top:13%;left:8%}.c1:before{width:48px;height:48px;left:17px;bottom:5px}.c1:after{width:56px;height:56px;right:12px;bottom:3px}
+  .c2{width:90px;height:27px;top:25%;right:5%}.c2:before{width:40px;height:40px;left:12px;bottom:3px}.c2:after{width:45px;height:45px;right:9px;bottom:3px}
+  #hud{position:absolute;z-index:10;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:8px}
+  .pill{background:rgba(255,255,255,.9);border:3px solid #fff;border-radius:20px;padding:7px 12px;font-weight:900;color:#24506a;box-shadow:0 3px 8px rgba(0,0,0,.16);font-size:17px}
+  #nextBox{position:absolute;z-index:10;top:66px;left:50%;transform:translateX(-50%);background:#fff7bf;border:4px solid #ffbb38;border-radius:18px;padding:7px 18px;text-align:center;color:#714700;font-weight:800;box-shadow:0 4px 8px rgba(0,0,0,.15)}
+  #nextSymbol{font-size:34px;color:#ff6550;margin-left:6px}
+  #symbol{position:absolute;z-index:5;width:66px;height:66px;border-radius:50%;display:none;align-items:center;justify-content:center;
+    background:linear-gradient(145deg,#fffdf2,#ffd95d);border:5px solid #fff;color:#e54c3d;font-size:42px;font-weight:900;
+    box-shadow:0 6px 10px rgba(0,0,0,.2)}
+  #basket{position:absolute;z-index:6;bottom:34px;width:104px;height:60px;left:50%;transform:translateX(-50%)}
+  .rim{position:absolute;top:0;left:0;width:104px;height:22px;background:#c77b2d;border:5px solid #8b501b;border-radius:50%}
+  .basketBody{position:absolute;top:10px;left:9px;width:86px;height:48px;background:repeating-linear-gradient(90deg,#f4b64d 0 12px,#d6892d 12px 19px);
+    border:5px solid #8b501b;clip-path:polygon(0 0,100% 0,86% 100%,14% 100%)}
+  #message{position:absolute;z-index:15;left:50%;top:42%;transform:translate(-50%,-50%);font-size:34px;font-weight:900;color:#fff;
+    text-shadow:0 4px 0 #e45757,0 6px 10px rgba(0,0,0,.25);pointer-events:none;opacity:0}
+  .pop{animation:pop .75s ease}
+  @keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-65%) scale(1)}}
+  #overlay{position:absolute;z-index:30;inset:0;background:rgba(26,72,96,.55);display:flex;align-items:center;justify-content:center;padding:24px}
+  .panel{width:100%;max-width:410px;background:#fff;border-radius:30px;padding:28px 22px;text-align:center;box-shadow:0 14px 35px rgba(0,0,0,.25);border:7px solid #fff1a6}
+  h1{margin:0 0 8px;font-size:40px;color:#ff644d;text-shadow:0 3px 0 #ffd36c}
+  .subtitle{font-size:20px;font-weight:800;color:#467087;margin-bottom:18px}
+  .rules{background:#eefaff;border-radius:18px;padding:14px;text-align:left;line-height:1.8;color:#31576c;font-weight:700;margin-bottom:18px}
+  button{border:0;border-radius:999px;padding:13px 34px;font-size:22px;font-weight:900;background:linear-gradient(#ffda52,#ffad2e);color:#714000;
+    box-shadow:0 6px 0 #d77d18;cursor:pointer}
+  button:active{transform:translateY(4px);box-shadow:0 2px 0 #d77d18}
+  #controls{position:absolute;z-index:12;bottom:108px;left:0;right:0;display:flex;justify-content:space-between;padding:0 26px;pointer-events:none}
+  .ctrl{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.55);border:4px solid rgba(255,255,255,.75);display:flex;align-items:center;justify-content:center;font-size:34px;color:#28627e;font-weight:900}
+  #traceOverlay{position:absolute;z-index:25;inset:0;background:rgba(28,76,104,.82);display:none;align-items:center;justify-content:center;padding:10px}
+  #traceCard{width:100%;max-width:500px;height:min(88vh,720px);background:#fff;border:6px solid #fff0a8;border-radius:24px;padding:12px;display:flex;flex-direction:column;text-align:center;box-shadow:0 14px 34px rgba(0,0,0,.3)}
+  #traceTitle{font-size:21px;font-weight:900;color:#35667e}
+  #tracePronunciation{font-size:18px;font-weight:800;color:#ff6750;margin:4px 0 8px}
+  #moeFrameWrap{position:relative;flex:1;min-height:0;border:2px solid #dbe9ee;border-radius:14px;overflow:hidden;background:#fff}
+  #moeFrame{position:absolute;left:0;top:-165px;width:100%;height:calc(100% + 165px);border:0;background:#fff}
+  #continueBtn{margin-top:10px;padding:11px 28px;font-size:20px;box-shadow:0 5px 0 #d77d18}
+  #sourceNote{font-size:12px;color:#607d8b;margin-top:7px}
+82%{stroke-dashoffset:0;fill:transparent}100%{stroke-dashoffset:0;fill:#ffe477}}
+
+  @media (max-width:480px){
+    #traceCard{height:94vh;padding:8px}
+    #traceTitle{font-size:19px}
+    #tracePronunciation{font-size:16px;margin:2px 0 5px}
+    #moeFrame{top:-150px;height:calc(100% + 150px)}
+    #continueBtn{margin-top:7px;padding:10px 22px;font-size:18px}
+    #sourceNote{font-size:11px;margin-top:5px}
+  }
+  @media (min-width:700px){#controls{display:none}}
+</style>
+</head>
+<body>
+<div id="game">
+  <div class="cloud c1"></div><div class="cloud c2"></div>
+  <div id="hud">
+    <div class="pill">⭐ 分數：<span id="score">0</span></div>
+    <div class="pill">❤️ 生命：<span id="lives">3</span></div>
+  </div>
+  <div id="nextBox">下一個：<span id="nextSymbol">ㄅ</span></div>
+  <div id="symbol">ㄅ</div>
+  <div id="basket"><div class="basketBody"></div><div class="rim"></div></div>
+  <div id="message"></div>
+  <div id="controls"><div class="ctrl">←</div><div class="ctrl">→</div></div>
+
+
+  <div id="traceOverlay">
+    <div id="traceCard">
+      <div id="traceTitle">教育部注音筆順及練習</div>
+      <div id="tracePronunciation"></div>
+      <div id="moeFrameWrap">
+        <iframe id="moeFrame" title="教育部注音符號筆順動畫" loading="eager"></iframe>
+      </div>
+      <button id="continueBtn" type="button">筆順及練習完成，繼續遊戲</button>
+      <div id="sourceNote">筆順來源：中華民國教育部《國字標準字體筆順學習網》</div>
+    </div>
+  </div>
+
+  <div id="overlay">
+    <div class="panel">
+      <h1 id="title">注音接接樂</h1>
+      <div class="subtitle" id="subtitle">接住依序掉落的注音符號！</div>
+      <div class="rules" id="rules">
+        👆 手機：左右滑動籃子<br>
+        ⌨️ 電腦：使用方向鍵 ← →<br>
+        ✅ 接到注音符號：+10 分、播放讀音及教育部筆順<br>
+        🔊 筆順播放完畢後，按「繼續遊戲」<br>
+        ❌ 漏接：失去 1 顆愛心
+      </div>
+      <button id="startBtn">開始遊戲</button>
+    </div>
+  </div>
+</div>
+<script>
+(() => {
+  const symbols = ["ㄅ","ㄆ","ㄇ","ㄈ","ㄉ","ㄊ","ㄋ","ㄌ","ㄍ","ㄎ","ㄏ","ㄐ","ㄑ","ㄒ","ㄓ","ㄔ","ㄕ","ㄖ","ㄗ","ㄘ","ㄙ","ㄧ","ㄨ","ㄩ","ㄚ","ㄛ","ㄜ","ㄝ","ㄞ","ㄟ","ㄠ","ㄡ","ㄢ","ㄣ","ㄤ","ㄥ","ㄦ"];
+  // 依臺灣國小注音教學常用的本音／拼讀形式播放，
+  // 避免以「玻、坡、摸、佛」等國字名稱代替。
+  const pronunciations = [
+    "ㄅㄛ","ㄆㄛ","ㄇㄛ","ㄈㄛ",
+    "ㄉㄜ","ㄊㄜ","ㄋㄜ","ㄌㄜ",
+    "ㄍㄜ","ㄎㄜ","ㄏㄜ",
+    "ㄐㄧ","ㄑㄧ","ㄒㄧ",
+    "ㄓ","ㄔ","ㄕ","ㄖ","ㄗ","ㄘ","ㄙ",
+    "ㄧ","ㄨ","ㄩ",
+    "ㄚ","ㄛ","ㄜ","ㄝ","ㄞ","ㄟ","ㄠ","ㄡ",
+    "ㄢ","ㄣ","ㄤ","ㄥ","ㄦ"
+  ];
+  const game = document.getElementById("game");
+  const basket = document.getElementById("basket");
+  const falling = document.getElementById("symbol");
+  const scoreEl = document.getElementById("score");
+  const livesEl = document.getElementById("lives");
+  const nextEl = document.getElementById("nextSymbol");
+  const overlay = document.getElementById("overlay");
+  const startBtn = document.getElementById("startBtn");
+  const title = document.getElementById("title");
+  const subtitle = document.getElementById("subtitle");
+  const rules = document.getElementById("rules");
+  const message = document.getElementById("message");
+  const traceOverlay = document.getElementById("traceOverlay");
+  const tracePronunciation = document.getElementById("tracePronunciation");
+  const moeFrame = document.getElementById("moeFrame");
+  const continueBtn = document.getElementById("continueBtn");
+
+  let score=0, lives=3, index=0, basketX=0, x=0, y=120, speed=2.7, running=false, tracing=false;
+  let caughtIndexPending = null;
+  let left=false, right=false, lastTime=0, audioCtx=null;
+
+  function beep(freq, duration=.09){
+    try{
+      audioCtx ??= new (window.AudioContext||window.webkitAudioContext)();
+      const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination); o.frequency.value=freq;
+      g.gain.setValueAtTime(.12,audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+      o.start();o.stop(audioCtx.currentTime+duration);
+    }catch(e){}
+  }
+
+  function speakSymbol(i){
+    return new Promise(resolve => {
+      try{
+        if(!("speechSynthesis" in window)){ resolve(); return; }
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(pronunciations[i]);
+        u.lang="zh-TW"; u.rate=.68; u.pitch=1; u.volume=1;
+        const voices=window.speechSynthesis.getVoices();
+        const tw=voices.find(v=>/zh[-_]TW/i.test(v.lang)||/Taiwan|臺灣|台灣/i.test(v.name));
+        if(tw) u.voice=tw;
+        let done=false;
+        const finish=()=>{if(!done){done=true;resolve();}};
+        u.onend=finish; u.onerror=finish;
+        window.speechSynthesis.speak(u);
+        setTimeout(finish,1800);
+      }catch(e){resolve();}
+    });
+  }
+
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+
+  function focusMoePracticeArea(){
+    try{
+      const doc = moeFrame.contentDocument || moeFrame.contentWindow.document;
+      const candidates = [
+        ...doc.querySelectorAll("a,button,div,span,td")
+      ];
+      const target = candidates.find(el =>
+        /筆順播放|筆順練習/.test((el.textContent || "").trim())
+      );
+      if(target){
+        target.scrollIntoView({block:"start",behavior:"auto"});
+        moeFrame.contentWindow.scrollBy(0,-20);
+      }else{
+        moeFrame.contentWindow.scrollTo(0,150);
+      }
+    }catch(e){
+      // Cross-origin browsers use the CSS upward offset instead.
+    }
+  }
+  moeFrame.addEventListener("load",()=>{
+    setTimeout(focusMoePracticeArea,350);
+    setTimeout(focusMoePracticeArea,1000);
+  });
+
+  function playTrace(i){
+    tracing=true;
+    caughtIndexPending=i;
+    falling.style.display="none";
+    tracePronunciation.textContent=`${symbols[i]}　讀音：${pronunciations[i]}`;
+    moeFrame.src=`https://stroke-order.learningweb.moe.edu.tw/dictView.jsp?ID=${12549+i}`;
+    traceOverlay.style.display="flex";
+    speakSymbol(i);
+  }
+
+  function resumeGame(e){
+    if(e){
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if(!tracing || caughtIndexPending===null) return;
+
+    traceOverlay.style.display="none";
+    moeFrame.src="about:blank";
+    tracing=false;
+
+    index=caughtIndexPending+1;
+    caughtIndexPending=null;
+
+    if(index>=symbols.length){
+      finish(true);
+      return;
+    }
+
+    speed=Math.min(6,2.7+index*.075);
+    lastTime=performance.now();
+    resetDrop();
+    requestAnimationFrame(loop);
+  }
+
+  continueBtn.addEventListener("click", resumeGame);
+  continueBtn.addEventListener("touchend", resumeGame, {passive:false});
+
+  function showMessage(text){
+    message.textContent=text;
+    message.classList.remove("pop"); void message.offsetWidth; message.classList.add("pop");
+  }
+  function setBasket(px){
+    const max=game.clientWidth-basket.offsetWidth;
+    basketX=Math.max(0,Math.min(max,px));
+    basket.style.left=basketX+"px";
+    basket.style.transform="none";
+  }
+  function resetDrop(){
+    falling.textContent=symbols[index];
+    nextEl.textContent=symbols[index];
+    x=Math.random()*(game.clientWidth-falling.offsetWidth);
+    y=110;
+    falling.style.left=x+"px";
+    falling.style.top=y+"px";
+    falling.style.display="flex";
+  }
+  function start(){
+    score=0;lives=3;index=0;speed=2.7;running=true;tracing=false;caughtIndexPending=null;
+    scoreEl.textContent=score;livesEl.textContent=lives;
+    setBasket((game.clientWidth-basket.offsetWidth)/2);
+    overlay.style.display="none";
+    lastTime=performance.now();
+    resetDrop();
+    requestAnimationFrame(loop);
+  }
+  function finish(win){
+    running=false; tracing=false; caughtIndexPending=null; falling.style.display="none"; traceOverlay.style.display="none"; overlay.style.display="flex";
+    title.textContent=win?"🎉 全部接完了！":"再挑戰一次！";
+    subtitle.textContent=win?`恭喜完成 37 個注音符號，得到 ${score} 分！`:`本次得到 ${score} 分`;
+    rules.innerHTML=win?"你是注音接接高手！<br>再玩一次，挑戰更快速度吧！":"別灰心！看準符號掉落位置，移動籃子接住它。";
+    startBtn.textContent="再玩一次";
+  }
+  function loop(t){
+    if(!running)return;
+    const dt=Math.min(2,(t-lastTime)/16.67); lastTime=t;
+    if(left)setBasket(basketX-7*dt);
+    if(right)setBasket(basketX+7*dt);
+    y+=speed*dt;
+    falling.style.top=y+"px";
+
+    const f=falling.getBoundingClientRect(), b=basket.getBoundingClientRect(), g=game.getBoundingClientRect();
+    const caught=f.bottom>=b.top+5 && f.top<b.bottom && f.right>b.left+8 && f.left<b.right-8;
+    if(caught && !tracing){
+      const caughtIndex=index;
+      score+=10; scoreEl.textContent=score; beep(720);
+      showMessage(`接到 ${symbols[caughtIndex]}！+10`);
+      playTrace(caughtIndex);
+      return;
+    }else if(f.top>g.bottom && !tracing){
+      lives--; livesEl.textContent=lives; beep(180,.18); showMessage("漏接了！");
+      if(lives<=0){finish(false);return;}
+      resetDrop();
+    }
+    if(!tracing) requestAnimationFrame(loop);
+  }
+
+  startBtn.addEventListener("click",start);
+  window.addEventListener("keydown",e=>{
+    if(e.key==="ArrowLeft"){left=true;e.preventDefault()}
+    if(e.key==="ArrowRight"){right=true;e.preventDefault()}
+  });
+  window.addEventListener("keyup",e=>{
+    if(e.key==="ArrowLeft")left=false;
+    if(e.key==="ArrowRight")right=false;
+  });
+  function moveByTouch(e){
+    if(!running)return;
+    const p=e.touches?e.touches[0]:e;
+    const r=game.getBoundingClientRect();
+    setBasket(p.clientX-r.left-basket.offsetWidth/2);
+    e.preventDefault();
+  }
+  game.addEventListener("touchstart",moveByTouch,{passive:false});
+  game.addEventListener("touchmove",moveByTouch,{passive:false});
+  game.addEventListener("mousemove",e=>{if(e.buttons===1)moveByTouch(e)});
+  window.addEventListener("resize",()=>setBasket(Math.min(basketX,game.clientWidth-basket.offsetWidth)));
+  setBasket((game.clientWidth-basket.offsetWidth)/2);
+})();
+</script>
+</body>
+</html>
