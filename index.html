@@ -447,6 +447,8 @@ font-size:12px;font-weight:900;color:#174f43}
 }
 
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 <div id="app">
@@ -1644,12 +1646,125 @@ async function end(){
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
  <div id="leaderPanel"><h3>🏆 本機排行榜</h3>${leaderHTML()}</div>
  <button id="again">再玩一次</button>
- <button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">分享成績</button>
+ <button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">分享成績</button><button id="saveScoreImage" style="background:#8a4dd6;box-shadow:0 6px 0 #5a2d99;margin-left:6px">📸 儲存成績圖片</button>
  </div>`;
  overlay.style.display='flex';
  if(hiddenEnding)launchFinalFireworks(4200);
  document.getElementById('again').onclick=start;
- document.getElementById('shareScore').onclick=async()=>{
+
+document.getElementById('saveScoreImage').onclick=async()=>{
+  const button=document.getElementById('saveScoreImage');
+  const card=document.querySelector('#overlay .card');
+  if(typeof html2canvas==='undefined'){
+    alert('截圖元件載入失敗，請確認網路連線。');
+    return;
+  }
+
+  const originalText=button.textContent;
+  button.disabled=true;
+  button.textContent='圖片製作中…';
+
+  let captureWrap=null;
+  try{
+    // 等待字型與吉祥物圖片完整載入
+    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+    const images=[...card.querySelectorAll('img')];
+    await Promise.all(images.map(img=>{
+      if(img.complete&&img.naturalWidth>0)return Promise.resolve();
+      return new Promise(resolve=>{
+        img.addEventListener('load',resolve,{once:true});
+        img.addEventListener('error',resolve,{once:true});
+      });
+    }));
+
+    // 複製完整結算卡片到畫面外，解除原本 92vh 捲動限制
+    const rect=card.getBoundingClientRect();
+    const captureWidth=Math.max(320,Math.round(rect.width));
+
+    captureWrap=document.createElement('div');
+    captureWrap.setAttribute('aria-hidden','true');
+    Object.assign(captureWrap.style,{
+      position:'fixed',
+      left:'-100000px',
+      top:'0',
+      width:captureWidth+'px',
+      background:'#ffffff',
+      zIndex:'-1',
+      pointerEvents:'none'
+    });
+
+    const clone=card.cloneNode(true);
+    clone.removeAttribute('style');
+    Object.assign(clone.style,{
+      width:captureWidth+'px',
+      maxWidth:'none',
+      height:'auto',
+      maxHeight:'none',
+      overflow:'visible',
+      boxSizing:'border-box',
+      margin:'0',
+      transform:'none'
+    });
+
+    // 截圖只保留成績內容，移除操作按鈕
+    clone.querySelectorAll('button').forEach(el=>el.remove());
+    clone.querySelectorAll('*').forEach(el=>{
+      el.style.animation='none';
+      el.style.transition='none';
+    });
+
+    captureWrap.appendChild(clone);
+    document.body.appendChild(captureWrap);
+
+    // 讓瀏覽器完成重新排版，取得真正完整高度
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    const captureHeight=Math.ceil(Math.max(
+      clone.scrollHeight,
+      clone.offsetHeight,
+      clone.getBoundingClientRect().height
+    ));
+
+    // 避免部分手機因超大 Canvas 失敗，依完整高度自動調整清晰度
+    const maxCanvasSide=14000;
+    const scale=Math.max(1,Math.min(2,maxCanvasSide/Math.max(captureWidth,captureHeight)));
+
+    const canvas=await html2canvas(clone,{
+      backgroundColor:'#fffdf2',
+      scale,
+      useCORS:true,
+      allowTaint:false,
+      logging:false,
+      width:captureWidth,
+      height:captureHeight,
+      windowWidth:captureWidth,
+      windowHeight:captureHeight,
+      scrollX:0,
+      scrollY:0
+    });
+
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
+    if(!blob)throw new Error('PNG 產生失敗');
+
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.download=`臺南甜甜接好運_${score}分_完整成績.png`;
+    a.href=url;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    showToast('完整成績圖片已儲存');
+  }catch(err){
+    console.error(err);
+    alert('成績圖片製作失敗，請重新操作一次。');
+  }finally{
+    if(captureWrap)captureWrap.remove();
+    button.disabled=false;
+    button.textContent=originalText;
+  }
+};
+document.getElementById('shareScore').onclick=async()=>{
+
    const heroText=hiddenEnding?'，並解鎖「臺南反詐英雄」隱藏結局':'';
    const text=`我在「臺南甜甜接好運 Release 11.0 Final」獲得 ${score} 分，稱號：${rank.replace(/<[^>]*>/g,'')}${heroText}！一起來挑戰反詐力！`;
    try{
