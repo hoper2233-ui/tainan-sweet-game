@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>臺南甜甜接好運｜Version 10.1B 答題流暢版</title>
+<meta name="description" content="臺南甜甜接好運 Release 11.0 Final－結合臺南特色、反詐知識、幸運道具、連擊寶箱與成就彩蛋的互動小遊戲。">
+<title>臺南甜甜接好運｜市警局 feat. 市場處</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#132b34}
@@ -115,7 +116,7 @@ font-size:12px;font-weight:900;color:#174f43}
 
 
 
-/* Version 10.1B 答題流暢版 */
+/* 市警局 feat. 市場處 */
 #chapterMission{
  position:absolute;
  left:50%;
@@ -154,7 +155,7 @@ font-size:12px;font-weight:900;color:#174f43}
 #chapterMission.compact small{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 
-/* Version 10.1B 答題流暢版 */
+/* 市警局 feat. 市場處 */
 #brandBar,#mapLabel,#chapterMission{
  transition:opacity .45s ease,transform .45s ease,filter .45s ease;
 }
@@ -237,7 +238,7 @@ font-size:12px;font-weight:900;color:#174f43}
 }
 
 
-/* Version 10.1B 答題流暢優化 */
+/* 市警局 feat. 市場處 */
 #start{
   display:block;width:min(100%,360px);margin:18px auto 14px;padding:18px 24px;
   border:0;border-radius:22px;background:linear-gradient(180deg,#ff8a3d,#ed5b2e);
@@ -255,6 +256,80 @@ font-size:12px;font-weight:900;color:#174f43}
 #hud .badge.timerPaused{background:#e8f4ff;border-color:#367bb4;color:#245f91;box-shadow:0 4px 0 #245f91}
 @media (max-height:700px){#start{padding:14px 20px;font-size:22px;margin:12px auto 10px}}
 
+
+/* Release 11.0 Final：成就・彩蛋・最佳化 */
+#combo.combo10{background:#eaffdf;border-color:#42a34b;color:#23752d;box-shadow:0 4px 0 #23752d}
+#combo.combo25{background:#e1f3ff;border-color:#3989c9;color:#246b9e;box-shadow:0 4px 0 #246b9e}
+#combo.combo50{background:#f3e4ff;border-color:#8a45bd;color:#6b2799;box-shadow:0 4px 0 #6b2799}
+#combo.combo75{background:#fff0d9;border-color:#e47d28;color:#b65312;box-shadow:0 4px 0 #b65312}
+#combo.combo100{background:#fff7ba;border-color:#d4a100;color:#8e6500;box-shadow:0 4px 0 #8e6500;animation:comboGold .7s ease-in-out infinite alternate}
+#combo.combo150{background:linear-gradient(90deg,#ffe2e2,#fff4bd,#dcffe3,#dff4ff,#eedfff);border-color:#fff;color:#613a7a;box-shadow:0 4px 0 #613a7a;animation:comboRainbow .65s linear infinite}
+@keyframes comboGold{from{filter:drop-shadow(0 0 2px #ffd700);transform:scale(1)}to{filter:drop-shadow(0 0 12px #ffb700);transform:scale(1.06)}}
+@keyframes comboRainbow{0%{filter:hue-rotate(0deg);transform:scale(1.02)}100%{filter:hue-rotate(360deg);transform:scale(1.08)}}
+
+#comboCelebration{
+ position:absolute;inset:0;z-index:28;display:none;align-items:center;justify-content:center;
+ pointer-events:none;background:rgba(12,31,38,.16)
+}
+#comboCelebrationBox{
+ min-width:270px;max-width:90%;padding:20px 24px;text-align:center;
+ border:5px solid #fff;border-radius:28px;background:linear-gradient(180deg,#fffbe5,#ffe29b);
+ box-shadow:0 10px 0 #9b5d12,0 18px 35px #0006;animation:comboCelebrate .95s ease both
+}
+#comboCelebrationIcon{font-size:70px;line-height:1}
+#comboCelebrationTitle{font-size:30px;font-weight:1000;color:#8d4300;margin-top:5px}
+#comboCelebrationText{font-size:17px;font-weight:900;color:#5e4323;margin-top:6px;line-height:1.45}
+@keyframes comboCelebrate{
+ 0%{opacity:0;transform:scale(.35) rotate(-8deg)}
+ 35%{opacity:1;transform:scale(1.12) rotate(3deg)}
+ 75%{opacity:1;transform:scale(1)}
+ 100%{opacity:0;transform:scale(.92) translateY(-18px)}
+}
+#comboCelebration.chest #comboCelebrationBox{background:linear-gradient(180deg,#fff5c4,#ffc84d);border-color:#fff7ba}
+#comboCelebration.super #comboCelebrationBox{background:linear-gradient(180deg,#fffbd2,#ffb934);box-shadow:0 10px 0 #a84800,0 0 35px #ffd700}
+#comboCelebration.legend #comboCelebrationBox{background:linear-gradient(135deg,#ffdede,#fff3a8,#d9ffe3,#ddecff,#f1dcff)}
+
+
+/* Release 11.0 Final：成就系統、隱藏彩蛋、動畫與效能最佳化 */
+#achievementToast{
+ position:absolute;left:50%;top:118px;transform:translateX(-50%) translateY(-18px);
+ z-index:35;display:none;min-width:270px;max-width:92%;padding:11px 16px;
+ border:3px solid #fff4a8;border-radius:18px;background:linear-gradient(135deg,#4d2178,#8e43bc);
+ color:#fff;text-align:center;font-weight:900;box-shadow:0 7px 0 #32134f,0 14px 30px #0006;
+ pointer-events:none;animation:achievementDrop 2.35s ease both
+}
+#achievementToast strong{display:block;font-size:18px;color:#fff7a8}
+@keyframes achievementDrop{
+ 0%{opacity:0;transform:translateX(-50%) translateY(-35px) scale(.82)}
+ 14%,78%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+ 100%{opacity:0;transform:translateX(-50%) translateY(-18px) scale(.94)}
+}
+.achievementGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
+.achievementCard{padding:10px 7px;border-radius:14px;background:#ece9e3;color:#8a8178;font-weight:900;font-size:13px;border:2px solid #d4cec4}
+.achievementCard.unlocked{background:linear-gradient(180deg,#fff8c8,#ffd974);color:#734410;border-color:#e6a921;box-shadow:0 3px 0 #bd7413}
+.achievementCard .achIcon{font-size:27px;display:block;margin-bottom:3px}
+.endingBanner{
+ margin:12px 0;padding:14px;border:4px solid #ffe068;border-radius:20px;
+ background:linear-gradient(135deg,#391169,#a82994,#ea692d);color:#fff;
+ font-weight:900;box-shadow:0 7px 0 #5a174c;animation:endingGlow 1s ease-in-out infinite alternate
+}
+@keyframes endingGlow{from{filter:drop-shadow(0 0 2px #ffd95c)}to{filter:drop-shadow(0 0 15px #ffd95c)}}
+#finalFireworks{position:absolute;inset:0;z-index:34;pointer-events:none;overflow:hidden;display:none}
+.fireworkPiece{position:absolute;font-size:30px;animation:fireworkFly 1.5s ease-out forwards}
+@keyframes fireworkFly{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}
+ 18%{opacity:1;transform:translate(-50%,-50%) scale(1.25) rotate(80deg)}
+ 100%{opacity:0;transform:translate(var(--fx),var(--fy)) scale(.5) rotate(360deg)}
+}
+#pauseCurtain{
+ position:absolute;inset:0;z-index:40;display:none;align-items:center;justify-content:center;
+ background:#132b34c9;color:#fff;text-align:center;font-size:25px;font-weight:1000;
+ pointer-events:none
+}
+@media (prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
 </style>
 </head>
 <body>
@@ -264,7 +339,7 @@ font-size:12px;font-weight:900;color:#174f43}
 <div id="hud">
   <div class="badge">分數 <span id="score">0</span></div>
   <div class="badge" id="combo">連擊 x<span id="comboN">0</span></div>
-  <div class="badge" id="timeBadge">⏱ <span id="time">45</span> 秒</div>
+  <div class="badge" id="timeBadge">⏱ <span id="time">60</span> 秒</div>
 </div>
 <button id="soundBtn" aria-label="音效">🔊</button>
 <div id="brandBar">
@@ -284,6 +359,7 @@ font-size:12px;font-weight:900;color:#174f43}
 </div>
 <div id="powerHud">
   <div id="shieldChip" class="powerChip">🛡️ 護盾 <span>0</span>s</div>
+  <div id="magnetChip" class="powerChip">🧲 好運磁鐵 <span>0</span>s</div>
   <div id="doubleChip" class="powerChip">✨ 雙倍分數 <span>0</span>s</div>
 </div>
 <div id="mapTransition"><div id="mapTransitionBox">
@@ -300,6 +376,20 @@ z-index:4;background:#173b43d9;color:white;padding:7px 14px;border-radius:999px;
 font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左右拖曳籃子</div>
 <div id="tip"><div id="tipTitle"></div><div id="tipText"></div></div>
 
+
+
+<div id="achievementToast"><strong>🏅 成就解鎖</strong><span id="achievementToastText"></span></div>
+<div id="finalFireworks"></div>
+<div id="pauseCurtain">⏸️ 遊戲暫停<br><small style="font-size:15px">回到畫面後自動繼續</small></div>
+
+<div id="comboCelebration">
+ <div id="comboCelebrationBox">
+  <div id="comboCelebrationIcon">🎉</div>
+  <div id="comboCelebrationTitle">COMBO！</div>
+  <div id="comboCelebrationText"></div>
+ </div>
+</div>
+
 <div id="quizOverlay">
   <div id="quizCard">
     <div id="quizPauseLabel">⏸️ 遊戲時間暫停中</div>
@@ -315,13 +405,13 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 <div id="overlay">
   <div class="card">
     <h1>🎮 臺南甜甜接好運</h1>
-    <div class="versionTag">Version 10.1B 答題流暢版</div>
-    <div class="subtitle">走訪臺南地標・閃避動畫詐騙・挑戰防詐知識</div>
+    <div class="versionTag">市警局 feat. 市場處</div>
+    <div class="subtitle">走訪臺南地標・閃避詐騙・挑戰防詐知識・抽獎超人氣菜奇鴨與夜奇鴨</div>
     <div class="rules">
       🍬 糖果 ＋10　🥭 臺南芒果 ＋20<br>
       🍍 臺南鳳梨 ＋30　⭐ 反詐之星 ＋50（稀有）<br>
       🚨 詐騙包裹、假投資、假檢警、假客服、假中獎：各扣 40 分<br>
-      🔥 連續接中 5 次起有額外加分<br>🛡️ 護盾　⏰ 加時　✨ 雙倍得分　🚨 警察支援<br>🗺️ 每 15 秒前往下一個臺南地標；時間加成不會讓章節倒退
+      🔥 連擊獎勵：10／25／50／75／100／150 Combo<br>🏅 完成指定條件可解鎖永久成就與隱藏結局<br>🎁 50 Combo 開啟幸運寶箱；100 Combo 啟動超級反詐模式<br>🎁 幸運道具：🧲 磁鐵　🛡️ 護盾　⏰ 加時　✨ 雙倍得分　🚨 警察支援<br>⏱️ 每局 60 秒；加時每次＋5 秒，最高延長至 80 秒<br>🗺️ 每 15 秒前往下一個臺南地標；時間加成不會讓章節倒退
     </div>
     <button id="start">開始挑戰</button>
     <div style="margin-top:8px;background:#f5e6ff;border:3px solid #9b59b6;border-radius:14px;padding:8px 10px;font-weight:900;color:#6d287d">🌆 四大臺南地標依序推進上午、午後、夜景與市府終章</div><div class="footer165">可疑訊息先停、先查，再撥 165</div>
@@ -350,34 +440,201 @@ const quizFeedback=document.getElementById('quizFeedback');
 
 const bossHud=document.getElementById('bossHud'),bossFill=document.getElementById('bossFill');
 const mapTransition=document.getElementById('mapTransition'),mapTransitionIcon=document.getElementById('mapTransitionIcon'),mapTransitionName=document.getElementById('mapTransitionName');
-const shieldChip=document.getElementById('shieldChip'),doubleChip=document.getElementById('doubleChip');
+const shieldChip=document.getElementById('shieldChip'),magnetChip=document.getElementById('magnetChip'),doubleChip=document.getElementById('doubleChip');
 const chapterMission=document.getElementById('chapterMission'),chapterTitle=document.getElementById('chapterTitle'),chapterTheme=document.getElementById('chapterTheme');
+const comboBadge=document.getElementById('combo');
+const comboCelebration=document.getElementById('comboCelebration');
+const comboCelebrationIcon=document.getElementById('comboCelebrationIcon');
+const comboCelebrationTitle=document.getElementById('comboCelebrationTitle');
+const comboCelebrationText=document.getElementById('comboCelebrationText');
+const achievementToast=document.getElementById('achievementToast');
+const achievementToastText=document.getElementById('achievementToastText');
+const finalFireworks=document.getElementById('finalFireworks');
+const pauseCurtain=document.getElementById('pauseCurtain');
+
 
 const quizSkipBtn=document.getElementById('quizSkipBtn');
 let brandHideTimer=null,chapterInfoHideTimer=null,quizCloseTimer=null,quizSafetyTimer=null;
 
-let combo50Announced=false,combo100Announced=false;
 
-function announceComboMilestones(){
- if(combo>=100 && !combo100Announced){
-  combo100Announced=true;
-  toast.textContent='🎉 防詐達人模式！特殊道具機率再提升！';
-  toast.style.display='block';
-  setTimeout(()=>toast.style.display='none',2200);
-  // 煙火彩蛋：利用既有粒子系統（若存在）
-  if(typeof burst==='function'){
-   for(let i=0;i<6;i++)setTimeout(()=>burst(W*(.18+.13*i),H*.32,18),i*90);
-  }
-  mayorMood='happy';
-  setTimeout(()=>{if(typeof mayorMood!=='undefined')mayorMood='normal';},1800);
- }else if(combo>=50 && !combo50Announced){
-  combo50Announced=true;
-  toast.textContent='🔥 50連擊達成！幸運加成啟動！';
-  toast.style.display='block';
-  setTimeout(()=>toast.style.display='none',1900);
+let comboMilestonesHit=new Set();
+let chestsOpened=0,powerUpsUsed=0,superModesTriggered=0;
+let comboCelebrationTimer=null;
+
+let achievementToastTimer=null;
+let sessionAchievements=new Set();
+const achievementDefs=[
+ {id:'firstCatch',icon:'🍬',name:'甜甜開張',desc:'接住第一個臺南好物',test:()=>goodCaught>=1},
+ {id:'combo25',icon:'🔥',name:'連擊新星',desc:'達成 25 Combo',test:()=>bestCombo>=25},
+ {id:'combo50',icon:'🎁',name:'寶箱獵人',desc:'開啟幸運寶箱',test:()=>chestsOpened>=1},
+ {id:'combo100',icon:'👑',name:'超級反詐',desc:'達成 100 Combo',test:()=>bestCombo>=100},
+ {id:'quizMaster',icon:'🧠',name:'識詐滿分',desc:'防詐題目全部答對',test:()=>quizAsked>0&&quizCorrect===quizAsked},
+ {id:'bossHunter',icon:'🚔',name:'詐團剋星',desc:'成功擊退詐騙 Boss',test:()=>bossDefeated},
+ {id:'score2500',icon:'🥉',name:'反詐小尖兵',desc:'單局達到 2,500 分',test:()=>score>=2500},
+ {id:'score3500',icon:'🥈',name:'反詐達人',desc:'單局達到 3,500 分',test:()=>score>=3500},
+ {id:'score4500',icon:'🥇',name:'165守護者',desc:'單局達到 4,500 分',test:()=>score>=4500},
+ {id:'score5500',icon:'🏆',name:'臺南反詐達人',desc:'單局達到 5,500 分',test:()=>score>=5500},
+ {id:'hiddenHero',icon:'🌟',name:'臺南反詐英雄',desc:'解鎖隱藏英雄結局',test:()=>isHiddenEnding()}
+];
+function getAchievementStore(){
+ try{return new Set(JSON.parse(localStorage.getItem('tainanSweetAchievements')||'[]'))}
+ catch(e){return new Set()}
+}
+function saveAchievementStore(store){
+ try{localStorage.setItem('tainanSweetAchievements',JSON.stringify([...store]))}catch(e){}
+}
+function showAchievementToast(def){
+ clearTimeout(achievementToastTimer);
+ achievementToastText.textContent=`${def.icon} ${def.name}｜${def.desc}`;
+ achievementToast.style.display='block';
+ achievementToast.style.animation='none';void achievementToast.offsetWidth;
+ achievementToast.style.animation='achievementDrop 2.35s ease both';
+ achievementToastTimer=setTimeout(()=>achievementToast.style.display='none',2320);
+ beep('achievement');
+}
+function unlockAchievement(id,silent=false){
+ const def=achievementDefs.find(a=>a.id===id);if(!def)return;
+ const stored=getAchievementStore();
+ if(sessionAchievements.has(id)&&stored.has(id))return;
+ sessionAchievements.add(id);
+ if(!stored.has(id)){
+  stored.add(id);saveAchievementStore(stored);
+  if(!silent)showAchievementToast(def);
  }
 }
+function checkAchievements(){
+ for(const def of achievementDefs){
+  if(def.id==='hiddenHero')continue;
+  if(def.test())unlockAchievement(def.id);
+ }
+}
+function isHiddenEnding(){
+ return score>=4500&&bestCombo>=100&&bossDefeated&&quizAsked>0&&quizCorrect===quizAsked;
+}
+function achievementHTML(hiddenUnlocked=false){
+ const stored=getAchievementStore();
+ if(hiddenUnlocked)stored.add('hiddenHero');
+ return achievementDefs.map(a=>{
+  const ok=stored.has(a.id);
+  return `<div class="achievementCard ${ok?'unlocked':''}"><span class="achIcon">${ok?a.icon:'🔒'}</span>${ok?a.name:'尚未解鎖'}<br><small>${a.desc}</small></div>`;
+ }).join('');
+}
+function launchFinalFireworks(duration=3000){
+ finalFireworks.innerHTML='';finalFireworks.style.display='block';
+ const emojis=['✦','✨','🎉','⭐','💫'];
+ const count=22;
+ for(let i=0;i<count;i++){
+  const p=document.createElement('span');
+  p.className='fireworkPiece';p.textContent=emojis[i%emojis.length];
+  p.style.left=(10+Math.random()*80)+'%';p.style.top=(18+Math.random()*45)+'%';
+  p.style.setProperty('--fx',`${(Math.random()-.5)*280}px`);
+  p.style.setProperty('--fy',`${-80-Math.random()*260}px`);
+  p.style.animationDelay=(Math.random()*.8)+'s';
+  finalFireworks.appendChild(p);
+ }
+ setTimeout(()=>{finalFireworks.style.display='none';finalFireworks.innerHTML=''},duration);
+}
 
+
+function updateComboBadge(){
+ if(!comboBadge)return;
+ comboBadge.classList.remove('combo10','combo25','combo50','combo75','combo100','combo150');
+ if(combo>=150)comboBadge.classList.add('combo150');
+ else if(combo>=100)comboBadge.classList.add('combo100');
+ else if(combo>=75)comboBadge.classList.add('combo75');
+ else if(combo>=50)comboBadge.classList.add('combo50');
+ else if(combo>=25)comboBadge.classList.add('combo25');
+ else if(combo>=10)comboBadge.classList.add('combo10');
+}
+
+function showComboCelebration(icon,title,text,kind=''){
+ clearTimeout(comboCelebrationTimer);
+ comboCelebration.className=kind;
+ comboCelebrationIcon.textContent=icon;
+ comboCelebrationTitle.textContent=title;
+ comboCelebrationText.textContent=text;
+ comboCelebration.style.display='flex';
+ const box=document.getElementById('comboCelebrationBox');
+ box.style.animation='none';void box.offsetWidth;box.style.animation='comboCelebrate 1.15s ease both';
+ comboCelebrationTimer=setTimeout(()=>comboCelebration.style.display='none',1120);
+}
+
+function grantTimeBonus(seconds=5){
+ const before=timeLeft;
+ timeLeft=Math.min(80,timeLeft+seconds);
+ const added=timeLeft-before;
+ timeEl.textContent=timeLeft;
+ return added;
+}
+
+function activateMagnet(seconds=8){
+ magnetTime=Math.max(magnetTime,seconds);
+ powerUpsUsed++;
+}
+function activateShield(seconds=7){
+ shieldTime=Math.max(shieldTime,seconds);
+ powerUpsUsed++;
+}
+function activateDouble(seconds=8){
+ doubleTime=Math.max(doubleTime,seconds);
+ powerUpsUsed++;
+}
+
+function openLuckyChest(){
+ chestsOpened++;
+ const rewards=[
+  {icon:'🛡️',name:'防詐護盾 10 秒',apply:()=>activateShield(10)},
+  {icon:'🧲',name:'好運磁鐵 10 秒',apply:()=>activateMagnet(10)},
+  {icon:'✨',name:'雙倍分數 10 秒',apply:()=>activateDouble(10)},
+  {icon:'⏰',name:'挑戰時間＋5秒',apply:()=>{powerUpsUsed++;const n=grantTimeBonus(5);return n>0?`時間增加 ${n} 秒`:'已達 80 秒上限'}},
+  {icon:'💎',name:'稀有獎勵＋300分',apply:()=>{score+=300;scoreEl.textContent=score;showScorePopup(W/2,H*.48,'＋300 分',false)}}
+ ];
+ const reward=rewards[Math.floor(Math.random()*rewards.length)];
+ const result=reward.apply();
+ beep('win');flash=.25;
+ showComboCelebration('🎁','幸運寶箱開啟！',`${reward.icon} ${result||reward.name}`,'chest');
+ for(let i=0;i<7;i++)setTimeout(()=>burst(W*(.15+.12*i),H*(.32+(i%2)*.08),'✦',false),i*55);
+}
+
+function activateSuperAntiFraudMode(){
+ superModesTriggered++;
+ activateShield(10);
+ activateMagnet(10);
+ activateDouble(10);
+ flash=.55;shake=.45;beep('win');
+ showComboCelebration('👑','SUPER COMBO！','護盾＋磁鐵＋雙倍分數，同時啟動 10 秒！','super');
+ for(let i=0;i<10;i++)setTimeout(()=>burst(W*(.08+.09*i),H*(.25+(i%3)*.1),'✦',false),i*45);
+}
+
+function announceComboMilestones(){
+ updateComboBadge();
+ const milestones=[10,25,50,75,100,150];
+ for(const level of milestones){
+  if(combo<level || comboMilestonesHit.has(level))continue;
+  comboMilestonesHit.add(level);
+  if(level===10){
+   score+=50;scoreEl.textContent=score;beep('star');
+   showComboCelebration('🔥','10 COMBO！','Nice！獎勵＋50分');
+   showScorePopup(W/2,H*.45,'連擊獎勵 ＋50',false);
+  }else if(level===25){
+   activateMagnet(5);beep('star');
+   showComboCelebration('🧲','25 COMBO！','好運磁鐵啟動 5 秒');
+  }else if(level===50){
+   openLuckyChest();
+  }else if(level===75){
+   score+=200;scoreEl.textContent=score;beep('win');
+   showComboCelebration('🎊','75 COMBO！','Amazing！獎勵＋200分');
+   showScorePopup(W/2,H*.45,'連擊獎勵 ＋200',false);
+  }else if(level===100){
+   activateSuperAntiFraudMode();
+  }else if(level===150){
+   score+=500;scoreEl.textContent=score;beep('win');flash=.7;
+   showComboCelebration('🏆','臺南反詐傳奇！','150 COMBO 達成，獎勵＋500分','legend');
+   showScorePopup(W/2,H*.43,'傳奇獎勵 ＋500',false);
+   for(let i=0;i<14;i++)setTimeout(()=>burst(Math.random()*W,H*(.2+Math.random()*.35),'✦',false),i*50);
+  }
+ }
+}
 
 function showBrandTemporarily(){
  if(!brandBar)return;
@@ -411,7 +668,7 @@ let mayorMood='normal',mayorMoodTime=0;
 let W=0,H=0,dpr=1,last=0,playing=false,spawnAcc=0,timeLeft=60,score=0,combo=0,bestCombo=0,starSpawned=false,starTipShown=false,shieldTime=0,shieldSpawnCooldown=0,shieldSpawnCount=0;
 let goodCaught=0,scamCaught=0,scamAvoided=0,quizCorrect=0,quizAsked=0,items=[],particles=[],devils=[],shake=0,flash=0,throwAnim=0,devilAcc=0;
 let mapIndex=0,quizActive=false,quizTriggered={30:false,15:false},usedQuizIndexes=[];
-let doubleTime=0,bossActive=false,bossHp=100,bossMaxHp=100,bossSpawnAcc=0,bossDefeated=false,mapTransitionTimer=null,chapterCompactTimer=null,policeSweep=0;
+let magnetTime=0,doubleTime=0,bossActive=false,bossHp=100,bossMaxHp=100,bossSpawnAcc=0,bossDefeated=false,mapTransitionTimer=null,chapterCompactTimer=null,policeSweep=0;
 let basket={x:0,y:0,w:116,h:56,vx:0};
 let mayor={x:0,y:60,size:138,dir:1};
 let timer=null,tipTimer=null,soundOn=true,audioCtx=null;
@@ -463,6 +720,9 @@ function tone(freq,dur=.16,type='sine',vol=.18,delay=0){
  }catch(e){}
 }
 function beep(type){
+ if(type==='achievement'){
+  beep('star');setTimeout(()=>beep('win'),130);return;
+ }
  if(type==='good'){tone(660,.12);tone(880,.12,'sine',.15,.09)}
  else if(type==='fruit'){tone(420,.10,'triangle');tone(610,.13,'triangle',.17,.07)}
  else if(type==='star'){tone(880,.15);tone(1100,.16,'sine',.18,.1);tone(1320,.2,'sine',.16,.2)}
@@ -481,6 +741,7 @@ const goodDefs=[
  {emoji:'⭐',label:'反詐之星',value:50,speed:198,type:'star'}
 ];
 const powerDefs=[
+ {emoji:'🧲',label:'好運磁鐵',type:'magnet',value:30,speed:188},
  {emoji:'🛡️',label:'防詐護盾',type:'shield',value:30,speed:190},
  {emoji:'⏰',label:'時間加成',type:'time',value:20,speed:190},
  {emoji:'✨',label:'雙倍得分',type:'double',value:20,speed:190},
@@ -548,12 +809,12 @@ function chapterScamDef(){
 
 function reset(){
  score=0;combo=0;
- combo50Announced=false;combo100Announced=false;bestCombo=0;goodCaught=0;scamCaught=0;scamAvoided=0;quizCorrect=0;quizAsked=0;timeLeft=60;starSpawned=false;starTipShown=false;shieldTime=0;shieldSpawnCooldown=0;shieldSpawnCount=0;
+ comboMilestonesHit=new Set();sessionAchievements=new Set();chestsOpened=0;powerUpsUsed=0;superModesTriggered=0;bestCombo=0;goodCaught=0;scamCaught=0;scamAvoided=0;quizCorrect=0;quizAsked=0;timeLeft=60;starSpawned=false;starTipShown=false;shieldTime=0;shieldSpawnCooldown=0;shieldSpawnCount=0;magnetTime=0;
  shieldChip.style.display='none';
  shieldChip.textContent='🛡️ 護盾';
- items=[];particles=[];devils=[];spawnAcc=0;devilAcc=0;shake=0;flash=0;mapIndex=0;quizActive=false;quizTriggered={30:false,15:false};usedQuizIndexes=[];doubleTime=0;bossActive=false;bossHp=100;bossSpawnAcc=0;bossDefeated=false;policeSweep=0;basket.x=W/2-basket.w/2;basket.vx=0;
- mayor.x=W/2-mayor.size/2;mayor.dir=1;scoreEl.textContent=0;timeEl.textContent=60;comboEl.textContent=0;
- tip.style.display='none';clearTimeout(quizCloseTimer);clearTimeout(quizSafetyTimer);quizActive=false;quizOverlay.style.display='none';bossHud.style.display='none';shieldChip.style.display='none';doubleChip.style.display='none';chapterMission.classList.remove('compact');clearTimeout(chapterCompactTimer);updateMapLabel();
+ items=[];particles=[];devils=[];spawnAcc=0;devilAcc=0;shake=0;flash=0;mapIndex=0;quizActive=false;quizTriggered={30:false,15:false};usedQuizIndexes=[];magnetTime=0;doubleTime=0;bossActive=false;bossHp=100;bossSpawnAcc=0;bossDefeated=false;policeSweep=0;basket.x=W/2-basket.w/2;basket.vx=0;
+ mayor.x=W/2-mayor.size/2;mayor.dir=1;scoreEl.textContent=0;timeEl.textContent=60;comboEl.textContent=0;updateComboBadge();
+ tip.style.display='none';achievementToast.style.display='none';finalFireworks.style.display='none';finalFireworks.innerHTML='';clearTimeout(quizCloseTimer);clearTimeout(quizSafetyTimer);quizActive=false;quizOverlay.style.display='none';bossHud.style.display='none';shieldChip.style.display='none';magnetChip.style.display='none';doubleChip.style.display='none';chapterMission.classList.remove('compact');clearTimeout(chapterCompactTimer);updateMapLabel();
 }
 
 function updateMapLabel(showTransition=false){
@@ -590,7 +851,7 @@ function damageBoss(amount){
  bossHp=Math.max(0,bossHp-amount);bossFill.style.width=(bossHp/bossMaxHp*100)+'%';
  if(bossHp<=0){
   bossActive=false;bossDefeated=true;bossHud.style.display='none';score+=300;scoreEl.textContent=score;
-  showToast('🏆 成功擊退詐騙集團！＋300分');beep('win');
+  showToast('🏆 成功擊退詐騙集團！＋300分');beep('win');checkAchievements();
   for(let i=items.length-1;i>=0;i--)if(items[i].type==='scam')items.splice(i,1);
  }
 }
@@ -640,7 +901,7 @@ const q=quizBank[idx];
 function answerQuiz(q,i){
  [...quizChoices.children].forEach(b=>b.disabled=true);
  if(i===q.correct){
-  quizCorrect++;score+=100;scoreEl.textContent=score;
+  quizCorrect++;score+=100;checkAchievements();scoreEl.textContent=score;
   beep('star');
   closeQuiz();
   showScorePopup(W/2,H*.46,'🎉 答對！＋100',false);
@@ -667,15 +928,17 @@ function spawn(){
  const powerRoll=Math.random()<powerChance;
  if(powerRoll){
   const roll=Math.random();
-  if(roll<.10&&shieldSpawnCooldown<=0){
+  if(roll<.12){
+   def=powerDefs.find(p=>p.type==='magnet');
+  }else if(roll<.22&&shieldSpawnCooldown<=0){
    def=powerDefs.find(p=>p.type==='shield');
    shieldSpawnCount++;
    shieldSpawnCooldown=16;
-  }else if(roll<.18){
-   def=powerDefs.find(p=>p.type==='time');
-  }else if(roll<.26){
-   def=powerDefs.find(p=>p.type==='double');
   }else if(roll<.34){
+   def=powerDefs.find(p=>p.type==='time');
+  }else if(roll<.46){
+   def=powerDefs.find(p=>p.type==='double');
+  }else if(roll<.56){
    def=powerDefs.find(p=>p.type==='police');
   }else{
    def=pickNormalGood();
@@ -754,7 +1017,7 @@ function showTip(title,text){
 }
 function burst(x,y,text,bad=false){
  for(let i=0;i<6;i++){
- particles.push({
+ if(particles.length>110)particles.splice(0,particles.length-90);particles.push({
   x,y,
   vx:(Math.random()-.5)*130,
   vy:(i===0?-120:-50-Math.random()*100),
@@ -780,25 +1043,38 @@ function catchItem(it){
    scamAvoided++;damageBoss(it.boss?8:3);beep('shield');burst(it.x,it.y,'護盾擋下！',false);showScorePopup(it.x,it.y,'🛡️ 擋下詐騙',false);
    return;
   }
-  score=Math.max(0,score-40);combo=0;scamCaught++;shake=.35;flash=.35;beep('bad');mayorMood='alert';mayorMoodTime=1.1;
+  score=Math.max(0,score-40);combo=0;updateComboBadge();scamCaught++;shake=.35;flash=.35;beep('bad');mayorMood='alert';mayorMoodTime=1.1;
   showTip('🚨 '+it.label,it.tip);burst(it.x,it.y,'-40 分',true);showScorePopup(it.x,it.y,'-40 分',true);
+ }else if(it.type==='magnet'){
+  activateMagnet(8);score+=30;beep('star');
+  showTip('🧲 好運磁鐵','8 秒內自動吸取附近好物與幸運道具，不會吸取詐騙陷阱。');
+  showScorePopup(it.x,it.y,'磁鐵 8 秒',false);
  }else if(it.type==='shield'){
-  shieldTime=7;score+=30;beep('shield');showTip('🛡️ 防詐護盾','7 秒內可擋下所有詐騙陷阱。');showScorePopup(it.x,it.y,'護盾 7 秒',false);
+  activateShield(7);score+=30;beep('shield');showTip('🛡️ 防詐護盾','7 秒內可擋下所有詐騙陷阱。');showScorePopup(it.x,it.y,'護盾 7 秒',false);
  }else if(it.type==='time'){
-  timeLeft+=5;timeEl.textContent=timeLeft;score+=20;beep('star');showTip('⏰ 時間加成','挑戰時間增加 5 秒。');showScorePopup(it.x,it.y,'＋5 秒',false);
+  powerUpsUsed++;
+  const added=grantTimeBonus(5);
+  score+=20;beep('star');
+  if(added>0){
+   showTip('⏰ 時間加成',`挑戰時間增加 ${added} 秒，最高可延長至 80 秒。`);
+   showScorePopup(it.x,it.y,`＋${added} 秒`,false);
+  }else{
+   showTip('⏰ 時間已滿','目前已達 80 秒上限，仍獲得道具分數。');
+   showScorePopup(it.x,it.y,'已達 80 秒',false);
+  }
  }else if(it.type==='double'){
-  doubleTime=8;score+=20;beep('star');showTip('✨ 雙倍得分','8 秒內接住好物分數加倍。');showScorePopup(it.x,it.y,'雙倍 8 秒',false);
+  activateDouble(8);score+=20;beep('star');showTip('✨ 雙倍得分','8 秒內接住好物分數加倍。');showScorePopup(it.x,it.y,'雙倍 8 秒',false);
  }else if(it.type==='police'){
-  policeSweep=.8;score+=40;beep('win');let cleared=0;
+  powerUpsUsed++;policeSweep=.8;score+=40;beep('win');let cleared=0;
   for(let i=items.length-1;i>=0;i--)if(items[i].type==='scam'){items.splice(i,1);cleared++;damageBoss(5)}
   showTip('🚨 警察支援','警方立即出動，清除畫面上的詐騙陷阱。');showScorePopup(it.x,it.y,'清除 '+cleared+' 個詐騙',false);
  }else{
   combo++;
- announceComboMilestones();bestCombo=Math.max(bestCombo,combo);goodCaught++;mayorMood=combo>=5?'cheer':'happy';mayorMoodTime=.8;
+  bestCombo=Math.max(bestCombo,combo);announceComboMilestones();goodCaught++;checkAchievements();mayorMood=combo>=5?'cheer':'happy';mayorMoodTime=.8;
   const bonus=combo>=10?15:combo>=5?5:0;let gain=it.value+bonus;if(doubleTime>0)gain*=2;
   score+=gain;beep(it.type==='star'?'star':(it.label&&it.label.includes('糖果')?'good':'fruit'));
   burst(it.x,it.y,'+'+gain+' 分',false);showScorePopup(it.x,it.y,'+'+gain+' 分',false);
-  if(bossActive)damageBoss(2);
+  if(bossActive)damageBoss(combo>=100?4:2);
   if(it.type==='star'){
     flash=.18;
     if(!starTipShown){showTip('⭐ 反詐之星','遇到可疑訊息，先停、先查，再撥 165。');starTipShown=true;}
@@ -807,6 +1083,9 @@ function catchItem(it){
  scoreEl.textContent=score;comboEl.textContent=combo;
 }
 function update(dt){
+ if(document.hidden)return;
+ if(items.length>85)items.splice(0,items.length-75);
+ if(particles.length>120)particles.splice(0,particles.length-100);
  const elapsed=60-timeLeft;
  const calculatedMap=Math.min(maps.length-1,Math.floor(Math.max(0,elapsed)/15));
  // 接到「時間加成」時，剩餘秒數會增加；章節只能前進，不能倒退。
@@ -823,6 +1102,7 @@ function update(dt){
  throwAnim=Math.max(0,throwAnim-dt);mayorMoodTime=Math.max(0,mayorMoodTime-dt);shake=Math.max(0,shake-dt);flash=Math.max(0,flash-dt);
  shieldTime=Math.max(0,shieldTime-dt);
  shieldSpawnCooldown=Math.max(0,shieldSpawnCooldown-dt);
+ magnetTime=Math.max(0,magnetTime-dt);
  doubleTime=Math.max(0,doubleTime-dt);
  policeSweep=Math.max(0,policeSweep-dt);
  if(shieldTime<=0){
@@ -833,11 +1113,24 @@ function update(dt){
   shieldChip.style.display='block';
   shieldChip.textContent=`🛡️ 護盾 ${Math.ceil(shieldTime)}秒`;
  }
+ magnetChip.style.display=magnetTime>0?'block':'none';
+ magnetChip.querySelector('span').textContent=Math.ceil(magnetTime);
  doubleChip.style.display=doubleTime>0?'block':'none';doubleChip.querySelector('span').textContent=Math.ceil(doubleTime);
  updateDevils(dt);
  warning.style.opacity=flash>0?String(Math.min(1,flash*3)):0;
  for(let i=items.length-1;i>=0;i--){
   const it=items[i];if(it.arc){it.x+=it.vx*dt;it.vy+=it.gravity*dt;} it.y+=it.vy*dt;it.rot+=it.vr*dt;
+  if(magnetTime>0 && it.type!=='scam'){
+   const targetX=basket.x+basket.w/2;
+   const targetY=basket.y+basket.h/2;
+   const dx=targetX-it.x,dy=targetY-it.y;
+   const dist=Math.hypot(dx,dy);
+   if(dist<230 && dist>1){
+    const pull=(1-dist/230)*720;
+    it.x+=dx/dist*pull*dt;
+    it.y+=dy/dist*pull*dt;
+   }
+  }
   if(hit(it,basket)){catchItem(it);items.splice(i,1);continue}
   if(it.y-it.r>H){if(it.type==='scam'){scamAvoided++;if(it.boss)damageBoss(6)}items.splice(i,1)}
  }
@@ -973,7 +1266,7 @@ function drawItem(it){
   if(it.label==='假客服'){ctx.font='13px serif';ctx.fillText('📞',34,-20);}
   if(it.label==='假中獎'){ctx.font='14px serif';ctx.fillText('✨',-34,-20);ctx.fillText('✨',34,-20);}
  }else{
-  if(['shield','time','double','police'].includes(it.type)){
+  if(['magnet','shield','time','double','police'].includes(it.type)){
     ctx.shadowColor='#fff8a0';ctx.shadowBlur=18;
     ctx.fillStyle='#fff9d8';ctx.beginPath();ctx.arc(0,0,31,0,Math.PI*2);ctx.fill();
     ctx.strokeStyle='#1d6a59';ctx.lineWidth=3;ctx.stroke();
@@ -1028,6 +1321,17 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 
+let pausedByVisibility=false;
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden&&playing&&!quizActive){
+  pausedByVisibility=true;
+  pauseCurtain.style.display='flex';
+ }else if(!document.hidden&&pausedByVisibility){
+  pausedByVisibility=false;
+  pauseCurtain.style.display='none';
+  last=performance.now();
+ }
+});
 
 function getLeaders(){
  try{return JSON.parse(localStorage.getItem('tainanSweetLeaders')||'[]')}catch(e){return []}
@@ -1049,7 +1353,7 @@ function showToast(msg){
 }
 async function shareGame(){
  const data={
-  title:'臺南甜甜接好運 Version 10.1B 答題流暢版',
+  title:'臺南甜甜接好運 市警局 feat. 市場處',
   text:'接住臺南好物，避開詐騙陷阱！',
   url:location.href
  };
@@ -1062,7 +1366,7 @@ async function shareGame(){
 shareBtn.onclick=shareGame;
 
 function start(){
- reset();scoreFxLayer.innerHTML='';dragging=false;if(moveHint)moveHint.style.display='block';overlay.style.display='none';
+ reset();scoreFxLayer.innerHTML='';comboCelebration.style.display='none';pauseCurtain.style.display='none';dragging=false;if(moveHint)moveHint.style.display='block';overlay.style.display='none';
  clearInterval(timer);playing=false;last=0;
  updateMapLabel(true);
  runStartCountdown();
@@ -1087,29 +1391,49 @@ function beginGameplay(){
  showChapterInfoTemporarily();
  playing=true;last=0;
  setTimeout(()=>{if(playing&&!quizActive)spawn()},250);
- timer=setInterval(()=>{if(!playing||quizActive)return;timeLeft--;timeEl.textContent=timeLeft;if(timeLeft<=0)end()},1000);
+ timer=setInterval(()=>{if(!playing||quizActive||document.hidden)return;timeLeft--;timeEl.textContent=timeLeft;if(timeLeft<=0)end()},1000);
 }
 function end(){
- playing=false;dragging=false;scoreFxLayer.innerHTML='';clearInterval(timer);tip.style.display='none';beep('win');saveLeader(score);
- let rank='🥉 防詐小尖兵',msg='你已完成臺南四大地標的防詐巡守任務。';
- if(score>=1200){rank='👑 臺南防詐守護英雄';msg='詐騙陷阱全都逃不過你的眼睛！'}
- else if(score>=850){rank='🥇 165反詐守護者';msg='你已具備優秀的反詐辨識力！'}
- else if(score>=500){rank='🥈 臺南反詐達人';msg='好物接得準，詐騙也看得清！'}
- overlay.innerHTML=`<div class="card"><h1>四章巡守完成</h1><div class="versionTag">Version 10.1B 答題流暢版</div><div class="rank">${rank}</div>
+ playing=false;dragging=false;scoreFxLayer.innerHTML='';comboCelebration.style.display='none';clearInterval(timer);tip.style.display='none';
+ checkAchievements();
+ const hiddenEnding=isHiddenEnding();
+ if(hiddenEnding)unlockAchievement('hiddenHero',true);
+ beep(hiddenEnding?'achievement':'win');saveLeader(score);
+
+ let rank='🌱 防詐學習者',msg='再挑戰一次，把更多防詐知識帶回家！';
+ if(score>=5500){rank='👑 臺南反詐達人';msg='甜甜好運與反詐實力都已登峰造極！'}
+ else if(score>=4500){rank='🥇 165反詐守護者';msg='你已具備頂尖的詐騙辨識與守護能力！'}
+ else if(score>=3500){rank='🥈 臺南反詐達人';msg='好物接得準，詐騙陷阱也看得清！'}
+ else if(score>=2500){rank='🥉 防詐小尖兵';msg='你已掌握重要的防詐基本功！'}
+
+ const hiddenBanner=hiddenEnding
+  ?`<div class="endingBanner">🌟 隱藏結局解鎖 🌟<br><span style="font-size:23px">臺南反詐英雄</span><br><small>高分＋100 Combo＋擊退 Boss＋答題全對</small></div>`
+  :'';
+ const nextTarget=score<2500?2500:score<3500?3500:score<4500?4500:score<5500?5500:null;
+ const progressText=nextTarget?`距離下一稱號還差 ${Math.max(0,nextTarget-score)} 分`:'已達最高榮譽！';
+
+ overlay.innerHTML=`<div class="card"><h1>${hiddenEnding?'英雄結局達成！':'四章巡守完成'}</h1>
+ <div class="versionTag">市警局 feat. 市場處</div>
+ ${hiddenBanner}<div class="rank">${rank}</div>
  <div style="font-size:52px;font-weight:900;color:#ed6539;margin:8px">${score} 分</div>
- <div class="stats"><div class="stat">接住好物<br>${goodCaught}</div><div class="stat">避開詐騙<br>${scamAvoided}</div><div class="stat">知識答對<br>${quizCorrect}/${quizAsked}</div><div class="stat">巡守進度<br>4／4</div></div>
+ <div style="font-weight:900;color:#7a5b2a">${progressText}</div>
+ <div class="stats"><div class="stat">接住好物<br>${goodCaught}</div><div class="stat">最高連擊<br>${bestCombo}</div><div class="stat">幸運寶箱<br>${chestsOpened}</div><div class="stat">道具啟動<br>${powerUpsUsed}</div><div class="stat">擊退 Boss<br>${bossDefeated?'成功':'未完成'}</div><div class="stat">知識答對<br>${quizCorrect}/${quizAsked}</div></div>
  <p style="font-weight:900;color:#5a4430">${msg}</p>
+ <h3 style="color:#60358b;margin:12px 0 5px">🏅 成就圖鑑</h3>
+ <div class="achievementGrid">${achievementHTML(hiddenEnding)}</div>
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
  <div id="leaderPanel"><h3>🏆 本機排行榜</h3>${leaderHTML()}</div>
  <button id="again">再玩一次</button>
  <button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">分享成績</button>
  </div>`;
  overlay.style.display='flex';
+ if(hiddenEnding)launchFinalFireworks(4200);
  document.getElementById('again').onclick=start;
  document.getElementById('shareScore').onclick=async()=>{
-   const text=`我在「臺南甜甜接好運 Version 8.0A 守護臺南」獲得 ${score} 分，稱號：${rank.replace(/<[^>]*>/g,'')}！一起來挑戰反詐力！`;
+   const heroText=hiddenEnding?'，並解鎖「臺南反詐英雄」隱藏結局':'';
+   const text=`我在「臺南甜甜接好運 Release 11.0 Final」獲得 ${score} 分，稱號：${rank.replace(/<[^>]*>/g,'')}${heroText}！一起來挑戰反詐力！`;
    try{
-     if(navigator.share)await navigator.share({title:'臺南甜甜接好運',text,url:location.href});
+     if(navigator.share)await navigator.share({title:'臺南甜甜接好運 Release 11.0 Final',text,url:location.href});
      else if(navigator.clipboard){await navigator.clipboard.writeText(text+' '+location.href);showToast('成績與連結已複製')}
    }catch(e){}
  };
