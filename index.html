@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>臺南甜甜接好運｜Version 8.0A.9 守護臺南・特殊工具頻率調整版</title>
+<title>臺南甜甜接好運｜Version 8.0A.11 守護臺南・地標資訊位置修正版</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#132b34}
@@ -83,7 +83,7 @@ button{border:0;border-radius:999px;padding:13px 27px;margin-top:14px;background
 }
 
 
-#mapLabel{position:absolute;left:50%;top:108px;transform:translateX(-50%);z-index:6;
+#mapLabel{position:absolute;left:50%;top:200px;transform:translateX(-50%);z-index:6;
 background:#173b43dc;color:#fff;border:2px solid #ffffffaa;border-radius:999px;
 padding:6px 13px;font-weight:900;font-size:13px;pointer-events:none;white-space:nowrap}
 #quizOverlay{position:absolute;inset:0;z-index:25;display:none;align-items:center;justify-content:center;
@@ -120,7 +120,7 @@ font-size:12px;font-weight:900;color:#174f43}
 #chapterMission{
  position:absolute;
  left:50%;
- top:190px;
+ top:242px;
  transform:translateX(-50%) scale(1);
  transform-origin:top left;
  z-index:8;
@@ -142,7 +142,7 @@ font-size:12px;font-weight:900;color:#174f43}
 }
 #chapterMission.compact{
  left:10px;
- top:194px;
+ top:250px;
  transform:translateX(0) scale(.78);
  min-width:0;
  max-width:210px;
@@ -211,7 +211,7 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 <div id="overlay">
   <div class="card">
     <h1>🎮 臺南甜甜接好運</h1>
-    <div class="versionTag">Version 8.0A.9 守護臺南・特殊工具頻率調整版</div>
+    <div class="versionTag">Version 8.0A.11 守護臺南・地標資訊位置修正版</div>
     <div class="subtitle">走訪臺南地標・閃避動畫詐騙・挑戰防詐知識</div>
     <div class="rules">
       🍬 糖果 ＋10　🥭 臺南芒果 ＋20<br>
@@ -794,7 +794,7 @@ function drawBasket(){
 }
 function draw(){
  ctx.save();if(shake>0)ctx.translate((Math.random()-.5)*12,(Math.random()-.5)*10);
- bg();drawMayor();devils.forEach(drawDevil);items.forEach(drawItem);drawBasket();drawShield();
+ bg();devils.forEach(drawDevil);items.forEach(drawItem);drawMayor();drawBasket();drawShield();
  for(const p of particles){
  ctx.globalAlpha=Math.max(0,p.life/.7);
  if(p.txt==='✦'){
@@ -851,7 +851,7 @@ function showToast(msg){
  clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.style.display='none',1800);
 }
 async function shareGame(){
- const data={title:'臺南甜甜接好運 Version 8.0A.9 守護臺南・特殊工具頻率調整版',text:'巡守四大臺南地標，接住甜甜好運、識破詐騙套路！',url:location.href};
+ const data={title:'臺南甜甜接好運 Version 8.0A.11 守護臺南・地標資訊位置修正版',text:'巡守四大臺南地標，接住甜甜好運、識破詐騙套路！',url:location.href};
  try{
   if(navigator.share){await navigator.share(data)}
   else if(navigator.clipboard){await navigator.clipboard.writeText(location.href);showToast('連結已複製')}
@@ -871,7 +871,7 @@ function end(){
  if(score>=1200){rank='👑 臺南防詐守護英雄';msg='詐騙陷阱全都逃不過你的眼睛！'}
  else if(score>=850){rank='🥇 165反詐守護者';msg='你已具備優秀的反詐辨識力！'}
  else if(score>=500){rank='🥈 臺南反詐達人';msg='好物接得準，詐騙也看得清！'}
- overlay.innerHTML=`<div class="card"><h1>四章巡守完成</h1><div class="versionTag">Version 8.0A.9 守護臺南・特殊工具頻率調整版</div><div class="rank">${rank}</div>
+ overlay.innerHTML=`<div class="card"><h1>四章巡守完成</h1><div class="versionTag">Version 8.0A.11 守護臺南・地標資訊位置修正版</div><div class="rank">${rank}</div>
  <div style="font-size:52px;font-weight:900;color:#ed6539;margin:8px">${score} 分</div>
  <div class="stats"><div class="stat">接住好物<br>${goodCaught}</div><div class="stat">避開詐騙<br>${scamAvoided}</div><div class="stat">知識答對<br>${quizCorrect}/${quizAsked}</div><div class="stat">巡守進度<br>4／4</div></div>
  <p style="font-weight:900;color:#5a4430">${msg}</p>
