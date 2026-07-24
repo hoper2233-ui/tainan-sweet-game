@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>臺南甜甜接好運｜Version 8.0A.11 守護臺南・地標資訊位置修正版</title>
+<title>臺南甜甜接好運｜Version 8.0A.14 守護臺南・四章資訊與連擊彩蛋版</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#132b34}
@@ -154,6 +154,38 @@ font-size:12px;font-weight:900;color:#174f43}
 #chapterMission.compact #chapterTitle{font-size:13px;white-space:nowrap}
 #chapterMission.compact small{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+
+/* Version 8.0A.12：開場資訊自動縮小淡出 */
+#brandBar,#mapLabel,#chapterMission{
+ transition:opacity .45s ease,transform .45s ease,filter .45s ease;
+}
+#brandBar.autoHide{
+ opacity:0;
+ transform:translateY(-10px) scale(.72);
+ filter:blur(2px);
+ pointer-events:none;
+}
+#mapLabel.autoHide{
+ opacity:0;
+ transform:translateX(-50%) translateY(-7px) scale(.72);
+ filter:blur(2px);
+ pointer-events:none;
+}
+#chapterMission.autoHide{
+ opacity:0;
+ transform:translateX(-50%) translateY(-7px) scale(.72);
+ filter:blur(2px);
+ pointer-events:none;
+}
+#chapterMission.compact.autoHide{
+ transform:translateX(0) translateY(-7px) scale(.62);
+}
+#shareBtn{
+ padding:5px 9px;
+ font-size:11px;
+ box-shadow:0 3px 0 #174d42;
+}
+
 </style>
 </head>
 <body>
@@ -211,7 +243,7 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 <div id="overlay">
   <div class="card">
     <h1>🎮 臺南甜甜接好運</h1>
-    <div class="versionTag">Version 8.0A.11 守護臺南・地標資訊位置修正版</div>
+    <div class="versionTag">Version 8.0A.14 守護臺南・四章資訊與連擊彩蛋版</div>
     <div class="subtitle">走訪臺南地標・閃避動畫詐騙・挑戰防詐知識</div>
     <div class="rules">
       🍬 糖果 ＋10　🥭 臺南芒果 ＋20<br>
@@ -234,6 +266,7 @@ const tipTitle=document.getElementById('tipTitle'),tipText=document.getElementBy
 const soundBtn=document.getElementById('soundBtn');
 const moveHint=document.getElementById('moveHint');
 const shareBtn=document.getElementById('shareBtn');
+const brandBar=document.getElementById('brandBar');
 const toast=document.getElementById('toast');
 const scoreFxLayer=document.getElementById('scoreFxLayer');
 const mapLabel=document.getElementById('mapLabel');
@@ -246,6 +279,49 @@ const bossHud=document.getElementById('bossHud'),bossFill=document.getElementByI
 const mapTransition=document.getElementById('mapTransition'),mapTransitionIcon=document.getElementById('mapTransitionIcon'),mapTransitionName=document.getElementById('mapTransitionName');
 const shieldChip=document.getElementById('shieldChip'),doubleChip=document.getElementById('doubleChip');
 const chapterMission=document.getElementById('chapterMission'),chapterTitle=document.getElementById('chapterTitle'),chapterTheme=document.getElementById('chapterTheme');
+
+let brandHideTimer=null,chapterInfoHideTimer=null;
+
+let combo50Announced=false,combo100Announced=false;
+
+function announceComboMilestones(){
+ if(combo>=100 && !combo100Announced){
+  combo100Announced=true;
+  toast.textContent='🎉 防詐達人模式！特殊道具機率再提升！';
+  toast.style.display='block';
+  setTimeout(()=>toast.style.display='none',2200);
+  // 煙火彩蛋：利用既有粒子系統（若存在）
+  if(typeof burst==='function'){
+   for(let i=0;i<6;i++)setTimeout(()=>burst(W*(.18+.13*i),H*.32,18),i*90);
+  }
+  mayorMood='happy';
+  setTimeout(()=>{if(typeof mayorMood!=='undefined')mayorMood='normal';},1800);
+ }else if(combo>=50 && !combo50Announced){
+  combo50Announced=true;
+  toast.textContent='🔥 50連擊達成！幸運加成啟動！';
+  toast.style.display='block';
+  setTimeout(()=>toast.style.display='none',1900);
+ }
+}
+
+
+function showBrandTemporarily(){
+ if(!brandBar)return;
+ brandBar.classList.remove('autoHide');
+ clearTimeout(brandHideTimer);
+ brandHideTimer=setTimeout(()=>brandBar.classList.add('autoHide'),5000);
+}
+
+function showChapterInfoTemporarily(){
+ mapLabel.classList.remove('autoHide');
+ chapterMission.classList.remove('autoHide');
+ clearTimeout(chapterInfoHideTimer);
+ chapterInfoHideTimer=setTimeout(()=>{
+  mapLabel.classList.add('autoHide');
+  chapterMission.classList.add('autoHide');
+ },3000);
+}
+
 
 const mayorImgs={};
 for(const [k,src] of Object.entries({
@@ -397,7 +473,8 @@ function chapterScamDef(){
 }
 
 function reset(){
- score=0;combo=0;bestCombo=0;goodCaught=0;scamCaught=0;scamAvoided=0;quizCorrect=0;quizAsked=0;timeLeft=60;starSpawned=false;starTipShown=false;shieldTime=0;shieldSpawnCooldown=0;shieldSpawnCount=0;
+ score=0;combo=0;
+ combo50Announced=false;combo100Announced=false;bestCombo=0;goodCaught=0;scamCaught=0;scamAvoided=0;quizCorrect=0;quizAsked=0;timeLeft=60;starSpawned=false;starTipShown=false;shieldTime=0;shieldSpawnCooldown=0;shieldSpawnCount=0;
  shieldChip.style.display='none';
  shieldChip.textContent='🛡️ 護盾';
  items=[];particles=[];devils=[];spawnAcc=0;devilAcc=0;shake=0;flash=0;mapIndex=0;quizActive=false;quizTriggered={30:false,15:false};usedQuizIndexes=[];doubleTime=0;bossActive=false;bossHp=100;bossSpawnAcc=0;bossDefeated=false;policeSweep=0;basket.x=W/2-basket.w/2;basket.vx=0;
@@ -421,7 +498,11 @@ function updateMapLabel(showTransition=false){
   const sub=mapTransition.querySelector('#mapTransitionBox div:last-child');
   if(sub)sub.textContent=m.mission;
   mapTransition.style.display='flex';
-  clearTimeout(mapTransitionTimer);mapTransitionTimer=setTimeout(()=>mapTransition.style.display='none',1500);
+  clearTimeout(mapTransitionTimer);
+  mapTransitionTimer=setTimeout(()=>{
+   mapTransition.style.display='none';
+   showChapterInfoTemporarily();
+  },1500);
   showToast(m.voice);beep('star');
  }
 }
@@ -484,13 +565,14 @@ function answerQuiz(q,i){
 function pickNormalGood(){
  const stars=goodDefs.filter(g=>g.type==='star');
  const normals=goodDefs.filter(g=>g.type!=='star');
- if(stars.length&&Math.random()<.05)return stars[Math.floor(Math.random()*stars.length)];
+ if(stars.length&&Math.random()<(combo>=100?.13:(combo>=50?.10:.05)))return stars[Math.floor(Math.random()*stars.length)];
  return normals[Math.floor(Math.random()*normals.length)];
 }
 
 function spawn(){
  let def;
- const powerRoll=Math.random()<.06;
+ const powerChance = combo>=100 ? .156 : (combo>=50 ? .12 : .06);
+ const powerRoll=Math.random()<powerChance;
  if(powerRoll){
   const roll=Math.random();
   if(roll<.10&&shieldSpawnCooldown<=0){
@@ -619,7 +701,8 @@ function catchItem(it){
   for(let i=items.length-1;i>=0;i--)if(items[i].type==='scam'){items.splice(i,1);cleared++;damageBoss(5)}
   showTip('🚨 警察支援','警方立即出動，清除畫面上的詐騙陷阱。');showScorePopup(it.x,it.y,'清除 '+cleared+' 個詐騙',false);
  }else{
-  combo++;bestCombo=Math.max(bestCombo,combo);goodCaught++;mayorMood=combo>=5?'cheer':'happy';mayorMoodTime=.8;
+  combo++;
+ announceComboMilestones();bestCombo=Math.max(bestCombo,combo);goodCaught++;mayorMood=combo>=5?'cheer':'happy';mayorMoodTime=.8;
   const bonus=combo>=10?15:combo>=5?5:0;let gain=it.value+bonus;if(doubleTime>0)gain*=2;
   score+=gain;beep(it.type==='star'?'star':(it.label&&it.label.includes('糖果')?'good':'fruit'));
   burst(it.x,it.y,'+'+gain+' 分',false);showScorePopup(it.x,it.y,'+'+gain+' 分',false);
@@ -851,7 +934,7 @@ function showToast(msg){
  clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.style.display='none',1800);
 }
 async function shareGame(){
- const data={title:'臺南甜甜接好運 Version 8.0A.11 守護臺南・地標資訊位置修正版',text:'巡守四大臺南地標，接住甜甜好運、識破詐騙套路！',url:location.href};
+ const data={title:'臺南甜甜接好運 Version 8.0A.14 守護臺南・四章資訊與連擊彩蛋版',text:'巡守四大臺南地標，接住甜甜好運、識破詐騙套路！',url:location.href};
  try{
   if(navigator.share){await navigator.share(data)}
   else if(navigator.clipboard){await navigator.clipboard.writeText(location.href);showToast('連結已複製')}
@@ -861,7 +944,9 @@ async function shareGame(){
 shareBtn.onclick=shareGame;
 
 function start(){
- reset();scoreFxLayer.innerHTML='';dragging=false;if(moveHint)moveHint.style.display='block';overlay.style.display='none';playing=true;last=0;clearInterval(timer);
+ reset();scoreFxLayer.innerHTML='';dragging=false;if(moveHint)moveHint.style.display='block';overlay.style.display='none';
+ showBrandTemporarily();
+ playing=true;last=0;clearInterval(timer);
  updateMapLabel(true);setTimeout(()=>{if(playing)spawn()},250);
  timer=setInterval(()=>{if(!playing||quizActive)return;timeLeft--;timeEl.textContent=timeLeft;if(timeLeft<=0)end()},1000);
 }
@@ -871,7 +956,7 @@ function end(){
  if(score>=1200){rank='👑 臺南防詐守護英雄';msg='詐騙陷阱全都逃不過你的眼睛！'}
  else if(score>=850){rank='🥇 165反詐守護者';msg='你已具備優秀的反詐辨識力！'}
  else if(score>=500){rank='🥈 臺南反詐達人';msg='好物接得準，詐騙也看得清！'}
- overlay.innerHTML=`<div class="card"><h1>四章巡守完成</h1><div class="versionTag">Version 8.0A.11 守護臺南・地標資訊位置修正版</div><div class="rank">${rank}</div>
+ overlay.innerHTML=`<div class="card"><h1>四章巡守完成</h1><div class="versionTag">Version 8.0A.14 守護臺南・四章資訊與連擊彩蛋版</div><div class="rank">${rank}</div>
  <div style="font-size:52px;font-weight:900;color:#ed6539;margin:8px">${score} 分</div>
  <div class="stats"><div class="stat">接住好物<br>${goodCaught}</div><div class="stat">避開詐騙<br>${scamAvoided}</div><div class="stat">知識答對<br>${quizCorrect}/${quizAsked}</div><div class="stat">巡守進度<br>4／4</div></div>
  <p style="font-weight:900;color:#5a4430">${msg}</p>
