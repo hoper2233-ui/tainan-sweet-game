@@ -446,6 +446,12 @@ font-size:12px;font-weight:900;color:#174f43}
  background:#eef3ff;color:#294a8a;font-size:17px;font-weight:1000;overflow-wrap:anywhere
 }
 
+
+.lineBrowserNotice{
+ margin:8px 0;padding:9px 11px;border:2px solid #27ae60;border-radius:13px;
+ background:#effff5;color:#17633a;font-size:13px;font-weight:900;line-height:1.45
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -1650,108 +1656,150 @@ async function end(){
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
  <div id="leaderPanel"><h3>🏆 本機排行榜</h3>${leaderHTML()}</div>
  <button id="again">再玩一次</button>
- <button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">分享成績</button><button id="saveScoreImage" style="background:#8a4dd6;box-shadow:0 6px 0 #5a2d99;margin-left:6px">📸 儲存成績圖片</button>
+ <div id="lineBrowserNotice" class="lineBrowserNotice" style="display:none">LINE 內建瀏覽器不支援直接下載，點選「儲存圖片」時將自動改用分享模式。</div>
+<button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">📤 分享圖片</button><button id="saveScoreImage" style="background:#8a4dd6;box-shadow:0 6px 0 #5a2d99;margin-left:6px">📸 儲存圖片</button>
  </div>`;
  overlay.style.display='flex';
  if(hiddenEnding)launchFinalFireworks(4200);
  document.getElementById('again').onclick=start;
 
-document.getElementById('saveScoreImage').onclick=async()=>{
-  const button=document.getElementById('saveScoreImage');
+
+function isLineBrowser(){
+  return /Line\/|LIFF/i.test(navigator.userAgent||'');
+}
+
+async function buildFullResultImage(){
   const card=document.querySelector('#overlay .card');
   if(typeof html2canvas==='undefined'){
-    alert('截圖元件載入失敗，請確認網路連線。');
-    return;
+    throw new Error('截圖元件載入失敗，請確認網路連線。');
   }
 
-  const originalText=button.textContent;
-  button.disabled=true;
-  button.textContent='圖片製作中…';
+  if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+  const images=[...card.querySelectorAll('img')];
+  await Promise.all(images.map(img=>{
+    if(img.complete&&img.naturalWidth>0)return Promise.resolve();
+    return new Promise(resolve=>{
+      img.addEventListener('load',resolve,{once:true});
+      img.addEventListener('error',resolve,{once:true});
+    });
+  }));
 
-  let captureWrap=null;
+  const rect=card.getBoundingClientRect();
+  const captureWidth=Math.max(320,Math.round(rect.width));
+  const captureWrap=document.createElement('div');
+  captureWrap.setAttribute('aria-hidden','true');
+  Object.assign(captureWrap.style,{
+    position:'fixed',left:'-100000px',top:'0',width:captureWidth+'px',
+    background:'#ffffff',zIndex:'-1',pointerEvents:'none'
+  });
+
+  const clone=card.cloneNode(true);
+  clone.removeAttribute('style');
+  Object.assign(clone.style,{
+    width:captureWidth+'px',maxWidth:'none',height:'auto',maxHeight:'none',
+    overflow:'visible',boxSizing:'border-box',margin:'0',transform:'none'
+  });
+
+  clone.querySelectorAll('button').forEach(el=>el.remove());
+  clone.querySelectorAll('*').forEach(el=>{
+    el.style.animation='none';
+    el.style.transition='none';
+  });
+
+  captureWrap.appendChild(clone);
+  document.body.appendChild(captureWrap);
+
   try{
-    // 等待字型與吉祥物圖片完整載入
-    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
-    const images=[...card.querySelectorAll('img')];
-    await Promise.all(images.map(img=>{
-      if(img.complete&&img.naturalWidth>0)return Promise.resolve();
-      return new Promise(resolve=>{
-        img.addEventListener('load',resolve,{once:true});
-        img.addEventListener('error',resolve,{once:true});
-      });
-    }));
-
-    // 複製完整結算卡片到畫面外，解除原本 92vh 捲動限制
-    const rect=card.getBoundingClientRect();
-    const captureWidth=Math.max(320,Math.round(rect.width));
-
-    captureWrap=document.createElement('div');
-    captureWrap.setAttribute('aria-hidden','true');
-    Object.assign(captureWrap.style,{
-      position:'fixed',
-      left:'-100000px',
-      top:'0',
-      width:captureWidth+'px',
-      background:'#ffffff',
-      zIndex:'-1',
-      pointerEvents:'none'
-    });
-
-    const clone=card.cloneNode(true);
-    clone.removeAttribute('style');
-    Object.assign(clone.style,{
-      width:captureWidth+'px',
-      maxWidth:'none',
-      height:'auto',
-      maxHeight:'none',
-      overflow:'visible',
-      boxSizing:'border-box',
-      margin:'0',
-      transform:'none'
-    });
-
-    // 截圖只保留成績內容，移除操作按鈕
-    clone.querySelectorAll('button').forEach(el=>el.remove());
-    clone.querySelectorAll('*').forEach(el=>{
-      el.style.animation='none';
-      el.style.transition='none';
-    });
-
-    captureWrap.appendChild(clone);
-    document.body.appendChild(captureWrap);
-
-    // 讓瀏覽器完成重新排版，取得真正完整高度
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     const captureHeight=Math.ceil(Math.max(
-      clone.scrollHeight,
-      clone.offsetHeight,
-      clone.getBoundingClientRect().height
+      clone.scrollHeight,clone.offsetHeight,clone.getBoundingClientRect().height
     ));
-
-    // 避免部分手機因超大 Canvas 失敗，依完整高度自動調整清晰度
     const maxCanvasSide=14000;
     const scale=Math.max(1,Math.min(2,maxCanvasSide/Math.max(captureWidth,captureHeight)));
 
     const canvas=await html2canvas(clone,{
-      backgroundColor:'#fffdf2',
-      scale,
-      useCORS:true,
-      allowTaint:false,
-      logging:false,
-      width:captureWidth,
-      height:captureHeight,
-      windowWidth:captureWidth,
-      windowHeight:captureHeight,
-      scrollX:0,
-      scrollY:0
+      backgroundColor:'#fffdf2',scale,useCORS:true,allowTaint:false,logging:false,
+      width:captureWidth,height:captureHeight,windowWidth:captureWidth,
+      windowHeight:captureHeight,scrollX:0,scrollY:0
     });
 
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
     if(!blob)throw new Error('PNG 產生失敗');
+    return {
+      blob,
+      file:new File([blob],`臺南甜甜接好運_${score}分_完整成績.png`,{type:'image/png'})
+    };
+  }finally{
+    captureWrap.remove();
+  }
+}
 
-    const url=URL.createObjectURL(blob);
+async function shareResultImage(){
+  const shareButton=document.getElementById('shareScore');
+  const saveButton=document.getElementById('saveScoreImage');
+  const oldShareText=shareButton.textContent;
+  shareButton.disabled=true;
+  saveButton.disabled=true;
+  shareButton.textContent='圖片製作中…';
+
+  try{
+    const result=await buildFullResultImage();
+    const shareData={
+      title:'臺南甜甜接好運',
+      text:`我在《臺南甜甜接好運》獲得 ${score} 分！`,
+      files:[result.file]
+    };
+
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[result.file]})){
+      await navigator.share(shareData);
+      showToast('已開啟分享選單');
+      return true;
+    }
+
+    // 部分 LINE 內建瀏覽器不支援 Web Share 檔案，但可以開啟圖片供長按儲存／分享。
+    const imageUrl=URL.createObjectURL(result.blob);
+    const win=window.open(imageUrl,'_blank');
+    if(!win){
+      location.href=imageUrl;
+    }
+    setTimeout(()=>URL.revokeObjectURL(imageUrl),60000);
+    alert('此瀏覽器未支援直接分享檔案，已開啟成績圖片。請長按圖片後選擇「分享」或「儲存圖片」。');
+    return true;
+  }catch(err){
+    if(err&&err.name==='AbortError')return false;
+    console.error(err);
+    alert(err.message||'成績圖片製作失敗，請重新操作一次。');
+    return false;
+  }finally{
+    shareButton.disabled=false;
+    saveButton.disabled=false;
+    shareButton.textContent=oldShareText;
+  }
+}
+
+const lineBrowserNotice=document.getElementById('lineBrowserNotice');
+ if(lineBrowserNotice&&isLineBrowser())lineBrowserNotice.style.display='block';
+
+document.getElementById('saveScoreImage').onclick=async()=>{
+  // LINE 內建瀏覽器不使用下載機制，直接改走手機分享模式。
+  if(isLineBrowser()){
+    showToast('LINE 瀏覽器將改用分享圖片');
+    await shareResultImage();
+    return;
+  }
+
+  const button=document.getElementById('saveScoreImage');
+  const shareButton=document.getElementById('shareScore');
+  const originalText=button.textContent;
+  button.disabled=true;
+  shareButton.disabled=true;
+  button.textContent='圖片製作中…';
+
+  try{
+    const result=await buildFullResultImage();
+    const url=URL.createObjectURL(result.blob);
     const a=document.createElement('a');
-    a.download=`臺南甜甜接好運_${score}分_完整成績.png`;
+    a.download=result.file.name;
     a.href=url;
     document.body.appendChild(a);
     a.click();
@@ -1760,22 +1808,17 @@ document.getElementById('saveScoreImage').onclick=async()=>{
     showToast('完整成績圖片已儲存');
   }catch(err){
     console.error(err);
-    alert('成績圖片製作失敗，請重新操作一次。');
+    alert(err.message||'成績圖片製作失敗，請重新操作一次。');
   }finally{
-    if(captureWrap)captureWrap.remove();
     button.disabled=false;
+    shareButton.disabled=false;
     button.textContent=originalText;
   }
 };
-document.getElementById('shareScore').onclick=async()=>{
 
-   const heroText=hiddenEnding?'，並解鎖「臺南反詐英雄」隱藏結局':'';
-   const text=`我在「臺南甜甜接好運 Release 11.0 Final」獲得 ${score} 分，稱號：${rank.replace(/<[^>]*>/g,'')}${heroText}！一起來挑戰反詐力！`;
-   try{
-     if(navigator.share)await navigator.share({title:'臺南甜甜接好運 Release 11.0 Final',text,url:location.href});
-     else if(navigator.clipboard){await navigator.clipboard.writeText(text+' '+location.href);showToast('成績與連結已複製')}
-   }catch(e){}
- };
+document.getElementById('shareScore').onclick=async()=>{
+  await shareResultImage();
+};
 }
 document.getElementById('start').onclick=start;
 function moveTo(clientX){
