@@ -651,13 +651,17 @@ function showAchievementToast(def){
 }
 function unlockAchievement(id,silent=false){
  const def=achievementDefs.find(a=>a.id===id);if(!def)return;
- const stored=getAchievementStore();
- if(sessionAchievements.has(id)&&stored.has(id))return;
+ // 同一局只能解鎖一次，避免重複跳出成就通知
+ if(sessionAchievements.has(id))return;
  sessionAchievements.add(id);
+
+ // 歷史紀錄僅供保存，不再影響本局圖鑑判定
+ const stored=getAchievementStore();
  if(!stored.has(id)){
-  stored.add(id);saveAchievementStore(stored);
-  if(!silent)showAchievementToast(def);
+  stored.add(id);
+  saveAchievementStore(stored);
  }
+ if(!silent)showAchievementToast(def);
 }
 function checkAchievements(finalCheck=false){
  for(const def of achievementDefs){
@@ -670,11 +674,11 @@ function isHiddenEnding(){
  return score>=4500&&bestCombo>=100&&bossDefeated&&quizAsked>0&&quizCorrect===quizAsked;
 }
 function achievementHTML(hiddenUnlocked=false){
- const stored=getAchievementStore();
- if(hiddenUnlocked)stored.add('hiddenHero');
+ const currentRound=new Set(sessionAchievements);
+ if(hiddenUnlocked)currentRound.add('hiddenHero');
  return achievementDefs.map(a=>{
-  const ok=stored.has(a.id);
-  return `<div class="achievementCard ${ok?'unlocked':''}"><span class="achIcon">${ok?a.icon:'🔒'}</span>${ok?a.name:'尚未解鎖'}<br><small>${a.desc}</small></div>`;
+  const ok=currentRound.has(a.id);
+  return `<div class="achievementCard ${ok?'unlocked':''}"><span class="achIcon">${ok?a.icon:'🔒'}</span>${ok?a.name:'本局未解鎖'}<br><small>${a.desc}</small></div>`;
  }).join('');
 }
 function launchFinalFireworks(duration=3000){
@@ -1641,8 +1645,8 @@ async function end(){
  <div class="stats"><div class="stat">接住好物<br>${goodCaught}</div><div class="stat">最高連擊<br>${bestCombo}</div><div class="stat">幸運寶箱<br>${chestsOpened}</div><div class="stat">道具啟動<br>${powerUpsUsed}</div><div class="stat">擊退 Boss<br>${bossDefeated?'成功':'未完成'}</div><div class="stat">知識答對<br>${quizCorrect}/${quizAsked}</div></div>
  ${facebookAccountBlock}
  <p style="font-weight:900;color:#5a4430">${msg}</p>
- <h3 style="color:#60358b;margin:12px 0 5px">🏅 成就圖鑑（本機永久紀錄）</h3>
- <div class="achievementGrid">${achievementHTML(hiddenEnding)}</div><div style="font-size:11px;color:#777;margin:-4px 0 10px">答題全對與分數成就，僅依本局最終結算結果判定。</div>
+ <h3 style="color:#60358b;margin:12px 0 5px">🏅 本局成就圖鑑</h3>
+ <div class="achievementGrid">${achievementHTML(hiddenEnding)}</div><div style="font-size:11px;color:#777;margin:-4px 0 10px">本區只顯示本局實際達成的成就；分數、答題及隱藏成就均以最終結算結果判定。</div>
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
  <div id="leaderPanel"><h3>🏆 本機排行榜</h3>${leaderHTML()}</div>
  <button id="again">再玩一次</button>
