@@ -7,16 +7,19 @@
 <style>
   *{box-sizing:border-box}
   html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#cfefff}
-  body{display:flex;align-items:center;justify-content:center;background:#cfefff}
-#viewport{
-width:100vw;
-height:100vh;
-overflow:hidden;
+  body{
 display:flex;
 align-items:center;
 justify-content:center;
+background:#cfefff;
+padding:0;
 }
-  #game{position:relative;width:520px;height:900px;overflow:hidden;transform-origin:center center;
+  #game{
+position:relative;
+width:min(100vw,520px);
+height:min(calc(100vh - 8px),900px);
+overflow:hidden;
+margin:auto;
     background:linear-gradient(#77d9ff 0%,#d9f8ff 62%,#80d875 62%,#57ba58 100%);
     box-shadow:0 0 24px rgba(0,0,0,.2);touch-action:none}
   .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85}
@@ -70,7 +73,7 @@ justify-content:center;
 </style>
 </head>
 <body>
-<div id="viewport"><div id="game">
+<div id="game">
   <div class="cloud c1"></div><div class="cloud c2"></div>
   <div id="hud">
     <div class="pill">⭐ 分數：<span id="score">0</span></div>
@@ -109,19 +112,18 @@ justify-content:center;
       <button id="startBtn">開始遊戲</button>
     </div>
   </div>
-</div></div>
+</div>
 <script>
 
-function fitGame(){
- const game=document.getElementById('game');
- const vw=window.innerWidth;
- const vh=window.innerHeight;
- const scale=Math.min(vw/520,vh/900);
- game.style.transform='scale('+scale+')';
+function updateViewportHeight(){
+  const h = window.innerHeight;
+  document.documentElement.style.height = h + "px";
+  document.body.style.height = h + "px";
 }
-window.addEventListener('resize',fitGame);
-window.addEventListener('orientationchange',fitGame);
-window.addEventListener('load',fitGame);
+window.addEventListener("load", updateViewportHeight);
+window.addEventListener("resize", updateViewportHeight);
+window.addEventListener("orientationchange", updateViewportHeight);
+
 
 (() => {
   const symbols = ["ㄅ","ㄆ","ㄇ","ㄈ","ㄉ","ㄊ","ㄋ","ㄌ","ㄍ","ㄎ","ㄏ","ㄐ","ㄑ","ㄒ","ㄓ","ㄔ","ㄕ","ㄖ","ㄗ","ㄘ","ㄙ","ㄧ","ㄨ","ㄩ","ㄚ","ㄛ","ㄜ","ㄝ","ㄞ","ㄟ","ㄠ","ㄡ","ㄢ","ㄣ","ㄤ","ㄥ","ㄦ"];
