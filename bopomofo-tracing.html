@@ -62,13 +62,13 @@
   #controls{position:absolute;z-index:12;bottom:108px;left:0;right:0;display:flex;justify-content:space-between;padding:0 26px;pointer-events:none}
   .ctrl{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.55);border:4px solid rgba(255,255,255,.75);display:flex;align-items:center;justify-content:center;font-size:34px;color:#28627e;font-weight:900}
   #traceOverlay{position:absolute;z-index:25;inset:0;background:rgba(28,76,104,.82);display:none;align-items:center;justify-content:center;padding:10px}
-  #traceCard{width:100%;max-width:500px;height:min(88vh,720px);background:#fff;border:6px solid #fff0a8;border-radius:24px;padding:12px;display:flex;flex-direction:column;text-align:center;box-shadow:0 14px 34px rgba(0,0,0,.3)}
-  #traceTitle{font-size:21px;font-weight:900;color:#35667e}
-  #tracePronunciation{font-size:18px;font-weight:800;color:#ff6750;margin:4px 0 8px}
-  #moeFrameWrap{position:relative;flex:1;min-height:0;border:2px solid #dbe9ee;border-radius:14px;overflow:hidden;background:#fff}
+  #traceCard{width:min(96vw,500px);height:min(96dvh,680px);max-height:96%;background:#fff;border:5px solid #fff0a8;border-radius:22px;padding:8px;display:flex;flex-direction:column;text-align:center;box-shadow:0 14px 34px rgba(0,0,0,.3)}
+  #traceTitle{font-size:18px;font-weight:900;color:#35667e}
+  #tracePronunciation{font-size:15px;font-weight:800;color:#ff6750;margin:2px 0 4px}
+  #moeFrameWrap{position:relative;flex:1 1 auto;min-height:180px;border:2px solid #dbe9ee;border-radius:14px;overflow:hidden;background:#fff}
   #moeFrame{position:absolute;left:0;top:-165px;width:100%;height:calc(100% + 165px);border:0;background:#fff}
-  #continueBtn{margin-top:10px;padding:11px 28px;font-size:20px;box-shadow:0 5px 0 #d77d18}
-  #sourceNote{font-size:12px;color:#607d8b;margin-top:7px}
+  #continueBtn{margin-top:6px;padding:8px 20px;font-size:17px;box-shadow:0 5px 0 #d77d18}
+  #sourceNote{font-size:10px;color:#607d8b;margin-top:4px}
 82%{stroke-dashoffset:0;fill:transparent}100%{stroke-dashoffset:0;fill:#ffe477}}
 
   @media (max-width:480px){
