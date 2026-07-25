@@ -8,7 +8,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#cfefff}
   body{display:flex;align-items:center;justify-content:center}
-  #game{position:relative;width:min(100vw,520px);height:100vh;max-height:900px;overflow:hidden;
+  #game{position:relative;width:min(100vw,520px);height:100dvh;max-height:900px;overflow:hidden;
     background:linear-gradient(#77d9ff 0%,#d9f8ff 62%,#80d875 62%,#57ba58 100%);
     box-shadow:0 0 24px rgba(0,0,0,.2);touch-action:none}
   .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85}
@@ -80,7 +80,7 @@
       <div id="traceTitle">教育部注音筆順及練習</div>
       <div id="tracePronunciation"></div>
       <div id="moeFrameWrap">
-        <iframe id="moeFrame" title="教育部注音符號筆順動畫" loading="eager"></iframe>
+        <iframe id="moeFrame" title="教育部注音符號筆順動畫" loading="lazy" src="about:blank"></iframe>
       </div>
       <button id="continueBtn" type="button">筆順及練習完成，繼續遊戲</button>
       <div id="sourceNote">筆順來源：中華民國教育部《國字標準字體筆順學習網》</div>
@@ -169,31 +169,6 @@
   }
 
   const wait = ms => new Promise(r => setTimeout(r, ms));
-
-
-  function focusMoePracticeArea(){
-    try{
-      const doc = moeFrame.contentDocument || moeFrame.contentWindow.document;
-      const candidates = [
-        ...doc.querySelectorAll("a,button,div,span,td")
-      ];
-      const target = candidates.find(el =>
-        /筆順播放|筆順練習/.test((el.textContent || "").trim())
-      );
-      if(target){
-        target.scrollIntoView({block:"start",behavior:"auto"});
-        moeFrame.contentWindow.scrollBy(0,-20);
-      }else{
-        moeFrame.contentWindow.scrollTo(0,150);
-      }
-    }catch(e){
-      // Cross-origin browsers use the CSS upward offset instead.
-    }
-  }
-  moeFrame.addEventListener("load",()=>{
-    setTimeout(focusMoePracticeArea,350);
-    setTimeout(focusMoePracticeArea,1000);
-  });
 
   function playTrace(i){
     tracing=true;
