@@ -6,20 +6,30 @@
 <title>注音接接樂</title>
 <style>
   *{box-sizing:border-box}
-  html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#cfefff}
+  :root{--app-height:100dvh}
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;
+    background:#cfefff;
+  }
   body{
-display:flex;
-align-items:center;
-justify-content:center;
-background:#cfefff;
-padding:0;
-}
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#cfefff;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right)
+            env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
   #game{
-position:relative;
-width:min(100vw,520px);
-height:min(calc(100vh - 8px),900px);
-overflow:hidden;
-margin:auto;
+    position:relative;
+    width:min(100%,520px);
+    height:min(var(--app-height),900px);
+    max-height:100%;
+    overflow:hidden;
+    margin:auto;
     background:linear-gradient(#77d9ff 0%,#d9f8ff 62%,#80d875 62%,#57ba58 100%);
     box-shadow:0 0 24px rgba(0,0,0,.2);touch-action:none}
   .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85}
@@ -69,6 +79,37 @@ margin:auto;
     #continueBtn{margin-top:7px;padding:10px 22px;font-size:18px}
     #sourceNote{font-size:11px;margin-top:5px}
   }
+
+  @media (max-height:760px){
+    #hud{top:7px;left:8px;right:8px}
+    .pill{padding:5px 9px;font-size:15px;border-width:2px}
+    #nextBox{top:49px;padding:4px 12px;border-width:3px;font-size:15px}
+    #nextSymbol{font-size:27px}
+    #symbol{width:58px;height:58px;font-size:36px;border-width:4px}
+    #basket{bottom:16px;transform:translateX(-50%) scale(.88);transform-origin:bottom center}
+    #controls{bottom:72px;padding:0 18px}
+    .ctrl{width:60px;height:60px;font-size:29px;border-width:3px}
+    .panel{max-width:390px;padding:17px 18px;border-width:5px;border-radius:24px}
+    h1{font-size:32px}
+    .subtitle{font-size:17px;margin-bottom:10px}
+    .rules{font-size:14px;line-height:1.55;padding:10px;margin-bottom:12px}
+    button{padding:10px 28px;font-size:19px}
+    #traceCard{height:calc(var(--app-height) - 14px);padding:8px;border-width:4px}
+    #traceTitle{font-size:18px}
+    #tracePronunciation{font-size:15px;margin:2px 0 4px}
+    #continueBtn{margin-top:6px;padding:9px 20px;font-size:17px}
+    #sourceNote{font-size:10px;margin-top:4px}
+  }
+
+  @media (orientation:landscape) and (max-height:600px){
+    #controls{display:none}
+    #overlay{padding:8px}
+    .panel{max-width:520px;padding:12px 18px}
+    .rules{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}
+    #traceOverlay{padding:4px}
+    #traceCard{height:calc(var(--app-height) - 8px);max-width:620px}
+  }
+
   @media (min-width:700px){#controls{display:none}}
 </style>
 </head>
@@ -116,13 +157,19 @@ margin:auto;
 <script>
 
 function updateViewportHeight(){
-  const h = window.innerHeight;
+  const viewport = window.visualViewport;
+  const h = Math.round(viewport ? viewport.height : window.innerHeight);
+  document.documentElement.style.setProperty("--app-height", h + "px");
   document.documentElement.style.height = h + "px";
   document.body.style.height = h + "px";
 }
 window.addEventListener("load", updateViewportHeight);
 window.addEventListener("resize", updateViewportHeight);
-window.addEventListener("orientationchange", updateViewportHeight);
+window.addEventListener("orientationchange", () => setTimeout(updateViewportHeight, 180));
+if(window.visualViewport){
+  window.visualViewport.addEventListener("resize", updateViewportHeight);
+  window.visualViewport.addEventListener("scroll", updateViewportHeight);
+}
 
 
 (() => {
