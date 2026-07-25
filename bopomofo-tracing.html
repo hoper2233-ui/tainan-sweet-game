@@ -162,7 +162,10 @@ window.addEventListener("orientationchange", updateViewportHeight);
 
   function beep(freq, duration=.09){
     try{
-      audioCtx ??= new (window.AudioContext||window.webkitAudioContext)();
+      if(!audioCtx){
+        audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      }
+      if(audioCtx.state==="suspended"){audioCtx.resume();}
       const o=audioCtx.createOscillator(), g=audioCtx.createGain();
       o.connect(g); g.connect(audioCtx.destination); o.frequency.value=freq;
       g.gain.setValueAtTime(.12,audioCtx.currentTime);
@@ -314,7 +317,16 @@ window.addEventListener("orientationchange", updateViewportHeight);
     if(!tracing) requestAnimationFrame(loop);
   }
 
-  startBtn.addEventListener("click",start);
+  function startGame(e){
+    if(e){e.preventDefault();e.stopPropagation();}
+    try{
+      if(audioCtx && audioCtx.state==="suspended"){audioCtx.resume();}
+    }catch(err){}
+    requestAnimationFrame(()=>start());
+  }
+  startBtn.addEventListener("pointerup",startGame);
+  startBtn.addEventListener("touchend",startGame,{passive:false});
+  startBtn.addEventListener("click",startGame);
   window.addEventListener("keydown",e=>{
     if(e.key==="ArrowLeft"){left=true;e.preventDefault()}
     if(e.key==="ArrowRight"){right=true;e.preventDefault()}
@@ -330,6 +342,8 @@ window.addEventListener("orientationchange", updateViewportHeight);
     setBasket(p.clientX-r.left-basket.offsetWidth/2);
     e.preventDefault();
   }
+  game.addEventListener("pointerdown",moveByTouch);
+  game.addEventListener("pointermove",e=>{if(e.buttons||e.pointerType==="touch")moveByTouch(e);});
   game.addEventListener("touchstart",moveByTouch,{passive:false});
   game.addEventListener("touchmove",moveByTouch,{passive:false});
   game.addEventListener("mousemove",e=>{if(e.buttons===1)moveByTouch(e)});
