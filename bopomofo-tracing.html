@@ -8,7 +8,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#cfefff}
   body{display:flex;align-items:center;justify-content:center}
-  #game{position:relative;width:100%;max-width:520px;height:100%;max-height:100%;aspect-ratio:9/16;overflow:hidden;margin:auto;
+  #game{position:relative;width:100%;max-width:520px;height:calc(var(--vh,1vh) * 100);max-height:100%;aspect-ratio:9/16;overflow:hidden;margin:auto;
     background:linear-gradient(#77d9ff 0%,#d9f8ff 62%,#80d875 62%,#57ba58 100%);
     box-shadow:0 0 24px rgba(0,0,0,.2);touch-action:none}
   .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85}
@@ -113,6 +113,14 @@
   </div>
 </div>
 <script>
+
+function updateVH(){
+  document.documentElement.style.setProperty('--vh',(window.innerHeight*0.01)+'px');
+}
+updateVH();
+window.addEventListener('resize', updateVH);
+window.addEventListener('orientationchange', updateVH);
+
 (() => {
   const symbols = ["ㄅ","ㄆ","ㄇ","ㄈ","ㄉ","ㄊ","ㄋ","ㄌ","ㄍ","ㄎ","ㄏ","ㄐ","ㄑ","ㄒ","ㄓ","ㄔ","ㄕ","ㄖ","ㄗ","ㄘ","ㄙ","ㄧ","ㄨ","ㄩ","ㄚ","ㄛ","ㄜ","ㄝ","ㄞ","ㄟ","ㄠ","ㄡ","ㄢ","ㄣ","ㄤ","ㄥ","ㄦ"];
   // 依臺灣國小注音教學常用的本音／拼讀形式播放，
