@@ -15,20 +15,19 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .panel{background:rgba(7,20,34,.9);border:1px solid rgba(255,255,255,.2);box-shadow:0 14px 40px rgba(0,0,0,.36);backdrop-filter:blur(8px)}
 #hud{position:absolute;left:10px;right:10px;top:10px;z-index:20;display:flex;gap:8px;align-items:center;pointer-events:none}
 .hudBox{padding:7px 10px;border-radius:13px;font-size:13px;font-weight:900;white-space:nowrap}
-#missionBox{flex:1;min-width:0}
-#missionTitle{font-size:14px;overflow:hidden;text-overflow:ellipsis}
-#missionSub{font-size:11px;color:#d3e6f5;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#missionBox{position:absolute;left:50%;top:58px;transform:translateX(-50%);width:min(560px,calc(100vw - 360px));min-width:280px;z-index:26;text-align:center;pointer-events:none}
+#missionTitle{font-size:15px;overflow:visible;white-space:normal;line-height:1.25}
+#missionSub{font-size:12px;color:#d3e6f5;margin-top:3px;overflow:visible;white-space:normal;line-height:1.35}
 #lifeBar{width:88px;height:10px;background:#3b1d25;border-radius:99px;overflow:hidden;margin-top:4px}
 #lifeFill{height:100%;background:linear-gradient(90deg,#ff5252,#ffdc6e);width:100%}
 #timer{font-size:21px;color:#ffe36e}
 #miniWrap{position:absolute;right:12px;top:82px;z-index:18;width:150px;height:112px;border-radius:15px;overflow:hidden}
 #miniMap{width:100%;height:100%}
 #miniLabel{position:absolute;left:7px;top:5px;font-size:10px;font-weight:900;background:rgba(0,0,0,.48);padding:3px 6px;border-radius:8px}
-#guide{position:absolute;left:12px;top:82px;transform:none;z-index:17;width:min(42vw,430px);max-width:calc(100vw - 190px);padding:10px 14px;border-radius:15px;text-align:left;font-weight:900;font-size:14px;line-height:1.45;box-shadow:0 7px 18px rgba(0,0,0,.22)}
-#guide.bottomGuide{left:50%;top:auto;bottom:118px;transform:translateX(-50%);width:min(620px,82vw);max-width:82vw;text-align:center;background:rgba(7,28,45,.88)}
-#itemList{position:absolute;left:12px;top:154px;z-index:19;width:min(42vw,360px);max-width:calc(100vw - 190px);padding:10px 13px;border-radius:15px;font-size:13px;font-weight:900;line-height:1.55;box-shadow:0 7px 18px rgba(0,0,0,.20)}
-#toast{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.92);z-index:40;max-width:min(560px,84vw);padding:13px 18px;border-radius:16px;font-weight:1000;opacity:0;transition:.22s;pointer-events:none;text-align:center;box-shadow:0 10px 28px rgba(0,0,0,.32)}
-#toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#guide{position:absolute;left:50%;top:132px;transform:translateX(-50%);z-index:17;max-width:min(520px,72vw);padding:9px 14px;border-radius:15px;text-align:center;font-weight:900;font-size:14px}
+#itemList{position:absolute;left:12px;top:205px;z-index:19;max-width:min(360px,72vw);padding:10px 13px;border-radius:15px;font-size:13px;font-weight:900;line-height:1.55}
+#toast{position:absolute;left:50%;top:142px;transform:translateX(-50%);z-index:40;padding:10px 16px;border-radius:14px;font-weight:1000;opacity:0;transition:.22s;pointer-events:none;text-align:center}
+#toast.show{opacity:1}
 #toast.good{background:#1e8c57} #toast.bad{background:#bf3347}
 #alarmFlash{position:absolute;inset:0;z-index:8;pointer-events:none;background:rgba(255,25,25,.12);animation:flash .65s infinite alternate}
 @keyframes flash{from{opacity:.15}to{opacity:.75}}
@@ -79,9 +78,23 @@ h1,h2,h3,p{margin:0}
 #specialMessage.show{display:block;animation:popIn .45s ease}
 @keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
 
+
+/* 成績圖片儲存與外部瀏覽器導引 */
+#saveResultBtn{background:#79e0ff;color:#10243a;box-shadow:0 6px 0 #2c89a4}
+#browserGuide{position:absolute;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(2,10,18,.88)}
+#browserGuide.hidden{display:none!important}
+#browserGuide .guideCard{width:min(540px,94vw);max-height:90vh;overflow:auto;border-radius:24px;padding:22px;text-align:center}
+#browserGuide .steps{text-align:left;line-height:1.8;margin:14px 0;padding:14px;border-radius:15px;background:rgba(255,255,255,.08)}
+#resultImagePreview{width:min(360px,100%);border-radius:18px;border:2px solid rgba(255,255,255,.35);margin:12px auto;display:none}
+#resultImagePreview.show{display:block}
+#saveHint{margin-top:10px;color:#d5ecfa;font-size:13px;line-height:1.6}
+
 @media (max-width:600px){
  #miniWrap{width:132px;height:98px;top:92px}
- #guide{top:85px;max-width:58vw;font-size:12px}
+ #missionBox{top:62px;width:calc(100vw - 170px);min-width:0;padding:7px 9px}
+ #missionTitle{font-size:12px}
+ #missionSub{font-size:10px}
+ #guide{top:145px;max-width:56vw;font-size:12px}
  .hudBox{font-size:11px;padding:6px 8px}
  #timer{font-size:18px}
  #joystick{width:116px;height:116px}
@@ -94,18 +107,24 @@ h1,h2,h3,p{margin:0}
  #mayorWords .name{font-size:14px}
 }
 
-@media(max-width:720px){
- #miniWrap{right:8px;top:78px;width:132px;height:99px}
- #guide{left:8px;top:78px;width:calc(100vw - 156px);max-width:calc(100vw - 156px);font-size:12px;padding:8px 10px;line-height:1.35}
- #itemList{left:8px;top:146px;width:calc(100vw - 156px);max-width:calc(100vw - 156px);font-size:11px;padding:8px 10px;line-height:1.42}
- #guide.bottomGuide{left:50%;bottom:110px;width:calc(100vw - 28px);max-width:calc(100vw - 28px);font-size:13px;padding:9px 12px}
- #toast{font-size:14px;max-width:86vw}
-}
-@media(max-width:430px){
- #miniWrap{width:116px;height:87px}
- #guide{width:calc(100vw - 140px);max-width:calc(100vw - 140px);font-size:11px}
- #itemList{top:142px;width:calc(100vw - 140px);max-width:calc(100vw - 140px);font-size:10.5px}
-}
+/* Mission 3.4 */
+#citizenBadge{position:absolute;left:12px;top:86px;z-index:19;background:#fff;border:2px solid #0a4c83;border-radius:999px;padding:7px 12px;font-weight:900;box-shadow:0 4px 14px #0004}
+#characterSelect,#countdownOverlay,#quizOverlay{position:absolute;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:rgba(2,18,38,.84);padding:18px}
+#characterSelect.hidden,#countdownOverlay.hidden,#quizOverlay.hidden,#eventOverlay.hidden{display:none!important}
+.m3card{width:min(720px,94vw);max-height:92vh;overflow:auto;background:linear-gradient(180deg,#fff,#eef7ff);border:4px solid #ffd34e;border-radius:26px;padding:22px;text-align:center;box-shadow:0 20px 70px #0008;color:#17324d}
+.charGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.charBtn{font-size:42px;border:3px solid #c9dded;border-radius:18px;background:#fff;padding:12px 5px;font-weight:900}.charBtn small{display:block;font-size:14px}.charBtn.selected{border-color:#ff9c1a;background:#fff4cf;transform:scale(1.04)}
+#countNum{font-size:min(28vw,180px);font-weight:1000;color:#fff;text-shadow:0 0 30px #f00}.countTitle{font-size:clamp(24px,7vw,54px);color:#ffdf4c;font-weight:1000}.quizAns{display:block;width:100%;margin:10px 0;padding:14px;border:2px solid #bdd3e6;border-radius:14px;background:#fff;font-size:17px;font-weight:800;text-align:left}.quizAns:hover{background:#eaf6ff}.quizAns.correct{background:#d9f7df;border-color:#2e9d4d}.quizAns.wrong{background:#ffe0e0;border-color:#d84747}.quizMeta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:8px 0 4px;font-weight:900;color:#31536f}.quizTimer{color:#b32020}.quizCategory{background:#dceeff;padding:5px 9px;border-radius:999px}.quizStats{margin-top:12px;padding:10px;border-radius:14px;background:rgba(255,255,255,.08);line-height:1.6}
+.eventTimer{font-size:20px;font-weight:1000;color:#b32020;margin:6px 0 10px}.eventAns{display:block;width:100%;margin:9px 0;padding:13px;border:2px solid #bdd3e6;border-radius:14px;background:#fff;font-size:16px;font-weight:900;text-align:left}.eventAns:hover{background:#eaf6ff}.eventAns.correct{background:#d9f7df;border-color:#2e9d4d}.eventAns.wrong{background:#ffe0e0;border-color:#d84747}
+@media(max-width:600px){#citizenBadge{top:132px;font-size:12px}.charGrid{grid-template-columns:repeat(2,1fr)}}
+
+/* Mission 3.5｜臉書帳號登錄 */
+#facebookAccountOverlay{position:absolute;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;background:rgba(2,10,18,.86);padding:18px}
+#facebookAccountOverlay.hidden{display:none!important}
+.fbAccountCard{width:min(520px,94vw);background:linear-gradient(180deg,#fff,#eef7ff);border:4px solid #ffd34e;border-radius:26px;padding:24px;text-align:center;box-shadow:0 20px 70px #0009;color:#17324d}
+#facebookAccountInput{display:block;width:100%;margin:16px 0 8px;padding:14px 16px;border:2px solid #9ebbd2;border-radius:14px;background:#fff;color:#17324d;font-size:18px;font-weight:800;outline:none}
+#facebookAccountInput:focus{border-color:#1877f2;box-shadow:0 0 0 4px rgba(24,119,242,.14)}
+#facebookAccountError{min-height:24px;color:#bf3347;font-weight:900}
+#facebookAccountResult{margin:12px auto 4px;padding:12px 14px;border-radius:14px;background:rgba(24,119,242,.14);border:1px solid rgba(110,174,255,.45);font-size:17px;font-weight:1000;color:#eaf4ff;word-break:break-word}
 
 </style>
 </head>
@@ -151,7 +170,7 @@ h1,h2,h3,p{margin:0}
       <div class="title">臺南城鎮韌性<br>Mission 2.0</div>
       <div class="subtitle">全民防空 × 全民防災 × 全民守護</div>
       <div class="story">
-        📅 2026年8月7日（星期五）10時至10時30分，南部地區將實施城鎮韌性（防空）演習。<br><br>
+        🗓️ 2026年8月7日（星期五）10時至10時30分，南部地區將實施城鎮韌性（防空）演習。<br><br>
         上午 10:00，你正在臺南市區移動。街道一切如常，突然防空警報響起……<br>
         你必須完成停車下車、尋找警察、蒐集物資、協助市民、進入避難設施及處理隨機事件。
       </div>
@@ -163,6 +182,14 @@ h1,h2,h3,p{margin:0}
     </div>
   </div>
 
+
+  <div id="citizenBadge" class="hidden">👨 市民</div>
+  <div id="characterSelect" class="hidden"><div class="m3card"><h2>選擇你的 Q版市民</h2><p>每位角色都有專屬第一關劇情，選擇不同身分體驗正確避難方式。</p><div class="charGrid">
+    <button class="charBtn selected" data-e="👨" data-n="男市民">👨<small>男市民</small></button><button class="charBtn" data-e="👩" data-n="女市民">👩<small>女市民</small></button><button class="charBtn" data-e="👦" data-n="小朋友">👦<small>小朋友</small></button><button class="charBtn" data-e="👵" data-n="長者">👵<small>長者</small></button><button class="charBtn" data-e="🧑‍🦽" data-n="身心障礙市民">🧑‍🦽<small>身心障礙市民</small></button><button class="charBtn" data-e="🦺" data-n="民防志工">🦺<small>民防志工</small></button>
+  </div><button id="confirmCharacter" class="primary">確認角色，開始警報倒數</button></div></div>
+  <div id="countdownOverlay" class="hidden"><div style="text-align:center"><div class="countTitle">🚨 防空警報響起</div><div id="countNum">10</div><div style="color:#fff;font-size:20px;font-weight:800">保持冷靜，依指示避難</div></div></div>
+  <div id="quizOverlay" class="hidden"><div class="m3card"><div style="font-size:44px">❓</div><h2 style="color:#0a4c83">防空知識隨機題</h2><div class="quizMeta"><span id="quizCategory" class="quizCategory">綜合知識</span><span id="quizTimer" class="quizTimer">⏱️ 10 秒</span></div><div id="quizQuestion" style="display:block;margin:10px 0 16px;padding:14px 16px;border-radius:16px;background:#fff4c7;border:2px solid #f0b927;color:#152f49;font-size:clamp(18px,4.8vw,24px);line-height:1.5;font-weight:1000;text-align:left;min-height:62px"></div><div id="quizAnswers"></div><div id="quizFeedback" style="min-height:48px;margin-top:10px;color:#17324d;font-weight:900;line-height:1.5"></div></div></div>
+  <div id="eventOverlay" class="hidden" style="position:absolute;inset:0;z-index:85;display:flex;align-items:center;justify-content:center;background:rgba(2,18,38,.88);padding:18px"><div class="m3card"><div id="eventIcon" style="font-size:48px">🚨</div><h2 style="color:#0a4c83">第6關｜情境判斷</h2><div id="eventQuestion" style="margin:12px 0;padding:14px 16px;border-radius:16px;background:#fff4c7;border:2px solid #f0b927;color:#152f49;font-size:clamp(18px,4.8vw,24px);line-height:1.5;font-weight:1000;text-align:left"></div><div id="eventTimer" class="eventTimer">⏱️ 10 秒</div><div id="eventAnswers"></div><div id="eventFeedback" style="min-height:48px;margin-top:10px;color:#17324d;font-weight:900;line-height:1.5"></div></div></div>
   <div id="stageCard" class="hidden">
     <div class="card panel">
       <div id="stageIcon" class="logo">🚨</div>
@@ -187,10 +214,21 @@ h1,h2,h3,p{margin:0}
         🚗 駕車遇警報：靠邊臨停、熄火下車。<br>
         👮 依照警察及民防人員引導行動。<br>
         🎒 正確物資：飲水、手電筒、收音機、急救包、行動電源。<br>
-        🤝 優先協助長者、孩童及需要幫助者。<br>
+        🤝 優先協助長者、孩童、身心障礙者及其他需要幫助者。<br>
         🛡️ 依正式防空避難標誌，前往就近避難設施。
       </div>
       <button id="closeHelp" class="primary">知道了</button>
+    </div>
+  </div>
+
+  <div id="facebookAccountOverlay" class="hidden">
+    <div class="fbAccountCard">
+      <div style="font-size:48px">📘</div>
+      <h2>請輸入臉書帳號</h2>
+      <p style="margin-top:8px;line-height:1.6">輸入完成後，帳號會顯示在本次遊戲成績結算畫面。</p>
+      <input id="facebookAccountInput" type="text" maxlength="50" autocomplete="off" placeholder="例如：洪大天 或 Facebook 顯示名稱">
+      <div id="facebookAccountError"></div>
+      <button id="confirmFacebookAccount" class="primary" style="margin-top:6px">確認並查看成績</button>
     </div>
   </div>
 
@@ -202,7 +240,7 @@ h1,h2,h3,p{margin:0}
       <div id="finalScore" class="scoreBig">0</div>
       <div id="finalStars" class="stars">⭐⭐⭐⭐⭐</div>
       <h3 id="rankTitle">韌性英雄</h3>
-      <p id="resultText" class="subtitle"></p>
+      <p id="resultText" class="subtitle"></p><div id="citizenResult" style="margin:8px 0;font-weight:900">🎭 玩家角色：<span id="citizenResultName">尚未選擇</span></div><div id="facebookAccountResult">📘 臉書帳號：<span id="facebookAccountName">尚未輸入</span></div><div id="quizResultStats" class="quizStats"></div>
 
       <div id="mayorCheer">
         <div id="mayorAvatarWrap">
@@ -219,9 +257,26 @@ h1,h2,h3,p{margin:0}
       </div>
 
       <div id="badges" class="badges"></div>
+      <img id="resultImagePreview" alt="遊戲成績圖片預覽">
+      <div id="saveHint">可將本次成績製作成圖片，儲存後分享至臉書或 LINE。</div>
       <div class="row">
+        <button id="saveResultBtn" class="primary">儲存成績圖片</button>
         <button id="shareBtn" class="primary">分享成績</button>
         <button id="againBtn" class="secondary">再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="browserGuide" class="hidden">
+    <div class="guideCard panel">
+      <div class="logo">🌐</div>
+      <h2>請改用外部瀏覽器開啟</h2>
+      <p class="subtitle">目前可能是在 LINE、Facebook 或其他 App 內建瀏覽器中，部分手機會阻擋圖片下載。</p>
+      <div id="browserGuideSteps" class="steps"></div>
+      <div class="row">
+        <button id="openExternalBtn" class="primary">使用外部瀏覽器開啟</button>
+        <button id="copyGameLinkBtn" class="secondary">複製遊戲網址</button>
+        <button id="closeBrowserGuide" class="secondary">返回成績畫面</button>
       </div>
     </div>
   </div>
@@ -266,10 +321,18 @@ const badDefs=[
 ];
 const weatherOptions=['晴天','雨天','夜間'];
 const bossOptions=[
- {emoji:'📱',name:'滑手機的市民',msg:'提醒他停止滑手機並立即避難'},
- {emoji:'📸',name:'拍攝警報的市民',msg:'提醒他停止拍攝並前往避難'},
- {emoji:'🛵',name:'仍在騎車的市民',msg:'提醒他靠邊停車、下車避難'},
- {emoji:'🛒',name:'仍在購物的市民',msg:'提醒他停止購物並立即避難'}
+ {emoji:'📢',name:'網路假訊息',question:'收到未經證實的防空或災害訊息，應該怎麼做？',correct:'查證政府或官方來源，不任意轉傳',explain:'假訊息可能造成恐慌，應以政府、警察或消防等官方資訊為準。'},
+ {emoji:'🔥',name:'建築物失火',question:'前方建築物失火，最適當的處置是？',correct:'遠離火場並通報119',explain:'不要靠近圍觀，應遠離濃煙與火源並立即通報119。'},
+ {emoji:'⚡',name:'停電',question:'避難途中突然停電，應該怎麼做？',correct:'使用手電筒並避免搭乘電梯',explain:'停電時應使用手電筒照明，避免使用可能受困的電梯。'},
+ {emoji:'🌧️',name:'豪雨積水',question:'道路出現明顯積水時，應該怎麼做？',correct:'避開積水路段，改走安全路線',explain:'不要冒險涉水，以免遇到坑洞、漏電或水流危險。'},
+ {emoji:'🚧',name:'道路封閉',question:'警方已封閉前方道路，應該怎麼做？',correct:'聽從指揮並配合改道',explain:'封閉通常代表前方有危險，應依現場人員指示改走安全路線。'},
+ {emoji:'📻',name:'廣播更新',question:'收音機發布最新避難方向，應該怎麼做？',correct:'依官方廣播更新調整避難路線',explain:'災情可能隨時改變，應以最新官方指示行動。'},
+ {emoji:'🚑',name:'受傷市民',question:'發現有人受傷倒地，應該怎麼做？',correct:'先確保安全，通報119並提供適當協助',explain:'先確認周遭安全，再通報119；不任意搬動疑似重傷者。'},
+ {emoji:'🚁',name:'危險區域警示',question:'現場發布危險區域警示，應該怎麼做？',correct:'立即離開警示區域並依指示避難',explain:'不可停留拍攝或圍觀，應迅速離開危險範圍。'},
+ {emoji:'🏚️',name:'建築物受損',question:'看見牆面龜裂、物品掉落的建築物，應該怎麼做？',correct:'遠離受損建築物，避免進入或靠近',explain:'受損建築可能坍塌，應保持距離並通報相關單位。'},
+ {emoji:'☣️',name:'危險物質外洩',question:'疑似有不明氣體或危險物質外洩，應該怎麼做？',correct:'遠離現場並依警消指示避難',explain:'不要靠近、觸碰或自行處理，應迅速遠離並聽從專業人員指示。'},
+ {emoji:'👮',name:'警察引導',question:'警察正在引導民眾前往安全方向，應該怎麼做？',correct:'保持秩序並聽從警察指揮',explain:'現場指揮可避免人流衝突及進入危險區域。'},
+ {emoji:'🛵',name:'仍在騎車的市民',question:'防空警報期間仍有人騎車前進，正確做法是？',correct:'提醒其靠邊安全停車、下車避難',explain:'警報期間應靠邊安全停車、熄火下車，依指示前往避難處所。'}
 ];
 
 let audioCtx=null,soundOn=true,raf=0,last=0;
@@ -282,26 +345,33 @@ function resetState(){
   score:0,life:100,weather:weatherOptions[Math.floor(Math.random()*weatherOptions.length)],
   player:{x:520,y:700,w:48,h:58,speed:235,mode:'car',dir:1,step:0},
   camera:{x:0,y:0},keys:{l:false,r:false,u:false,d:false},
-  roadside:{x:1450,y:685,w:270,h:82},carStopped:false,exited:false,
+  roadside:{x:1450,y:685,w:270,h:82},carStopped:false,exited:false,roleStage1Type:'driver',roleStage1Done:false,
   police:{x:760,y:1130,w:52,h:64},policeFollow:false,followProgress:0,
   items:[],targets:chosen,collected:[],
   npcs:[
-   {x:340,y:890,emoji:'👴',name:'長者',helped:false,type:'normal'},
-   {x:1650,y:420,emoji:'👧',name:'小朋友',helped:false,type:'normal'},
-   {x:1920,y:900,emoji:'🧑‍🦽',name:'身心障礙者',helped:false,type:'disabled',escorting:false}
+   {x:340,y:890,emoji:'👴',name:'阿公',helped:false},
+   {x:1650,y:420,emoji:'👧',name:'小朋友',helped:false},
+   {x:1920,y:900,emoji:'👵',name:'阿嬤',helped:false},
+   {x:1080,y:1180,emoji:'🧑‍🦽',name:'身心障礙者',helped:false}
   ],
-  escortingNpc:null,
-  assistSafeZone:{x:1510,y:1040,w:260,h:150},
   shelter:{x:1850,y:250,w:150,h:180},
   boss:null,bossDone:false,
   mistakes:0,helped:0,perfect:true,startTotal:0,totalTime:0,
-  achievements:{first:false,perfect:false,helper:false,fast:false,collector:false}
+  achievements:{first:false,perfect:false,helper:false,fast:false,collector:false},
+  quizPool:[],quizAsked:0,quizCorrect:0,quizWrong:0,quizCategories:{},facebookAccount:''
  };
- const positions=[[380,420],[660,460],[1180,430],[1540,500],[500,1310],[1120,1250],[1720,1280],[2050,560]];
+ const dailySeed=Number(new Date().toISOString().slice(0,10).replaceAll('-',''));
+ let seed=dailySeed%2147483647; const rnd=()=>((seed=seed*48271%2147483647)-1)/2147483646;
+ const positions=[[380,420],[660,460],[1180,430],[1540,500],[500,1310],[1120,1250],[1720,1280],[2050,560]].sort(()=>rnd()-.5);
+ state.weather=weatherOptions[Math.floor(rnd()*weatherOptions.length)];
+ state.police.x=520+Math.floor(rnd()*1100); state.police.y=430+Math.floor(rnd()*760);
+ state.shelter.x=1450+Math.floor(rnd()*520); state.shelter.y=220+Math.floor(rnd()*700);
+ state.npcs.forEach((n,i)=>{n.x=260+Math.floor(rnd()*1750);n.y=300+Math.floor(rnd()*1050)});
  [...goodDefs,...badDefs].forEach((d,i)=>{
   const p=positions[i%positions.length];
   state.items.push({...d,x:p[0],y:p[1],taken:false,good:i<goodDefs.length});
  });
+ state.quizPool=shuffleCopy(knowledgeQuestions);
  UI.main.classList.add('hidden');UI.secondary.classList.add('hidden');UI.itemList.classList.add('hidden');
  UI.alarm.classList.add('hidden');
 }
@@ -370,32 +440,44 @@ function fmt(n){return Math.max(0,n).toFixed(1)}
 
 const stages=[
  null,
- {icon:'🚗',title:'駕車遇防空警報',desc:'靠邊臨停、停穩車輛並下車。',tip:'將車輛移到黃色臨停區，完全停止後按「熄火下車」。',limit:18},
+ {icon:'🚗',title:'角色專屬避難任務',desc:'依照所選角色完成第一階段應變。',tip:'每位角色都有不同情境與任務。',limit:22},
  {icon:'👮',title:'尋找警察並跟隨引導',desc:'先依小地圖提示找到警察，再跟著警察前進。',tip:'警察圖示會閃爍；找到後保持在警察附近，跟隨到安全方向。',limit:22},
  {icon:'🎒',title:'隨機防災物資',desc:'依任務清單找出本次指定的3項物資。',tip:'拿錯物品會扣分。指定物資每次遊戲都不同。',limit:28},
- {icon:'🤝',title:'全民一起避難',desc:'協助2位需要幫助的市民。',tip:'靠近長者或孩童後按「協助」，帶他們前往安全方向。',limit:25},
+ {icon:'🤝',title:'全民一起避難',desc:'協助2位需要幫助的市民。',tip:'靠近長者、孩童或身心障礙者後按「協助」，帶他們前往安全方向。',limit:25},
  {icon:'🛡️',title:'進入防空避難設施',desc:'小地圖此時才會顯示正式防空避難圖示。',tip:'依閃爍圖示，在時間內進入防空避難設施。',limit:16},
- {icon:'🚨',title:'隨機事件 Boss 關',desc:'處理一名仍未正確避難的市民。',tip:'靠近事件人物並按「提醒」，完成全民守護。',limit:16}
+ {icon:'🚨',title:'隨機事件情境判斷',desc:'依隨機事件選出正確的應變方式。',tip:'靠近事件圖示後按「開始判斷」，並在10秒內選出正確答案。',limit:26}
 ];
+
+const roleProfiles={
+ '男市民':{type:'driver',icon:'👨🚗',title:'駕車遇防空警報',desc:'自行將車輛靠路邊安全停車、熄火下車。',tip:'把車移到黃色安全臨停區，完全停止後按「熄火下車」。',guide:'🚗 靠路邊安全停車，停穩後熄火下車',button:'🚪 熄火下車',complete:'正確完成靠邊停車、熄火並下車'},
+ '女市民':{type:'family',icon:'👩‍👩‍👧🚗',title:'提醒家人一起避難',desc:'安全停車後，提醒同行家人下車，一起前往避難。',tip:'把車停進黃色安全臨停區，停穩後按「提醒家人下車」。',guide:'👩 先安全停車，再提醒家人一起下車避難',button:'📣 提醒家人下車',complete:'成功提醒家人一起下車避難'},
+ '小朋友':{type:'child',icon:'👦🚗',title:'提醒家長路邊停車',desc:'由家長駕車；請提醒家長靠路邊安全停車，再一起下車避難。',tip:'協助引導家長把車移到黃色安全臨停區，停穩後按「提醒家長停車」。',guide:'👦 爸爸／媽媽，警報響了！請靠路邊安全停車',button:'📣 提醒家長停車',complete:'成功提醒家長停車並一起下車避難'},
+ '長者':{type:'assisted',icon:'👵👮',title:'等待警察協助避難',desc:'留在安全處，前往黃色集合點等待警察或民防人員協助。',tip:'步行到黃色安全集合區，按「接受協助」後再前往避難。',guide:'👵 前往安全集合點，等待警察或民防人員協助',button:'👮 接受協助',complete:'已在安全處接受協助並前往避難'},
+ '身心障礙市民':{type:'assisted',icon:'🧑‍🦽🦺',title:'依引導安全避難',desc:'前往黃色集合點，等待協助人員引導至避難設施。',tip:'移動到黃色安全集合區，按「接受引導」完成任務。',guide:'🧑‍🦽 前往集合點，等待協助人員引導',button:'🦺 接受引導',complete:'已接受引導並安全前往避難'},
+ '民防志工':{type:'volunteer',icon:'🦺📣',title:'協助民眾安全疏散',desc:'前往黃色路邊安全區，協助附近民眾停車與疏散。',tip:'走到黃色安全區，按「引導民眾」完成第一階段任務。',guide:'🦺 前往路邊安全區，協助民眾停車與疏散',button:'📣 引導民眾',complete:'成功協助民眾停車並完成疏散引導'}
+};
+function currentRoleProfile(){return roleProfiles[state.citizen?.name]||roleProfiles['男市民']}
 
 function showStage(n){
  state.running=false;state.stage=n;state.stageActive=false;
- const s=stages[n];
- UI.stageIcon.textContent=s.icon;UI.stageTitle.textContent=`第 ${n} 關｜${s.title}`;
- UI.stageDesc.textContent=s.desc;UI.stageTip.innerHTML=s.tip;
+ const s=stages[n],display=n===1?currentRoleProfile():s;
+ UI.stageIcon.textContent=display.icon;UI.stageTitle.textContent=`第 ${n} 關｜${display.title}`;
+ UI.stageDesc.textContent=display.desc;UI.stageTip.innerHTML=display.tip;
  UI.stageCard.classList.remove('hidden');
 }
 function beginStage(){
- const n=state.stage,s=stages[n];
+ const n=state.stage,s=stages[n],display=n===1?currentRoleProfile():s;
  UI.stageCard.classList.add('hidden');state.running=true;state.stageActive=true;
- UI.guide.classList.remove('bottomGuide');
  UI.itemList.classList.add('hidden');
  state.stageStart=performance.now();state.stageLimit=s.limit;
- UI.stageNo.textContent=`${n}/6`;UI.missionTitle.textContent=s.title;UI.missionSub.textContent=s.desc;
+ UI.stageNo.textContent=`${n}/6`;UI.missionTitle.textContent=display.title;UI.missionSub.textContent=display.desc;
  if(n===1){
-  state.player.mode='car';state.player.x=1080;state.player.y=720;state.player.speed=290;state.player.dir=1;
-  UI.guide.textContent='🚗 前往黃色臨停區，停穩後熄火下車';
+  const role=currentRoleProfile();state.roleStage1Type=role.type;state.roleStage1Done=false;state.exited=false;
+  state.player.mode=['driver','family','child'].includes(role.type)?'car':'walk';
+  state.player.x=1080;state.player.y=720;state.player.speed=state.player.mode==='car'?290:235;state.player.dir=1;
+  UI.guide.textContent=role.guide;
   UI.alarm.classList.remove('hidden');alarmTone();
+  setTimeout(()=>toast(role.type==='child'?'👦 請提醒駕車的家長靠邊安全停車':role.desc,true),500);
  }else if(n===2){
   state.player.mode='walk';state.player.speed=235;state.player.x=1250;state.player.y=760;
   state.police.x=760;state.police.y=1130;state.policeFollow=false;state.followProgress=0;
@@ -407,15 +489,13 @@ function beginStage(){
   UI.itemList.innerHTML='<b>本次指定物資</b><br>'+state.targets.map(x=>x.emoji+' '+x.name).join('<br>');
  }else if(n===4){
   UI.itemList.classList.add('hidden');
-  UI.guide.classList.add('bottomGuide');
-  state.helped=0;state.escortingNpc=null;state.npcs.forEach(n=>{n.helped=false;n.escorting=false});
-  UI.guide.textContent='🤝 協助2位需要幫助的市民；身心障礙者須陪同至藍色安全區';
+  UI.guide.textContent='🤝 協助任意2位長者、孩童或身心障礙者';
  }else if(n===5){
   UI.guide.textContent='🛡️ 依小地圖閃爍圖示，前往防空避難設施';
   UI.alarm.classList.remove('hidden');alarmTone();
  }else if(n===6){
   state.boss={...bossOptions[Math.floor(Math.random()*bossOptions.length)],x:1180,y:470,w:55,h:65};
-  state.bossDone=false;UI.guide.textContent=`🚨 ${state.boss.msg}`;
+  state.bossDone=false;state.eventAnswered=false;UI.guide.textContent=`🚨 發現「${state.boss.name}」，靠近後進行情境判斷`;
   UI.alarm.classList.remove('hidden');
  }
  last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
@@ -425,8 +505,8 @@ function completeStage(points,msg){
  if(!state.stageActive)return;
  state.stageActive=false;state.running=false;state.score+=points;successTone();toast(msg,true);
  UI.main.classList.add('hidden');UI.secondary.classList.add('hidden');
- if(state.stage===6){setTimeout(finishGame,900)}
- else setTimeout(()=>showStage(state.stage+1),900);
+ if(state.stage===6){setTimeout(()=>showKnowledgeQuiz(finishGame),650)}
+ else setTimeout(()=>showKnowledgeQuiz(()=>showStage(state.stage+1)),650);
 }
 function failStage(msg){
  if(!state.stageActive)return;
@@ -451,12 +531,14 @@ function update(dt,now){
  UI.main.classList.add('hidden');UI.secondary.classList.add('hidden');
 
  if(state.stage===1){
-  const z=state.roadside,inZone=overlap(state.player,z),stopped=inZone&&!(dx||dy);
+  const role=currentRoleProfile(),z=state.roadside,inZone=overlap(state.player,z),stopped=inZone&&!(dx||dy);
   state.carStopped=stopped;
   if(inZone){
-   UI.main.classList.remove('hidden');UI.main.textContent=stopped?'🚪 熄火下車':'先停穩車輛';UI.main.disabled=!stopped;
+   UI.main.classList.remove('hidden');
+   UI.main.textContent=stopped?role.button:(state.player.mode==='car'?'先停穩車輛':'請在集合區停下');
+   UI.main.disabled=!stopped;
   }
-  if(state.exited)completeStage(100,'正確完成靠邊停車並下車');
+  if(state.roleStage1Done)completeStage(100,role.complete);
  }
  if(state.stage===2){
   if(!state.policeFollow&&distance(state.player,state.police)<80){
@@ -489,44 +571,22 @@ function update(dt,now){
   }
  }
  if(state.stage===4){
-  const escort=state.escortingNpc;
-  if(escort&&!escort.helped){
-   const d=distance(state.player,{...escort,w:45,h:55});
-   if(d>62){
-    const vx=state.player.x-escort.x,vy=state.player.y-escort.y,len=Math.hypot(vx,vy)||1;
-    const followSpeed=92;
-    escort.x+=vx/len*followSpeed*dt;escort.y+=vy/len*followSpeed*dt;
-   }
-   UI.missionSub.textContent='正在陪同身心障礙者前往藍色無障礙安全集合區';
-   const az=state.assistSafeZone;
-   const npcInSafe=escort.x>az.x&&escort.x<az.x+az.w&&escort.y>az.y&&escort.y<az.y+az.h;
-   const playerInSafe=state.player.x>az.x&&state.player.x<az.x+az.w&&state.player.y>az.y&&state.player.y<az.y+az.h;
-   if(npcInSafe&&playerInSafe){
-    escort.helped=true;escort.escorting=false;state.escortingNpc=null;state.helped++;
-    state.score+=60;successTone();
-    toast('💙 已安全陪同身心障礙者抵達集合區，額外加分！',true);
-    UI.guide.textContent='優先協助身心障礙者、高齡者及兒童避難';
-   }
-  }
-
   for(const n of state.npcs){
-   if(n.helped||n.escorting)continue;
+   if(n.helped)continue;
    if(distance(state.player,{...n,w:45,h:55})<72){
-    UI.main.classList.remove('hidden');
-    UI.main.textContent=n.type==='disabled'?`🧑‍🦽 陪同${n.name}`:`🤝 協助${n.name}`;
-    UI.main.disabled=false;UI.main.dataset.npc=n.name;
+    UI.main.classList.remove('hidden');UI.main.textContent=`🤝 協助${n.name}`;UI.main.disabled=false;UI.main.dataset.npc=n.name;
    }
   }
-  if(state.helped>=2&&!state.escortingNpc)completeStage(140,'成功協助需要幫助的市民安全避難');
+  if(state.helped>=2)completeStage(120,'成功協助市民一起避難');
  }
  if(state.stage===5){
   if(overlap(state.player,state.shelter))completeStage(130,'成功進入防空避難設施');
  }
  if(state.stage===6&&state.boss){
   if(distance(state.player,state.boss)<78){
-   UI.secondary.classList.remove('hidden');UI.secondary.textContent='📣 提醒避難';UI.secondary.disabled=false;
+   UI.secondary.classList.remove('hidden');UI.secondary.textContent='🧠 開始判斷';UI.secondary.disabled=false;
   }
-  if(state.bossDone)completeStage(150,'隨機事件處理完成，全員安全');
+  if(state.bossDone)completeStage(150,'情境判斷完成，正確應變！');
  }
 
  if(remain<=0)failStage('時間到，任務未完成');
@@ -534,6 +594,25 @@ function update(dt,now){
  state.camera.x=clamp(state.player.x-innerWidth/2,0,Math.max(0,WORLD.w-innerWidth));
  state.camera.y=clamp(state.player.y-innerHeight/2,0,Math.max(0,WORLD.h-innerHeight));
  UI.score.textContent=state.score;UI.lifeFill.style.width=state.life+'%';
+}
+
+// 身心障礙者專用向量圖案：確保左右移動時能清楚轉向
+function drawWheelchairUser(g,x,y,dir,bob=0){
+ g.save();
+ g.translate(x,y+bob);
+ if(dir<0)g.scale(-1,1);
+ g.lineCap='round';g.lineJoin='round';
+ g.strokeStyle='#dbeafe';g.lineWidth=5;
+ g.beginPath();g.arc(-5,5,20,0,Math.PI*2);g.stroke();
+ g.fillStyle='#ffd2a6';g.beginPath();g.arc(-7,-31,8,0,Math.PI*2);g.fill();
+ g.strokeStyle='#4da3ff';g.lineWidth=8;
+ g.beginPath();g.moveTo(-7,-21);g.lineTo(-3,-3);g.lineTo(13,2);g.stroke();
+ g.lineWidth=6;g.beginPath();g.moveTo(-4,-14);g.lineTo(13,-5);g.stroke();
+ g.strokeStyle='#f4f7fb';g.lineWidth=5;
+ g.beginPath();g.moveTo(-15,-8);g.lineTo(-13,2);g.lineTo(13,2);g.lineTo(20,17);g.stroke();
+ g.beginPath();g.moveTo(-16,-18);g.lineTo(-13,0);g.stroke();
+ g.fillStyle='#dbeafe';g.beginPath();g.arc(22,19,5,0,Math.PI*2);g.fill();
+ g.restore();
 }
 
 function drawWorld(){
@@ -704,10 +783,20 @@ function drawWorld(){
 
  if(state.stage===1){
   const z=state.roadside;
+  const role=currentRoleProfile();
+  let zoneTitle='路邊安全臨停區';
+  let zoneSub='靠邊停穩 → 熄火 → 下車';
+  if(role.type==='assisted'){
+   zoneTitle='安全協助集合區';
+   zoneSub='到達集合點 → 接受引導 → 安全避難';
+  }else if(role.type==='volunteer'){
+   zoneTitle='民防疏散引導區';
+   zoneSub='協助停車 → 引導疏散 → 確認安全';
+  }
   ctx.globalAlpha=.88;ctx.fillStyle='#ffd54a';ctx.fillRect(z.x,z.y,z.w,z.h);
   ctx.strokeStyle='#fff';ctx.lineWidth=5;ctx.setLineDash([15,10]);ctx.strokeRect(z.x,z.y,z.w,z.h);ctx.setLineDash([]);
-  ctx.fillStyle='#17283a';ctx.font='bold 18px sans-serif';ctx.fillText('路邊安全臨停區',z.x+z.w/2,z.y+31);
-  ctx.font='13px sans-serif';ctx.fillText('靠邊停穩 → 熄火 → 下車',z.x+z.w/2,z.y+58);ctx.globalAlpha=1;
+  ctx.fillStyle='#17283a';ctx.font='bold 18px sans-serif';ctx.fillText(zoneTitle,z.x+z.w/2,z.y+31);
+  ctx.font='13px sans-serif';ctx.fillText(zoneSub,z.x+z.w/2,z.y+58);ctx.globalAlpha=1;
  }
 
  if(state.stage===2){
@@ -724,24 +813,10 @@ function drawWorld(){
  }
 
  if(state.stage===4){
-  const az=state.assistSafeZone;
-  ctx.fillStyle='rgba(62,170,255,.28)';ctx.fillRect(az.x,az.y,az.w,az.h);
-  ctx.strokeStyle='#66c7ff';ctx.lineWidth=5;ctx.setLineDash([16,10]);ctx.strokeRect(az.x,az.y,az.w,az.h);ctx.setLineDash([]);
-  ctx.fillStyle='#fff';ctx.font='bold 18px sans-serif';ctx.textAlign='center';
-  ctx.fillText('無障礙安全集合區',az.x+az.w/2,az.y+37);
-  ctx.font='14px sans-serif';ctx.fillText('陪同需要協助者抵達此處',az.x+az.w/2,az.y+66);
-
   for(const n of state.npcs){
-   if(n.helped)continue;
-   ctx.font='48px sans-serif';ctx.fillText(n.emoji,n.x,n.y);
+   if(n.helped)continue;ctx.font='48px sans-serif';ctx.fillText(n.emoji,n.x,n.y);
    ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.fillText(n.name,n.x,n.y-34);
-   ctx.strokeStyle=n.escorting?'#66c7ff':'#ffe36e';ctx.lineWidth=3;
-   ctx.beginPath();ctx.arc(n.x,n.y-5,38,0,Math.PI*2);ctx.stroke();
-   if(n.escorting){
-    ctx.strokeStyle='rgba(102,199,255,.75)';ctx.lineWidth=3;ctx.setLineDash([8,8]);
-    ctx.beginPath();ctx.moveTo(state.player.x,state.player.y);ctx.lineTo(n.x,n.y);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillStyle='#66c7ff';ctx.font='bold 13px sans-serif';ctx.fillText('陪同中',n.x,n.y+48);
-   }
+   ctx.strokeStyle='#ffe36e';ctx.lineWidth=3;ctx.beginPath();ctx.arc(n.x,n.y-5,38,0,Math.PI*2);ctx.stroke();
   }
  }
 
@@ -769,7 +844,19 @@ function drawWorld(){
   ctx.fillText('🚗',0,0);
   ctx.restore();
 }
- else{ctx.font='54px sans-serif';ctx.fillText('🧑',p.x,p.y+bob);ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.fillText('市民',p.x,p.y-38+bob)}
+ else{
+  const citizen=state.citizen||{emoji:'🧑',name:'市民'};
+  if(citizen.name==='身心障礙市民'){
+   drawWheelchairUser(ctx,p.x,p.y,p.dir,bob);
+  }else{
+   ctx.font='54px sans-serif';
+   ctx.save();
+   ctx.translate(p.x,p.y+bob);
+   ctx.fillText(citizen.emoji,0,0);
+   ctx.restore();
+  }
+  ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.fillText(citizen.name,p.x,p.y-42+bob)
+ }
  ctx.restore();
 
  if(state.weather==='雨天'){
@@ -803,9 +890,6 @@ function drawMini(){
   }
  }
  if(state.stage===4){
-  const az=state.assistSafeZone;
-  mctx.fillStyle='rgba(62,170,255,.50)';
-  mctx.fillRect(az.x/WORLD.w*w,az.y/WORLD.h*h,az.w/WORLD.w*w,az.h/WORLD.h*h);
   const blink=.45+.55*Math.abs(Math.sin(performance.now()/240));
   mctx.globalAlpha=blink;
   mctx.font='15px sans-serif';
@@ -854,6 +938,32 @@ function launchConfetti(){
  setTimeout(()=>layer.innerHTML='',6000);
 }
 
+function requestFacebookAccount(){
+ const overlay=$('facebookAccountOverlay');
+ const input=$('facebookAccountInput');
+ const error=$('facebookAccountError');
+ overlay.classList.remove('hidden');
+ input.value='';
+ error.textContent='';
+ setTimeout(()=>input.focus(),80);
+}
+
+function confirmFacebookAccount(){
+ const input=$('facebookAccountInput');
+ const error=$('facebookAccountError');
+ const account=input.value.trim();
+ if(!account){
+  error.textContent='請先輸入臉書帳號或顯示名稱。';
+  input.focus();
+  return;
+ }
+ state.facebookAccount=account;
+ $('facebookAccountName').textContent=account;
+ $('facebookAccountOverlay').classList.add('hidden');
+ UI.result.classList.remove('hidden');
+ launchConfetti();
+}
+
 function finishGame(){
  state.running=false;UI.alarm.classList.add('hidden');UI.controls.classList.add('hidden');
  UI.hud.classList.add('hidden');UI.mini.classList.add('hidden');UI.guide.classList.add('hidden');UI.itemList.classList.add('hidden');UI.topBtns.classList.add('hidden');
@@ -873,6 +983,10 @@ function finishGame(){
  $('rankTitle').textContent=rank;
  if(stars>=4)setTimeout(cheerSound,320);
  $('resultText').textContent=`完成時間 ${Math.round(state.totalTime)} 秒｜天氣：${state.weather}｜錯誤 ${state.mistakes} 次`;
+ $('citizenResultName').textContent=`${state.citizen?.emoji||'🧑'} ${state.citizen?.name||'市民'}`;
+ const quizRate=state.quizAsked?Math.round(state.quizCorrect/state.quizAsked*100):0;
+ const quizBadge=quizRate===100?'🏅 防空知識滿分達人':quizRate>=80?'🥇 防空知識金牌':quizRate>=60?'🥈 防空知識銀牌':'🥉 持續學習';
+ $('quizResultStats').innerHTML=`<b>${quizBadge}</b><br>防空知識：答對 ${state.quizCorrect} 題／共 ${state.quizAsked} 題｜正確率 ${quizRate}%<br><span class="small">本局題目均由題庫抽取，不會重複出現。</span>`;
 
  const special=$('specialMessage');
  if(stars===5){
@@ -885,8 +999,6 @@ function finishGame(){
   special.textContent='👏 黃偉哲市長：再接再厲，下一次一定更厲害！';
   special.classList.add('show');
  }
- launchConfetti();
-
  const defs=[
   ['first','🏁 首次通關','完成一次完整任務'],
   ['perfect','💯 完美市民','全程沒有拿錯或違規'],
@@ -895,16 +1007,161 @@ function finishGame(){
   ['collector','🎒 補給專家','完成隨機物資任務']
  ];
  $('badges').innerHTML=defs.map(([k,n,d])=>`<div class="badge ${saved[k]?'':'locked'}"><b>${n}</b><br><span class="small">${d}</span></div>`).join('');
- UI.result.classList.remove('hidden');
+ requestFacebookAccount();
 }
 
 function startGame(){
+ $('characterSelect').classList.remove('hidden');
+}
+function beginMissionAfterCharacter(){
  resetState();state.startTotal=performance.now();
- $('intro').classList.add('hidden');UI.result.classList.add('hidden');
+ state.citizen=window.selectedCitizen||{emoji:'👨',name:'市民'};
+ $('citizenBadge').textContent=state.citizen.emoji+' '+state.citizen.name;$('citizenBadge').classList.remove('hidden');
+ $('intro').classList.add('hidden');$('characterSelect').classList.add('hidden');UI.result.classList.add('hidden');
  UI.hud.classList.remove('hidden');UI.mini.classList.remove('hidden');UI.guide.classList.remove('hidden');
  UI.controls.classList.remove('hidden');UI.topBtns.classList.remove('hidden');
- showStage(1);
+ runAlarmCountdown(()=>showStage(1));
 }
+
+
+
+const eventActionPool=[
+ '查證政府或官方來源，不任意轉傳','遠離火場並通報119','使用手電筒並避免搭乘電梯','避開積水路段，改走安全路線',
+ '聽從指揮並配合改道','依官方廣播更新調整避難路線','先確保安全，通報119並提供適當協助','立即離開警示區域並依指示避難',
+ '遠離受損建築物，避免進入或靠近','遠離現場並依警消指示避難','保持秩序並聽從警察指揮','提醒其靠邊安全停車、下車避難'
+];
+let eventCountdownId=null;
+function showEventChallenge(){
+ if(!state.boss||state.eventAnswered)return;
+ state.running=false;UI.secondary.classList.add('hidden');
+ const ev=state.boss;
+ const distractors=eventActionPool.filter(x=>x!==ev.correct).sort(()=>Math.random()-.5).slice(0,3);
+ const choices=[ev.correct,...distractors].sort(()=>Math.random()-.5);
+ $('eventIcon').textContent=ev.emoji;
+ $('eventQuestion').textContent=`${ev.name}：${ev.question}`;
+ $('eventFeedback').textContent='請在時間內選出最適當的應變方式。';
+ $('eventAnswers').innerHTML=choices.map((x,i)=>`<button class="eventAns" data-answer="${x.replaceAll('&','&amp;').replaceAll('"','&quot;')}">${String.fromCharCode(65+i)}. ${x}</button>`).join('');
+ $('eventOverlay').classList.remove('hidden');
+ let remain=10;$('eventTimer').textContent=`⏱️ ${remain} 秒`;
+ const finish=(answer,timedOut=false)=>{
+  if(state.eventAnswered)return;
+  state.eventAnswered=true;clearInterval(eventCountdownId);
+  const ok=answer===ev.correct;
+  document.querySelectorAll('.eventAns').forEach(btn=>{
+   btn.disabled=true;if(btn.dataset.answer===ev.correct)btn.classList.add('correct');else if(answer&&btn.dataset.answer===answer)btn.classList.add('wrong');
+  });
+  if(ok){state.score+=100;$('eventFeedback').textContent=`✅ 答對了！＋100分｜${ev.explain}`;successTone()}
+  else{state.score=Math.max(0,state.score-50);state.mistakes++;state.perfect=false;$('eventFeedback').textContent=`${timedOut?'⏰ 時間到！':'❌ 答錯了！'}－50分｜正確答案：${ev.correct}。${ev.explain}`;failTone()}
+  UI.score.textContent=state.score;
+  setTimeout(()=>{$('eventOverlay').classList.add('hidden');state.bossDone=true;state.running=true;last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)},2300);
+ };
+ document.querySelectorAll('.eventAns').forEach(btn=>btn.onclick=()=>finish(btn.dataset.answer,false));
+ eventCountdownId=setInterval(()=>{remain--;$('eventTimer').textContent=`⏱️ ${Math.max(0,remain)} 秒`;if(remain<=0)finish(null,true)},1000);
+}
+
+const knowledgeQuestions=[
+ {cat:'警報辨識',q:'聽到防空警報長音15秒、短音5秒，反覆3次時，代表什麼？',a:['解除警報','防空警報，應立即避難','消防車通過','一般廣播測試'],c:1,e:'這是防空警報音符，應保持冷靜並立即依指示避難。'},
+ {cat:'警報辨識',q:'防空警報解除時，通常會聽到哪一種聲音？',a:['連續90秒長音','長短音反覆','三聲短音','完全沒有聲音'],c:0,e:'解除警報通常為一長音90秒，仍應以官方發布為準。'},
+ {cat:'警報辨識',q:'聽到警報後，第一個正確反應是？',a:['停下來拍影片','保持冷靜並確認避難方向','立刻打電話給所有人','跑到空曠道路中央'],c:1,e:'保持冷靜、快速判斷並依官方或現場人員指示行動。'},
+ {cat:'警報辨識',q:'演習期間收到警報，是否可以因為只是演習就不配合？',a:['可以，演習不用理會','不可以，仍應依規定配合','只要躲進車內即可','看別人怎麼做再說'],c:1,e:'演習是熟悉程序的重要機會，應依規定配合。'},
+ {cat:'警報辨識',q:'無法判斷警報真偽時，最可靠的方式是？',a:['相信群組轉傳','查詢政府官方訊息','看網紅直播','自行推測'],c:1,e:'應以政府、警察、消防等官方發布為準。'},
+ {cat:'駕車應變',q:'防空警報響起時，正在駕車的民眾應怎麼做？',a:['加速離開市區','靠路邊安全停車、熄火下車','停在路口等待','繼續跟著車流行駛'],c:1,e:'應靠路邊安全停車、熄火下車，再依指示前往避難。'},
+ {cat:'駕車應變',q:'駕車遇警報時，哪個停車地點最不適當？',a:['不妨礙交通的路邊','路口中央','合法臨停安全處','警方指定位置'],c:1,e:'路口中央會阻礙交通與救援，應避開。'},
+ {cat:'駕車應變',q:'車輛停妥後，下一步應該？',a:['留在車內睡覺','熄火下車並前往避難','打開雙黃燈繼續開','站在車旁聊天'],c:1,e:'停車後應熄火下車，迅速進入附近避難設施。'},
+ {cat:'駕車應變',q:'騎乘機車時遇到防空警報，正確做法是？',a:['鑽車縫加速前進','靠邊安全停車並下車避難','停在隧道口','逆向尋找捷徑'],c:1,e:'機車也應靠邊安全停車，並依指示前往避難。'},
+ {cat:'駕車應變',q:'警察正在進行交通管制時，駕駛人應？',a:['按喇叭要求通行','聽從指揮並配合改道','自行移動路障','跟著前車闖入'],c:1,e:'現場管制通常基於安全考量，應配合警方指揮。'},
+ {cat:'行人避難',q:'行走在戶外時聽到警報，應優先？',a:['停在原地圍觀','前往最近的防空避難設施','跑回很遠的家','站在高處查看'],c:1,e:'應就近避難，不宜為返回遠處住家增加風險。'},
+ {cat:'行人避難',q:'前往避難處所途中，正確做法是？',a:['推擠奔跑','保持秩序快速移動','邊走邊直播','逆向穿越車道'],c:1,e:'快速但不推擠，避免跌倒及人流阻塞。'},
+ {cat:'行人避難',q:'找不到避難設施時，應該？',a:['詢問警察或民防人員','自行闖入任何住宅','停在路中央','往人最少的未知方向走'],c:0,e:'可依避難標誌或詢問現場執勤人員。'},
+ {cat:'行人避難',q:'避難途中經過施工區，應？',a:['穿越封鎖線抄近路','繞開危險區並依指示行動','停下觀看','攀爬圍籬'],c:1,e:'應避開施工、受損或封鎖區域。'},
+ {cat:'行人避難',q:'警報期間搭乘電梯是否適當？',a:['適當，速度最快','不適當，可能因停電受困','只要人少就可以','高樓層才可以'],c:1,e:'可能停電或設備故障，應改走安全樓梯。'},
+ {cat:'避難設施',q:'辨識防空避難設施最可靠的方法是？',a:['看是否很多人聚集','尋找正式防空避難標誌','看建築物是否漂亮','搜尋網友留言'],c:1,e:'應依正式標誌及官方資訊辨識。'},
+ {cat:'避難設施',q:'進入避難設施後，應該？',a:['堵在入口處','往內移動並保持通道暢通','占用出口放行李','大聲播放音樂'],c:1,e:'入口及通道應保持暢通，讓後續人員進入。'},
+ {cat:'避難設施',q:'在避難設施內，哪個行為正確？',a:['聽從管理人員指示','任意離開','散播未證實消息','占用大量空間'],c:0,e:'應配合管理與秩序，避免造成混亂。'},
+ {cat:'避難設施',q:'避難設施內人潮較多時，應？',a:['推擠搶位','保持冷靜並禮讓需要協助者','站在出口不動','自行宣布規則'],c:1,e:'保持秩序並優先協助弱勢，才能提升整體安全。'},
+ {cat:'避難設施',q:'解除警報前是否可以自行離開避難處所？',a:['可以，覺得安全就走','不宜，應等待官方或現場人員指示','只要手機有訊號就可以','跟著少數人離開'],c:1,e:'應等待官方解除或現場人員指示。'},
+ {cat:'緊急物資',q:'下列何者適合放入緊急避難包？',a:['飲用水與手電筒','大型玩偶','玻璃花瓶','電鍋'],c:0,e:'飲用水、手電筒、收音機、急救包及行動電源都很實用。'},
+ {cat:'緊急物資',q:'停電時最安全的照明工具是？',a:['蠟燭放在紙箱旁','手電筒','燃燒報紙','瓦斯爐火'],c:1,e:'手電筒較不會引發火災，是較安全的照明工具。'},
+ {cat:'緊急物資',q:'緊急避難包中的飲用水，應注意什麼？',a:['不用定期更換','確認保存期限並定期更新','只裝含糖飲料','開封後放多年'],c:1,e:'飲水與食品都應定期檢查保存期限。'},
+ {cat:'緊急物資',q:'行動電源放入避難包前，應？',a:['保持充電並定期檢查','完全放空電量','泡水保存','拆開電池'],c:0,e:'應維持可用電量並檢查是否膨脹或損壞。'},
+ {cat:'緊急物資',q:'收音機在災害期間的主要用途是？',a:['播放遊戲音效','在網路不穩時接收官方資訊','照明','煮食'],c:1,e:'收音機可在通訊不穩時接收重要廣播。'},
+ {cat:'緊急物資',q:'個人常用藥物放入避難包時，應？',a:['標示用途並注意效期','與陌生藥物混放','不需處方資訊','全部拆除包裝'],c:0,e:'常用藥應妥善標示並定期確認效期。'},
+ {cat:'緊急物資',q:'下列何者不建議成為避難包主要物品？',a:['急救用品','瓶裝水','沉重且無必要的收藏品','簡易乾糧'],c:2,e:'避難包應輕便實用，避免不必要的沉重物品。'},
+ {cat:'弱勢協助',q:'避難途中看見需要協助的長者，應？',a:['不予理會','在確保自身安全下主動協助','強拉對方奔跑','責怪對方太慢'],c:1,e:'應在安全可行範圍內提供適當協助。'},
+ {cat:'弱勢協助',q:'協助輪椅使用者時，第一步最好是？',a:['直接推走','先詢問對方需要何種協助','抬起輪椅奔跑','只拿走隨身物品'],c:1,e:'先詢問需求，尊重當事人的意願與安全。'},
+ {cat:'弱勢協助',q:'帶領視障者避難時，較適當的方式是？',a:['從背後推行','讓對方握住你的手臂並口頭說明環境','放開讓他自行摸索','大聲催促'],c:1,e:'可提供手臂讓對方輕握，並清楚說明階梯與障礙。'},
+ {cat:'弱勢協助',q:'遇到走失小朋友時，應？',a:['讓他獨自找家人','帶至安全處並通知現場人員','拍照上傳社群','交給陌生人'],c:1,e:'應確保孩子安全並交由警方或工作人員協助。'},
+ {cat:'弱勢協助',q:'協助疑似重傷者時，哪個做法較正確？',a:['任意搬動','先通報119並依專業指示處理','餵大量飲料','要求立刻站起來'],c:1,e:'除非現場有立即危險，否則不要任意搬動重傷者。'},
+ {cat:'弱勢協助',q:'避難通道狹窄時，應優先禮讓？',a:['拿最多行李的人','行動不便及需要協助者','拍攝影片的人','插隊的人'],c:1,e:'應優先協助長者、兒童、孕婦與身心障礙者。'},
+ {cat:'假訊息',q:'收到未經證實的空襲訊息時，應該？',a:['立刻大量轉傳','查證官方資訊，不任意轉傳','自行加油添醋','刪除所有官方通知'],c:1,e:'應以政府與官方發布資訊為準。'},
+ {cat:'假訊息',q:'群組有人說「朋友在政府工作，消息絕對可靠」，你應？',a:['立刻相信','仍需查證官方來源','轉傳後再說','加入更多猜測'],c:1,e:'轉述身分不能取代正式查證。'},
+ {cat:'假訊息',q:'災害期間發現可疑訊息，最不適當的是？',a:['比對官方公告','截圖後大量轉傳','確認發布時間','查看來源帳號'],c:1,e:'未查證前大量轉傳可能造成恐慌。'},
+ {cat:'假訊息',q:'看到舊災害影片被說成正在發生，應？',a:['立即轉傳','查核日期、地點與官方說明','只看標題判斷','留言煽動恐慌'],c:1,e:'影像可能移花接木，應確認時間、地點與來源。'},
+ {cat:'假訊息',q:'官方訊息與匿名貼文衝突時，應優先採信？',a:['匿名貼文','官方發布及現場指示','按讚數較高者','轉傳次數較多者'],c:1,e:'官方與現場執勤人員資訊較具可信度。'},
+ {cat:'假訊息',q:'災害資訊轉傳前，哪一項最重要？',a:['確認來源與時效','加上驚嘆號','催大家快轉','刪除原始連結'],c:0,e:'應確認來源、日期、地點與內容是否仍有效。'},
+ {cat:'居家避難',q:'在家中聽到警報，應優先前往？',a:['陽台觀看','地下室或遠離窗戶的室內安全處','屋頂','玻璃窗旁'],c:1,e:'應遠離玻璃與外牆，前往較低且堅固的安全空間。'},
+ {cat:'居家避難',q:'避難時窗戶應如何處理？',a:['站在窗邊觀察','遠離窗戶及玻璃','全部打開並探頭','貼近玻璃拍攝'],c:1,e:'玻璃可能因震動破裂，應保持距離。'},
+ {cat:'居家避難',q:'家中聞到瓦斯味時，應？',a:['開燈檢查','避免火花、關閉瓦斯並通風後撤離通報','點火確認位置','使用吹風機'],c:1,e:'避免操作電器與明火，安全關閉來源、通風並通報。'},
+ {cat:'居家避難',q:'停電時使用發電機，哪個位置最安全？',a:['密閉室內','通風良好的戶外並遠離門窗','臥室內','地下室'],c:1,e:'發電機會產生一氧化碳，必須放在戶外通風處。'},
+ {cat:'居家避難',q:'警報期間家人分散時，較好的做法是？',a:['每人自行決定且不聯絡','依事先約定的聯絡與集合方式','不停撥打電話占線','全部跑回家'],c:1,e:'平時應建立家庭防災聯絡與集合計畫。'},
+ {cat:'居家避難',q:'居家避難時，重要證件較適合？',a:['散放各處','以防水袋收妥並準備影本','放在窗台','交給陌生人保管'],c:1,e:'證件、藥物與聯絡資料應妥善防水保存。'},
+ {cat:'災害應變',q:'建築物失火時，最適當的處置是？',a:['靠近拍攝','遠離火場並通報119','搭電梯下樓','返回取物'],c:1,e:'不要圍觀或返回危險區，應遠離並通報119。'},
+ {cat:'災害應變',q:'道路明顯積水時，應？',a:['冒險涉水','避開積水路段','加速通過','站在水中查看'],c:1,e:'積水可能有坑洞、漏電或急流，應繞道。'},
+ {cat:'災害應變',q:'看到受損建築牆面龜裂時，應？',a:['靠近檢查','遠離並通報相關單位','進入拿東西','靠牆躲避'],c:1,e:'受損建築可能坍塌，應保持距離。'},
+ {cat:'災害應變',q:'疑似有不明氣體外洩時，應？',a:['靠近聞味道','遠離現場並依警消指示避難','自行觸摸檢查','點火測試'],c:1,e:'不可自行處理，應迅速遠離並聽從專業指示。'},
+ {cat:'災害應變',q:'發現掉落電線時，應？',a:['跨過去','保持距離並通報','用手移開','潑水降溫'],c:1,e:'掉落電線可能帶電，應遠離並立即通報。'},
+ {cat:'災害應變',q:'濃煙環境中逃生時，較適當的是？',a:['站直快跑','低姿勢移動並避開煙流','搭電梯','返回取手機'],c:1,e:'濃煙與高溫多在上方，應低姿勢撤離。'},
+ {cat:'通訊聯絡',q:'災害期間電話壅塞時，較合適的是？',a:['持續長時間通話','以簡短文字訊息報平安','不停重撥所有人','直播現場'],c:1,e:'簡短文字較節省通訊資源。'},
+ {cat:'通訊聯絡',q:'手機收到緊急警報後，應？',a:['立即刪除','閱讀內容並依指示行動','轉成笑話','只看標題'],c:1,e:'警報內容可能包含區域與應變指示。'},
+ {cat:'通訊聯絡',q:'家庭防災聯絡卡應包含？',a:['緊急聯絡人與集合地點','遊戲帳號','購物清單','娛樂節目表'],c:0,e:'應記錄聯絡人、電話、集合地點與重要醫療資訊。'},
+ {cat:'通訊聯絡',q:'手機沒電且網路中斷時，可優先利用？',a:['收音機與現場廣播','自拍棒','藍牙喇叭','遊戲主機'],c:0,e:'收音機與現場廣播是重要備援資訊來源。'},
+ {cat:'通訊聯絡',q:'災害訊息應注意發布時間，是因為？',a:['舊指示可能已失效','時間不重要','越舊越可靠','只為排版好看'],c:0,e:'災情與避難路線可能隨時改變，需確認最新資訊。'},
+ {cat:'公共秩序',q:'進入避難設施時，下列何者正確？',a:['推擠搶先進入','保持秩序並聽從引導','停在入口拍照','逆向離開'],c:1,e:'保持秩序可避免入口阻塞與二次危險。'},
+ {cat:'公共秩序',q:'警察要求改走另一條路時，應？',a:['爭辯後闖入','配合改道','移開路障','跟隨陌生人穿越封鎖區'],c:1,e:'封鎖區可能有未公開危險，應遵從管制。'},
+ {cat:'公共秩序',q:'避難處所內應降低音量，主要原因是？',a:['方便聽清楚廣播與指示','禁止說話','節省手機電力','避免被認出'],c:0,e:'保持安靜可讓所有人接收重要訊息。'},
+ {cat:'公共秩序',q:'攜帶寵物進入避難處所時，應？',a:['放任四處奔跑','使用牽繩或提籠並遵守管理規定','占用出口','讓陌生人代管後離開'],c:1,e:'應妥善控制寵物，避免影響他人與動線。'},
+ {cat:'公共秩序',q:'發現有人情緒恐慌時，較適當的是？',a:['嘲笑他','以平穩語氣安撫並尋求工作人員協助','大聲斥責','散播更多可怕消息'],c:1,e:'平穩溝通及尋求專業協助可降低恐慌。'},
+ {cat:'綜合知識',q:'防空避難最重要的原則是？',a:['保持冷靜、迅速依指示行動','四處奔跑','停留街道圍觀','只顧拍攝'],c:0,e:'保持冷靜並依現場指示，才能安全完成避難。'},
+ {cat:'綜合知識',q:'平時最能提升家庭韌性的做法是？',a:['完全不準備','準備避難包並討論家庭應變計畫','只依賴臨時網路消息','把所有責任交給別人'],c:1,e:'事前準備與演練可大幅提升應變能力。'}
+];
+function shuffleCopy(arr){
+ const out=[...arr];
+ for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}
+ return out;
+}
+let quizNext=null,quizCountdownId=null;
+function showKnowledgeQuiz(next){
+ quizNext=next;state.running=false;
+ if(!state.quizPool||!state.quizPool.length)state.quizPool=shuffleCopy(knowledgeQuestions);
+ const q=state.quizPool.pop();
+ state.quizAsked++;state.quizCategories[q.cat]=(state.quizCategories[q.cat]||0)+1;
+ $('quizCategory').textContent=q.cat;
+ const questionEl=$('quizQuestion');questionEl.textContent='題目：'+q.q;questionEl.style.display='block';
+ $('quizFeedback').textContent='請在時間內選出最適當的答案。';
+ const choices=q.a.map((text,index)=>({text,correct:index===q.c}));
+ for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]]}
+ $('quizAnswers').innerHTML=choices.map((x,i)=>`<button class="quizAns" data-i="${i}">${String.fromCharCode(65+i)}. ${x.text}</button>`).join('');
+ $('quizOverlay').classList.remove('hidden');
+ let remain=10;$('quizTimer').textContent=`⏱️ ${remain} 秒`;let finished=false;
+ const finish=(idx,timedOut=false)=>{
+  if(finished)return;finished=true;clearInterval(quizCountdownId);
+  const selected=idx===null?null:choices[idx];const ok=!!selected?.correct;
+  document.querySelectorAll('.quizAns').forEach((btn,i)=>{btn.disabled=true;if(choices[i].correct)btn.classList.add('correct');else if(i===idx)btn.classList.add('wrong')});
+  if(ok){state.score+=100;state.quizCorrect++;$('quizFeedback').textContent='✅ 答對了！＋100分｜'+q.e;successTone()}
+  else{state.score=Math.max(0,state.score-50);state.quizWrong++;state.mistakes++;state.perfect=false;$('quizFeedback').textContent=`${timedOut?'⏰ 時間到！':'❌ 答錯了！'}－50分｜正確答案：${choices.find(x=>x.correct).text}。${q.e}`;failTone()}
+  UI.score.textContent=state.score;
+  setTimeout(()=>{$('quizOverlay').classList.add('hidden');quizNext&&quizNext()},2200);
+ };
+ document.querySelectorAll('.quizAns').forEach(b=>b.onclick=()=>finish(Number(b.dataset.i),false));
+ quizCountdownId=setInterval(()=>{remain--;$('quizTimer').textContent=`⏱️ ${Math.max(0,remain)} 秒`;if(remain<=0)finish(null,true)},1000);
+}
+function runAlarmCountdown(done){
+ const o=$('countdownOverlay'),n=$('countNum');o.classList.remove('hidden');let v=10;n.textContent=v;alarmTone();
+ const id=setInterval(()=>{v--;n.textContent=v>0?v:'開始！';if(v<=3&&v>0)alarmTone();if(v<=0){clearInterval(id);setTimeout(()=>{o.classList.add('hidden');done()},500)}},1000);
+}
+window.selectedCitizen={emoji:'👨',name:'男市民'};
+[...document.querySelectorAll('.charBtn')].forEach(b=>b.onclick=()=>{document.querySelectorAll('.charBtn').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');window.selectedCitizen={emoji:b.dataset.e,name:b.dataset.n}});
+$('confirmCharacter').onclick=beginMissionAfterCharacter;
 
 // buttons
 $('startBtn').onclick=startGame;$('stageGo').onclick=beginStage;$('againBtn').onclick=()=>{
@@ -919,24 +1176,96 @@ $('introHelpBtn').onclick=()=>{$('helpCard').classList.remove('hidden')};
 $('closeHelp').onclick=()=>{$('helpCard').classList.add('hidden')};
 $('soundBtn').onclick=()=>{soundOn=!soundOn;$('soundBtn').textContent=soundOn?'🔊':'🔇'};
 UI.main.onclick=()=>{
- if(state.stage===1&&state.carStopped){state.exited=true;state.player.mode='walk';state.player.speed=235;toast('已熄火下車，立即疏散',true)}
+ if(state.stage===1&&state.carStopped){
+  const role=currentRoleProfile();state.roleStage1Done=true;state.exited=true;state.player.mode='walk';state.player.speed=235;
+  const line=role.type==='child'?'爸爸／媽媽：好，我們馬上靠邊停車，一起去避難！':role.complete;
+  toast(line,true);
+ }
  else if(state.stage===4){
-  const n=state.npcs.find(x=>!x.helped&&!x.escorting&&distance(state.player,{...x,w:45,h:55})<72);
-  if(n){
-   if(n.type==='disabled'){
-    n.escorting=true;state.escortingNpc=n;state.score+=15;
-    toast('🧑‍🦽 請放慢速度，陪同前往藍色無障礙安全集合區',true);
-    UI.guide.textContent='保持同行，不要讓需要協助者落單';
-   }else{
-    n.helped=true;state.helped++;state.score+=40;successTone();
-    toast(`已協助${n.name}（${state.helped}/2）`,true);
-   }
-  }
+  const n=state.npcs.find(x=>!x.helped&&distance(state.player,{...x,w:45,h:55})<72);
+  if(n){n.helped=true;state.helped++;state.score+=40;toast(`已協助${n.name}（${state.helped}/2）`,true)}
  }
 };
-UI.secondary.onclick=()=>{if(state.stage===6&&state.boss&&distance(state.player,state.boss)<78){state.bossDone=true;state.score+=50;toast('已提醒市民立即避難',true)}};
+UI.secondary.onclick=()=>{if(state.stage===6&&state.boss&&distance(state.player,state.boss)<78&&!state.eventAnswered){showEventChallenge()}};
+$('confirmFacebookAccount').onclick=confirmFacebookAccount;
+$('facebookAccountInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmFacebookAccount()});
+
+function isInAppBrowser(){
+ const ua=navigator.userAgent||'';
+ return /(Line\/|FBAN|FBAV|Instagram|Messenger|MicroMessenger|Twitter|TikTok|WebView|; wv\))/i.test(ua);
+}
+function isIOS(){return /iPhone|iPad|iPod/i.test(navigator.userAgent||'')}
+function currentGameUrl(){return location.href.split('#')[0]}
+function showBrowserGuide(){
+ const steps=$('browserGuideSteps');
+ steps.innerHTML=isIOS()
+  ? '<b>iPhone／iPad：</b><br>① 點選右上角或右下角的「分享」圖示。<br>② 選擇「在 Safari 中開啟」。<br>③ 回到成績畫面後，再按「儲存成績圖片」。'
+  : '<b>Android：</b><br>① 點選右上角「⋮」選單。<br>② 選擇「以瀏覽器開啟」或「使用 Chrome 開啟」。<br>③ 回到成績畫面後，再按「儲存成績圖片」。';
+ $('browserGuide').classList.remove('hidden');
+}
+function roundRectPath(c,x,y,w,h,r){
+ r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();
+}
+function fitText(c,text,maxWidth,startSize,minSize=24){
+ let size=startSize;c.font=`900 ${size}px "Microsoft JhengHei",sans-serif`;
+ while(size>minSize&&c.measureText(text).width>maxWidth){size-=2;c.font=`900 ${size}px "Microsoft JhengHei",sans-serif`}return size;
+}
+function buildResultImage(){
+ const c=document.createElement('canvas');c.width=1080;c.height=1350;const g=c.getContext('2d');
+ const grad=g.createLinearGradient(0,0,0,c.height);grad.addColorStop(0,'#0d3457');grad.addColorStop(1,'#07182b');g.fillStyle=grad;g.fillRect(0,0,c.width,c.height);
+ g.fillStyle='rgba(255,255,255,.07)';for(let i=0;i<18;i++){g.beginPath();g.arc((i*173)%1080,(i*257)%1350,35+(i%4)*18,0,Math.PI*2);g.fill()}
+ roundRectPath(g,70,70,940,1210,42);g.fillStyle='rgba(6,24,42,.92)';g.fill();g.strokeStyle='rgba(255,213,74,.9)';g.lineWidth=7;g.stroke();
+ g.textAlign='center';g.fillStyle='#ffffff';g.font='900 58px "Microsoft JhengHei",sans-serif';g.fillText('臺南城鎮韌性',540,165);
+ g.fillStyle='#ffd54a';g.font='900 46px "Microsoft JhengHei",sans-serif';g.fillText('Mission 2.0',540,225);
+ g.font='84px sans-serif';g.fillText('🏆',540,330);
+ g.fillStyle='#ffffff';g.font='900 48px "Microsoft JhengHei",sans-serif';g.fillText('城鎮韌性任務完成',540,405);
+ g.fillStyle='#ffe36e';g.font='1000 122px "Microsoft JhengHei",sans-serif';g.fillText(String(state.score),540,555);
+ g.fillStyle='#d4eaff';g.font='700 30px "Microsoft JhengHei",sans-serif';g.fillText('本次任務得分',540,600);
+ const stars=($('finalStars').textContent||'').trim();fitText(g,stars,820,62,40);g.fillStyle='#ffd54a';g.fillText(stars,540,680);
+ g.fillStyle='#ffffff';fitText(g,$('rankTitle').textContent||'韌性守護者',820,52,32);g.fillText($('rankTitle').textContent||'韌性守護者',540,755);
+ roundRectPath(g,130,805,820,280,28);g.fillStyle='rgba(255,255,255,.08)';g.fill();
+ g.textAlign='left';g.fillStyle='#ffffff';g.font='800 32px "Microsoft JhengHei",sans-serif';
+ const role=`玩家角色：${state.citizen?.emoji||'🧑'} ${state.citizen?.name||'市民'}`;g.fillText(role,180,870);
+ g.fillText(`臉書帳號：${state.facebookAccount||'未填寫'}`,180,925);
+ g.fillText(`完成時間：${Math.round(state.totalTime||0)} 秒`,180,980);
+ const rate=state.quizAsked?Math.round(state.quizCorrect/state.quizAsked*100):0;g.fillText(`防空知識：${state.quizCorrect}／${state.quizAsked} 題（${rate}%）`,180,1035);
+ g.textAlign='center';g.fillStyle='#bfe5ff';g.font='700 27px "Microsoft JhengHei",sans-serif';g.fillText('防空警報響起時，我知道該怎麼做！',540,1155);
+ g.fillStyle='#ffffff';g.font='600 22px "Microsoft JhengHei",sans-serif';g.fillText('臺南市政府警察局｜城鎮韌性宣導小遊戲',540,1215);
+ return c;
+}
+async function saveResultImage(){
+ if(isInAppBrowser()){showBrowserGuide();return}
+ const c=buildResultImage();
+ const preview=$('resultImagePreview');preview.src=c.toDataURL('image/png');preview.classList.add('show');
+ c.toBlob(async blob=>{
+  if(!blob){toast('圖片製作失敗，請再試一次');return}
+  const file=new File([blob],'臺南城鎮韌性_Mission_2.0_遊戲成績.png',{type:'image/png'});
+  try{
+   if(navigator.canShare&&navigator.canShare({files:[file]})&&/iPhone|iPad|iPod/i.test(navigator.userAgent||'')){
+    await navigator.share({files:[file],title:'臺南城鎮韌性 Mission 2.0 遊戲成績'});return;
+   }
+  }catch(e){if(e&&e.name==='AbortError')return}
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);toast('成績圖片已產生',true);
+ },'image/png');
+}
+$('saveResultBtn').onclick=saveResultImage;
+$('closeBrowserGuide').onclick=()=>$('browserGuide').classList.add('hidden');
+$('copyGameLinkBtn').onclick=async()=>{
+ try{await navigator.clipboard.writeText(currentGameUrl());toast('遊戲網址已複製',true)}catch(e){prompt('請複製以下遊戲網址：',currentGameUrl())}
+};
+$('openExternalBtn').onclick=()=>{
+ const url=currentGameUrl();
+ if(/Android/i.test(navigator.userAgent||'')&&/^https?:/i.test(url)){
+  const noScheme=url.replace(/^https?:\/\//,'');
+  location.href=`intent://${noScheme}#Intent;scheme=${url.startsWith('https')?'https':'http'};package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(url)};end`;
+ }else{
+  window.open(url,'_blank');
+  setTimeout(()=>{if(isInAppBrowser())showBrowserGuide()},600);
+ }
+};
+
 $('shareBtn').onclick=async()=>{
- const text=`🛡️ 我完成《臺南城鎮韌性 Mission 2.0》！\n得分：${state.score} 分\n防空警報響起時，我知道該怎麼做！`;
+ const text=`🛡️ 我使用 ${state.citizen?.emoji||'🧑'} ${state.citizen?.name||'市民'} 完成《臺南城鎮韌性 Mission 2.0》！\n臉書帳號：${state.facebookAccount||'未填寫'}\n得分：${state.score} 分\n防空警報響起時，我知道該怎麼做！`;
  try{if(navigator.share)await navigator.share({title:'臺南城鎮韌性 Mission 2.0',text});else{await navigator.clipboard.writeText(text);toast('成績文字已複製',true)}}catch(e){}
 };
 
