@@ -453,27 +453,27 @@ font-size:12px;font-weight:900;color:#174f43}
 }
 
 
-#lineImagePreview{
+#universalImagePreview{
  position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;
  background:rgba(0,0,0,.94);padding:12px;overflow:auto;-webkit-overflow-scrolling:touch
 }
-#lineImagePreview .previewBar{
+#universalImagePreview .previewBar{
  position:sticky;top:0;z-index:2;background:#111;color:#fff;border-radius:14px;
  padding:12px;text-align:center;font-weight:900;line-height:1.5
 }
-#lineImagePreview img{
+#universalImagePreview img{
  display:block;width:100%;max-width:760px;height:auto;margin:12px auto 18px;
  border-radius:14px;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.45);
  -webkit-touch-callout:default;user-select:auto
 }
-#lineImagePreview .previewActions{
+#universalImagePreview .previewActions{
  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding-bottom:24px
 }
-#lineImagePreview button{
+#universalImagePreview button{
  border:0;border-radius:14px;padding:12px 16px;font-size:16px;font-weight:1000;color:#fff
 }
-#linePreviewClose{background:#666}
-#linePreviewBrowser{background:#1b7966}
+#universalPreviewClose{background:#666}
+#universalPreviewBrowser{background:#1b7966}
 
 </style>
 
@@ -481,15 +481,15 @@ font-size:12px;font-weight:900;color:#174f43}
 </head>
 <body>
 
-<div id="lineImagePreview">
+<div id="universalImagePreview">
  <div class="previewBar">
   📸 成績圖片已產生<br>
   請「長按下方圖片」後選擇儲存圖片或分享
  </div>
- <img id="linePreviewImage" alt="臺南甜甜接好運完整成績圖片">
+ <img id="universalPreviewImage" alt="臺南甜甜接好運完整成績圖片">
  <div class="previewActions">
-  <button id="linePreviewBrowser" type="button">🌐 使用外部瀏覽器開啟遊戲</button>
-  <button id="linePreviewClose" type="button">關閉預覽</button>
+  <button id="universalPreviewBrowser" type="button">🌐 使用外部瀏覽器開啟遊戲</button>
+  <button id="universalPreviewClose" type="button">關閉預覽</button>
  </div>
 </div>
 
@@ -1692,7 +1692,7 @@ async function end(){
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
  <div id="leaderPanel"><h3>🏆 本機排行榜</h3>${leaderHTML()}</div>
  <button id="again">再玩一次</button>
- <div id="lineBrowserNotice" class="lineBrowserNotice" style="display:none">LINE 內建瀏覽器會將成績圖片顯示於畫面中，請長按圖片後選擇儲存或分享。</div>
+ <div id="inAppBrowserNotice" class="lineBrowserNotice" style="display:none">目前使用 App 內建瀏覽器，成績圖片將直接顯示於畫面中，請長按圖片後選擇儲存或分享。</div>
 <button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">📤 分享圖片</button><button id="saveScoreImage" style="background:#8a4dd6;box-shadow:0 6px 0 #5a2d99;margin-left:6px">📸 儲存圖片</button>
  </div>`;
  overlay.style.display='flex';
@@ -1701,42 +1701,57 @@ async function end(){
 
 
 
-const lineImagePreview=document.getElementById('lineImagePreview');
-const linePreviewImage=document.getElementById('linePreviewImage');
-const linePreviewClose=document.getElementById('linePreviewClose');
-const linePreviewBrowser=document.getElementById('linePreviewBrowser');
-let currentLinePreviewUrl='';
 
-function closeLineImagePreview(){
-  lineImagePreview.style.display='none';
-  linePreviewImage.removeAttribute('src');
-  if(currentLinePreviewUrl){
-    URL.revokeObjectURL(currentLinePreviewUrl);
-    currentLinePreviewUrl='';
+const universalImagePreview=document.getElementById('universalImagePreview');
+const universalPreviewImage=document.getElementById('universalPreviewImage');
+const universalPreviewClose=document.getElementById('universalPreviewClose');
+const universalPreviewBrowser=document.getElementById('universalPreviewBrowser');
+const universalPreviewBar=universalImagePreview.querySelector('.previewBar');
+let currentPreviewUrl='';
+
+function getBrowserContext(){
+  const ua=navigator.userAgent||'';
+  if(/Line\/|LIFF/i.test(ua))return {inApp:true,name:'LINE'};
+  if(/Instagram/i.test(ua))return {inApp:true,name:'Instagram'};
+  if(/FBAN|FBAV|FB_IAB/i.test(ua)){
+    if(/Messenger|FBAN\/MessengerForiOS/i.test(ua))return {inApp:true,name:'Messenger'};
+    return {inApp:true,name:'Facebook'};
+  }
+  if(/Messenger/i.test(ua))return {inApp:true,name:'Messenger'};
+  return {inApp:false,name:'一般瀏覽器'};
+}
+
+function isInAppBrowser(){return getBrowserContext().inApp;}
+
+function closeUniversalImagePreview(){
+  universalImagePreview.style.display='none';
+  universalPreviewImage.removeAttribute('src');
+  if(currentPreviewUrl){
+    URL.revokeObjectURL(currentPreviewUrl);
+    currentPreviewUrl='';
   }
 }
 
-function showLineImagePreview(blob){
-  closeLineImagePreview();
-  currentLinePreviewUrl=URL.createObjectURL(blob);
-  linePreviewImage.src=currentLinePreviewUrl;
-  lineImagePreview.style.display='flex';
-  lineImagePreview.scrollTop=0;
+function showUniversalImagePreview(blob){
+  closeUniversalImagePreview();
+  const context=getBrowserContext();
+  currentPreviewUrl=URL.createObjectURL(blob);
+  universalPreviewImage.src=currentPreviewUrl;
+  universalPreviewBar.innerHTML=`📸 成績圖片已產生<br><span style="font-size:14px">${context.inApp?`您正在使用 ${context.name} 內建瀏覽器，請長按下方圖片後選擇「儲存圖片」或「分享」`:'請長按下方圖片儲存，或使用系統分享功能'}</span>`;
+  universalImagePreview.style.display='flex';
+  universalImagePreview.scrollTop=0;
 }
 
-linePreviewClose.onclick=closeLineImagePreview;
-linePreviewBrowser.onclick=()=>{
+universalPreviewClose.onclick=closeUniversalImagePreview;
+universalPreviewBrowser.onclick=async()=>{
   const url=location.href;
-  // LINE 內建瀏覽器無法直接強制開啟 Chrome，因此複製網址並提示操作。
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(url).catch(()=>{});
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(url);
+    alert('遊戲網址已複製。請點右上角「⋮」或分享圖示，再選擇「使用其他瀏覽器開啟」，或將網址貼到 Chrome／Safari。');
+  }catch(e){
+    alert('請點右上角「⋮」或分享圖示，再選擇「使用其他瀏覽器開啟」。');
   }
-  alert('遊戲網址已準備完成。請點右上角「⋮」或「分享」圖示，再選擇「使用其他瀏覽器開啟」。');
 };
-
-function isLineBrowser(){
-  return /Line\/|LIFF/i.test(navigator.userAgent||'');
-}
 
 async function buildFullResultImage(){
   const card=document.querySelector('#overlay .card');
@@ -1815,8 +1830,8 @@ async function shareResultImage(){
   try{
     const result=await buildFullResultImage();
 
-    if(isLineBrowser()){
-      showLineImagePreview(result.blob);
+    if(isInAppBrowser()){
+      showUniversalImagePreview(result.blob);
       showToast('請長按成績圖片儲存或分享');
       return true;
     }
@@ -1833,9 +1848,9 @@ async function shareResultImage(){
       return true;
     }
 
-    // LINE 內建瀏覽器常同時封鎖下載、檔案分享與 blob 新視窗。
+    // 部分 App 內建瀏覽器會封鎖下載、檔案分享與 blob 新視窗。
     // 改為直接在目前頁面顯示 PNG，讓使用者長按圖片儲存或分享。
-    showLineImagePreview(result.blob);
+    showUniversalImagePreview(result.blob);
     showToast('請長按成績圖片儲存或分享');
     return true;
   }catch(err){
@@ -1850,13 +1865,17 @@ async function shareResultImage(){
   }
 }
 
-const lineBrowserNotice=document.getElementById('lineBrowserNotice');
- if(lineBrowserNotice&&isLineBrowser())lineBrowserNotice.style.display='block';
+const inAppBrowserNotice=document.getElementById('inAppBrowserNotice');
+ const browserContext=getBrowserContext();
+ if(inAppBrowserNotice&&browserContext.inApp){
+   inAppBrowserNotice.style.display='block';
+   inAppBrowserNotice.textContent=`${browserContext.name} 內建瀏覽器會直接顯示成績圖片，請長按圖片後選擇儲存或分享。`;
+ }
 
 document.getElementById('saveScoreImage').onclick=async()=>{
-  // LINE 內建瀏覽器不使用下載機制，直接改走手機分享模式。
-  if(isLineBrowser()){
-    showToast('LINE 瀏覽器將改用分享圖片');
+  // App 內建瀏覽器不使用下載機制，直接顯示圖片供長按儲存或分享。
+  if(isInAppBrowser()){
+    showToast(`${getBrowserContext().name} 內建瀏覽器將顯示成績圖片`);
     await shareResultImage();
     return;
   }
