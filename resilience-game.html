@@ -127,6 +127,10 @@ h1,h2,h3,p{margin:0}
 #facebookAccountResult{margin:12px auto 4px;padding:12px 14px;border-radius:14px;background:rgba(24,119,242,.14);border:1px solid rgba(110,174,255,.45);font-size:17px;font-weight:1000;color:#eaf4ff;word-break:break-word}
 
 </style>
+<meta name="app-build" content="20260726153638">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 </head>
 <body>
 <div id="app">
@@ -1298,5 +1302,108 @@ joy.addEventListener('touchend',e=>{if([...e.changedTouches].some(x=>x.identifie
 
 resetState();drawWorld();drawMini();
 </script>
+
+<script>
+(() => {
+  const BUILD_VERSION =
+    document.querySelector('meta[name="app-build"]')?.content || 'unknown';
+  const CHECK_INTERVAL = 5 * 60 * 1000;
+  let checking = false;
+  let pendingBuild = '';
+
+  function isSafeToReload() {
+    const intro = document.getElementById('intro');
+    const result = document.getElementById('result');
+    return Boolean(
+      (intro && !intro.classList.contains('hidden')) ||
+      (result && !result.classList.contains('hidden'))
+    );
+  }
+
+  function makeFreshUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.set('_check', Date.now().toString());
+    return url.toString();
+  }
+
+  function reloadLatest(build) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('_check');
+    url.searchParams.set('v', build || Date.now().toString());
+    window.location.replace(url.toString());
+  }
+
+  async function checkForUpdate(forceReload = false) {
+    if (checking || location.protocol === 'file:') return;
+    checking = true;
+
+    try {
+      const response = await fetch(makeFreshUrl(), {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, max-age=0',
+          'Pragma': 'no-cache'
+        }
+      });
+
+      if (!response.ok) return;
+
+      const latestHtml = await response.text();
+      const match = latestHtml.match(
+        /<meta\s+name=["']app-build["']\s+content=["']([^"']+)["']/i
+      );
+      const latestBuild = match?.[1];
+
+      if (latestBuild && latestBuild !== BUILD_VERSION) {
+        pendingBuild = latestBuild;
+
+        if (forceReload || isSafeToReload()) {
+          reloadLatest(latestBuild);
+        } else if (typeof toast === 'function') {
+          toast('已偵測到新版，完成目前任務後將自動更新', true);
+        }
+      }
+    } catch (error) {
+      console.info('版本檢查暫時無法完成：', error);
+    } finally {
+      checking = false;
+    }
+  }
+
+  function applyPendingUpdate() {
+    if (pendingBuild && isSafeToReload()) {
+      reloadLatest(pendingBuild);
+    }
+  }
+
+  window.addEventListener('load', () => {
+    setTimeout(() => checkForUpdate(true), 800);
+    setInterval(() => checkForUpdate(false), CHECK_INTERVAL);
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      applyPendingUpdate();
+      checkForUpdate(false);
+    }
+  });
+
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) {
+      checkForUpdate(true);
+    }
+  });
+
+  const observer = new MutationObserver(applyPendingUpdate);
+  window.addEventListener('DOMContentLoaded', () => {
+    const intro = document.getElementById('intro');
+    const result = document.getElementById('result');
+    if (intro) observer.observe(intro, { attributes: true, attributeFilter: ['class'] });
+    if (result) observer.observe(result, { attributes: true, attributeFilter: ['class'] });
+  });
+})();
+</script>
+
 </body>
 </html>
