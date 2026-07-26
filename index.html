@@ -475,6 +475,15 @@ font-size:12px;font-weight:900;color:#174f43}
 #universalPreviewClose{background:#666}
 #universalPreviewBrowser{background:#1b7966}
 
+
+#universalPreviewShare{background:#18864b}
+#universalPreviewDownload{background:#8a4dd6}
+#universalPreviewOpenImage{background:#d56a20}
+#universalPreviewHint{
+ max-width:760px;margin:0 auto 10px;padding:10px 12px;border-radius:12px;
+ background:#fff4ce;color:#5c4317;font-weight:800;line-height:1.55;text-align:left
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -487,7 +496,13 @@ font-size:12px;font-weight:900;color:#174f43}
   請「長按下方圖片」後選擇儲存圖片或分享
  </div>
  <img id="universalPreviewImage" alt="臺南甜甜接好運完整成績圖片">
+ <div id="universalPreviewHint">
+  部分社群 App 會關閉圖片長按選單，請直接使用下方按鈕。若仍被限制，請改用外部瀏覽器。
+ </div>
  <div class="previewActions">
+  <button id="universalPreviewShare" type="button">📤 系統分享圖片</button>
+  <button id="universalPreviewDownload" type="button">📥 嘗試下載圖片</button>
+  <button id="universalPreviewOpenImage" type="button">🖼️ 開啟原始圖片</button>
   <button id="universalPreviewBrowser" type="button">🌐 使用外部瀏覽器開啟遊戲</button>
   <button id="universalPreviewClose" type="button">關閉預覽</button>
  </div>
@@ -1692,7 +1707,7 @@ async function end(){
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
  <div id="leaderPanel"><h3>🏆 本機排行榜</h3>${leaderHTML()}</div>
  <button id="again">再玩一次</button>
- <div id="inAppBrowserNotice" class="lineBrowserNotice" style="display:none">目前使用 App 內建瀏覽器，成績圖片將直接顯示於畫面中，請長按圖片後選擇儲存或分享。</div>
+ <div id="inAppBrowserNotice" class="lineBrowserNotice" style="display:none">目前使用 App 內建瀏覽器。若沒有圖片長按選單，請使用預覽頁下方的「系統分享圖片」、「嘗試下載圖片」或「開啟原始圖片」。</div>
 <button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">📤 分享圖片</button><button id="saveScoreImage" style="background:#8a4dd6;box-shadow:0 6px 0 #5a2d99;margin-left:6px">📸 儲存圖片</button>
  </div>`;
  overlay.style.display='flex';
@@ -1706,8 +1721,13 @@ const universalImagePreview=document.getElementById('universalImagePreview');
 const universalPreviewImage=document.getElementById('universalPreviewImage');
 const universalPreviewClose=document.getElementById('universalPreviewClose');
 const universalPreviewBrowser=document.getElementById('universalPreviewBrowser');
+const universalPreviewShare=document.getElementById('universalPreviewShare');
+const universalPreviewDownload=document.getElementById('universalPreviewDownload');
+const universalPreviewOpenImage=document.getElementById('universalPreviewOpenImage');
 const universalPreviewBar=universalImagePreview.querySelector('.previewBar');
 let currentPreviewUrl='';
+let currentPreviewBlob=null;
+let currentPreviewFile=null;
 
 function getBrowserContext(){
   const ua=navigator.userAgent||'';
@@ -1726,23 +1746,81 @@ function isInAppBrowser(){return getBrowserContext().inApp;}
 function closeUniversalImagePreview(){
   universalImagePreview.style.display='none';
   universalPreviewImage.removeAttribute('src');
+  currentPreviewBlob=null;
+  currentPreviewFile=null;
   if(currentPreviewUrl){
     URL.revokeObjectURL(currentPreviewUrl);
     currentPreviewUrl='';
   }
 }
 
-function showUniversalImagePreview(blob){
+function showUniversalImagePreview(blob,file){
   closeUniversalImagePreview();
   const context=getBrowserContext();
+  currentPreviewBlob=blob;
+  currentPreviewFile=file||new File([blob],`臺南甜甜接好運_${score}分_完整成績.png`,{type:'image/png'});
   currentPreviewUrl=URL.createObjectURL(blob);
   universalPreviewImage.src=currentPreviewUrl;
-  universalPreviewBar.innerHTML=`📸 成績圖片已產生<br><span style="font-size:14px">${context.inApp?`您正在使用 ${context.name} 內建瀏覽器，請長按下方圖片後選擇「儲存圖片」或「分享」`:'請長按下方圖片儲存，或使用系統分享功能'}</span>`;
+  universalPreviewBar.innerHTML=`📸 成績圖片已產生<br><span style="font-size:14px">${context.inApp?`您正在使用 ${context.name} 內建瀏覽器；若沒有長按選單，請直接按下方「系統分享圖片」或「嘗試下載圖片」`:'可直接使用下方按鈕分享或下載'}</span>`;
   universalImagePreview.style.display='flex';
   universalImagePreview.scrollTop=0;
 }
 
 universalPreviewClose.onclick=closeUniversalImagePreview;
+
+universalPreviewShare.onclick=async()=>{
+  if(!currentPreviewBlob||!currentPreviewFile)return;
+  try{
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[currentPreviewFile]})){
+      await navigator.share({
+        title:'臺南甜甜接好運',
+        text:`我在《臺南甜甜接好運》獲得 ${score} 分！`,
+        files:[currentPreviewFile]
+      });
+      showToast('已開啟系統分享選單');
+      return;
+    }
+    alert('目前的 App 內建瀏覽器不支援分享圖片檔案。請按「開啟原始圖片」或「使用外部瀏覽器開啟遊戲」。');
+  }catch(err){
+    if(err&&err.name==='AbortError')return;
+    alert('此 App 阻擋圖片分享，請改按「開啟原始圖片」或使用外部瀏覽器。');
+  }
+};
+
+universalPreviewDownload.onclick=()=>{
+  if(!currentPreviewUrl||!currentPreviewFile)return;
+  try{
+    const a=document.createElement('a');
+    a.href=currentPreviewUrl;
+    a.download=currentPreviewFile.name;
+    a.rel='noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast('已嘗試下載圖片');
+    setTimeout(()=>{
+      if(isInAppBrowser()){
+        alert('若未出現下載通知，代表此 App 已封鎖下載。請改按「開啟原始圖片」或「使用外部瀏覽器開啟遊戲」。');
+      }
+    },700);
+  }catch(err){
+    alert('目前瀏覽器封鎖下載，請使用外部瀏覽器開啟。');
+  }
+};
+
+universalPreviewOpenImage.onclick=()=>{
+  if(!currentPreviewUrl)return;
+  // 由使用者直接點擊觸發，成功率高於程式自動開啟。
+  const win=window.open(currentPreviewUrl,'_blank');
+  if(!win){
+    try{
+      location.href=currentPreviewUrl;
+    }catch(err){
+      alert('目前 App 阻擋開啟圖片，請改用外部瀏覽器。');
+    }
+  }
+};
+
 universalPreviewBrowser.onclick=async()=>{
   const url=location.href;
   try{
@@ -1831,7 +1909,7 @@ async function shareResultImage(){
     const result=await buildFullResultImage();
 
     if(isInAppBrowser()){
-      showUniversalImagePreview(result.blob);
+      showUniversalImagePreview(result.blob,result.file);
       showToast('請長按成績圖片儲存或分享');
       return true;
     }
@@ -1850,7 +1928,7 @@ async function shareResultImage(){
 
     // 部分 App 內建瀏覽器會封鎖下載、檔案分享與 blob 新視窗。
     // 改為直接在目前頁面顯示 PNG，讓使用者長按圖片儲存或分享。
-    showUniversalImagePreview(result.blob);
+    showUniversalImagePreview(result.blob,result.file);
     showToast('請長按成績圖片儲存或分享');
     return true;
   }catch(err){
@@ -1869,7 +1947,7 @@ const inAppBrowserNotice=document.getElementById('inAppBrowserNotice');
  const browserContext=getBrowserContext();
  if(inAppBrowserNotice&&browserContext.inApp){
    inAppBrowserNotice.style.display='block';
-   inAppBrowserNotice.textContent=`${browserContext.name} 內建瀏覽器會直接顯示成績圖片，請長按圖片後選擇儲存或分享。`;
+   inAppBrowserNotice.textContent=`${browserContext.name} 內建瀏覽器會顯示成績圖片；若沒有長按選單，請使用圖片下方的分享、下載或開啟原圖按鈕。`;
  }
 
 document.getElementById('saveScoreImage').onclick=async()=>{
