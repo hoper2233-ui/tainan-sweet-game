@@ -497,13 +497,13 @@ font-size:12px;font-weight:900;color:#174f43}
  </div>
  <img id="universalPreviewImage" alt="臺南甜甜接好運完整成績圖片">
  <div id="universalPreviewHint">
-  部分社群 App 會關閉圖片長按選單，請直接使用下方按鈕。若仍被限制，請改用外部瀏覽器。
+  部分社群 App 會限制圖片儲存。可按下方按鈕，直接嘗試以手機外部瀏覽器重新開啟遊戲。
  </div>
  <div class="previewActions">
   <button id="universalPreviewShare" type="button">📤 系統分享圖片</button>
   <button id="universalPreviewDownload" type="button">📥 嘗試下載圖片</button>
   <button id="universalPreviewOpenImage" type="button">🖼️ 開啟原始圖片</button>
-  <button id="universalPreviewBrowser" type="button">🌐 使用外部瀏覽器開啟遊戲</button>
+  <button id="universalPreviewBrowser" type="button">🌐 直接用外部瀏覽器開啟</button>
   <button id="universalPreviewClose" type="button">關閉預覽</button>
  </div>
 </div>
@@ -1821,14 +1821,66 @@ universalPreviewOpenImage.onclick=()=>{
   }
 };
 
-universalPreviewBrowser.onclick=async()=>{
+universalPreviewBrowser.onclick=()=>{
   const url=location.href;
-  try{
-    if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(url);
-    alert('遊戲網址已複製。請點右上角「⋮」或分享圖示，再選擇「使用其他瀏覽器開啟」，或將網址貼到 Chrome／Safari。');
-  }catch(e){
-    alert('請點右上角「⋮」或分享圖示，再選擇「使用其他瀏覽器開啟」。');
+  const ua=navigator.userAgent||'';
+  const isAndroid=/Android/i.test(ua);
+  const isIOS=/iPhone|iPad|iPod/i.test(ua);
+
+  if(isAndroid){
+    try{
+      const parsed=new URL(url);
+      const pathAndQuery=parsed.host+parsed.pathname+parsed.search+parsed.hash;
+      const scheme=parsed.protocol.replace(':','')||'https';
+      const fallback=encodeURIComponent(url);
+
+      // Android：直接要求系統交由 Chrome 開啟目前遊戲網址。
+      const chromeIntent=`intent://${pathAndQuery}#Intent;scheme=${scheme};package=com.android.chrome;S.browser_fallback_url=${fallback};end`;
+      location.href=chromeIntent;
+
+      // 若裝置未安裝 Chrome 或 App 阻擋 intent，稍後退回一般外部開啟嘗試。
+      setTimeout(()=>{
+        if(document.visibilityState==='visible'){
+          const a=document.createElement('a');
+          a.href=url;
+          a.target='_system';
+          a.rel='external noopener';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
+      },1200);
+      return;
+    }catch(err){
+      window.open(url,'_system');
+      return;
+    }
   }
+
+  if(isIOS){
+    try{
+      // iOS 若已安裝 Chrome，優先直接開啟 Chrome。
+      const chromeUrl=url
+        .replace(/^https:\/\//i,'googlechromes://')
+        .replace(/^http:\/\//i,'googlechrome://');
+      location.href=chromeUrl;
+
+      // iOS 不允許網頁強制指定 Safari；Chrome 未安裝時顯示操作提示。
+      setTimeout(()=>{
+        if(document.visibilityState==='visible'){
+          alert('iPhone／iPad 無法由網頁強制啟動 Safari。請點右上角分享圖示，再選擇「在 Safari 中打開」。');
+        }
+      },1300);
+      return;
+    }catch(err){
+      alert('請點右上角分享圖示，再選擇「在 Safari 中打開」。');
+      return;
+    }
+  }
+
+  // 桌面或其他系統：以新視窗開啟。
+  const win=window.open(url,'_blank','noopener');
+  if(!win)location.href=url;
 };
 
 async function buildFullResultImage(){
