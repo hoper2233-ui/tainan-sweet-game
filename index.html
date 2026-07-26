@@ -484,11 +484,44 @@ font-size:12px;font-weight:900;color:#174f43}
  background:#fff4ce;color:#5c4317;font-weight:800;line-height:1.55;text-align:left
 }
 
+
+#rawImageMode{
+ position:fixed;inset:0;z-index:100000;display:none;overflow:auto;
+ background:#111;padding:0 10px 24px;-webkit-overflow-scrolling:touch
+}
+#rawImageMode .rawHeader{
+ position:sticky;top:0;z-index:3;background:rgba(17,17,17,.96);color:#fff;
+ padding:12px 8px;text-align:center;font-weight:900;line-height:1.45
+}
+#rawImageMode .rawHeader button{
+ margin-top:8px;border:0;border-radius:12px;padding:10px 16px;
+ font-size:16px;font-weight:900;background:#666;color:#fff
+}
+#rawImageMode img{
+ display:block;width:100%;max-width:900px;height:auto;margin:12px auto 0;
+ background:#fff;border-radius:4px;
+ -webkit-touch-callout:default!important;
+ -webkit-user-select:auto!important;
+ user-select:auto!important;
+ pointer-events:auto!important
+}
+body.raw-image-open{overflow:hidden}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
+
+<div id="rawImageMode">
+  <div class="rawHeader">
+    🖼️ 原始成績圖片<br>
+    <span style="font-size:14px;font-weight:700">請長按圖片嘗試儲存；若 App 未提供長按選單，請改用「系統分享圖片」或外部瀏覽器。</span><br>
+    <button id="rawImageBack" type="button">← 返回成績圖片功能</button>
+  </div>
+  <img id="rawImageElement" alt="臺南甜甜接好運原始成績圖片">
+</div>
+
 
 <div id="universalImagePreview">
  <div class="previewBar">
@@ -502,7 +535,7 @@ font-size:12px;font-weight:900;color:#174f43}
  <div class="previewActions">
   <button id="universalPreviewShare" type="button">📤 系統分享圖片</button>
   <button id="universalPreviewDownload" type="button">📥 嘗試下載圖片</button>
-  <button id="universalPreviewOpenImage" type="button">🖼️ 開啟原始圖片</button>
+  <button id="universalPreviewOpenImage" type="button">🖼️ 全螢幕檢視原圖</button>
   <button id="universalPreviewBrowser" type="button">🌐 直接用外部瀏覽器開啟</button>
   <button id="universalPreviewClose" type="button">關閉預覽</button>
  </div>
@@ -1724,6 +1757,9 @@ const universalPreviewBrowser=document.getElementById('universalPreviewBrowser')
 const universalPreviewShare=document.getElementById('universalPreviewShare');
 const universalPreviewDownload=document.getElementById('universalPreviewDownload');
 const universalPreviewOpenImage=document.getElementById('universalPreviewOpenImage');
+const rawImageMode=document.getElementById('rawImageMode');
+const rawImageElement=document.getElementById('rawImageElement');
+const rawImageBack=document.getElementById('rawImageBack');
 const universalPreviewBar=universalImagePreview.querySelector('.previewBar');
 let currentPreviewUrl='';
 let currentPreviewBlob=null;
@@ -1744,6 +1780,9 @@ function getBrowserContext(){
 function isInAppBrowser(){return getBrowserContext().inApp;}
 
 function closeUniversalImagePreview(){
+  rawImageMode.style.display='none';
+  rawImageElement.removeAttribute('src');
+  document.body.classList.remove('raw-image-open');
   universalImagePreview.style.display='none';
   universalPreviewImage.removeAttribute('src');
   currentPreviewBlob=null;
@@ -1780,10 +1819,10 @@ universalPreviewShare.onclick=async()=>{
       showToast('已開啟系統分享選單');
       return;
     }
-    alert('目前的 App 內建瀏覽器不支援分享圖片檔案。請按「開啟原始圖片」或「使用外部瀏覽器開啟遊戲」。');
+    alert('目前的 App 內建瀏覽器不支援分享圖片檔案。請按「全螢幕檢視原圖」或「直接用外部瀏覽器開啟」。');
   }catch(err){
     if(err&&err.name==='AbortError')return;
-    alert('此 App 阻擋圖片分享，請改按「開啟原始圖片」或使用外部瀏覽器。');
+    alert('此 App 阻擋圖片分享，請改按「全螢幕檢視原圖」或使用外部瀏覽器。');
   }
 };
 
@@ -1800,7 +1839,7 @@ universalPreviewDownload.onclick=()=>{
     showToast('已嘗試下載圖片');
     setTimeout(()=>{
       if(isInAppBrowser()){
-        alert('若未出現下載通知，代表此 App 已封鎖下載。請改按「開啟原始圖片」或「使用外部瀏覽器開啟遊戲」。');
+        alert('若未出現下載通知，代表此 App 已封鎖下載。請改按「全螢幕檢視原圖」或「直接用外部瀏覽器開啟」。');
       }
     },700);
   }catch(err){
@@ -1810,15 +1849,20 @@ universalPreviewDownload.onclick=()=>{
 
 universalPreviewOpenImage.onclick=()=>{
   if(!currentPreviewUrl)return;
-  // 由使用者直接點擊觸發，成功率高於程式自動開啟。
-  const win=window.open(currentPreviewUrl,'_blank');
-  if(!win){
-    try{
-      location.href=currentPreviewUrl;
-    }catch(err){
-      alert('目前 App 阻擋開啟圖片，請改用外部瀏覽器。');
-    }
-  }
+  // 社群 App 常封鎖 blob 新分頁，因此直接在目前頁面切換為純原圖模式。
+  rawImageElement.src=currentPreviewUrl;
+  rawImageMode.style.display='block';
+  rawImageMode.scrollTop=0;
+  document.body.classList.add('raw-image-open');
+  showToast('已切換為全螢幕原圖');
+};
+
+rawImageBack.onclick=()=>{
+  rawImageMode.style.display='none';
+  rawImageElement.removeAttribute('src');
+  document.body.classList.remove('raw-image-open');
+  universalImagePreview.style.display='flex';
+  universalImagePreview.scrollTop=0;
 };
 
 universalPreviewBrowser.onclick=()=>{
@@ -1999,7 +2043,7 @@ const inAppBrowserNotice=document.getElementById('inAppBrowserNotice');
  const browserContext=getBrowserContext();
  if(inAppBrowserNotice&&browserContext.inApp){
    inAppBrowserNotice.style.display='block';
-   inAppBrowserNotice.textContent=`${browserContext.name} 內建瀏覽器會顯示成績圖片；若沒有長按選單，請使用圖片下方的分享、下載或開啟原圖按鈕。`;
+   inAppBrowserNotice.textContent=`${browserContext.name} 內建瀏覽器會顯示成績圖片；若沒有長按選單，請使用圖片下方的分享、下載或全螢幕原圖按鈕。`;
  }
 
 document.getElementById('saveScoreImage').onclick=async()=>{
