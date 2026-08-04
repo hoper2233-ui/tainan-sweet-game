@@ -513,7 +513,7 @@ font-size:12px;font-weight:900;color:#174f43}
 body.raw-image-open{overflow:hidden}
 
 
-/* V13.1 冠軍／英雄結算特效 */
+/* V13.2 冠軍／英雄結算特效 */
 .resultMascotWrap.champion{
  border:5px solid #f4c542;
  box-shadow:0 0 0 5px #fff4a5,0 0 26px #ffd44d,0 8px 0 #b97800;
@@ -1655,8 +1655,8 @@ document.addEventListener('visibilitychange',()=>{
  }
 });
 
-const LEADERBOARD_START_TIME=Date.parse('2026-08-10T00:00:00+08:00');
-const LEADERBOARD_STORAGE_KEY='tainanSweetLeaders_v20260810';
+const LEADERBOARD_START_TIME=Date.parse('2026-08-11T00:00:00+08:00');
+const LEADERBOARD_STORAGE_KEY='tainanSweetLeaders_v20260811';
 
 function formatLeaderDate(timestamp){
  const d=new Date(timestamp);
@@ -1684,6 +1684,7 @@ function getLeaders(){
   // 自動移除活動開始日前、缺少日期或格式不正確的舊紀錄。
   localStorage.setItem(LEADERBOARD_STORAGE_KEY,JSON.stringify(top));
   localStorage.removeItem('tainanSweetLeaders');
+  localStorage.removeItem('tainanSweetLeaders_v20260810');
   return top;
  }catch(e){
   return [];
@@ -1693,7 +1694,7 @@ function getLeaders(){
 function saveLeader(value){
  const timestamp=Date.now();
 
- // 2026/8/10 00:00（臺灣時間）以前的測試成績不寫入正式活動排行榜。
+ // 2026/8/11 00:00（臺灣時間）以前的成績不寫入正式活動排行榜。
  if(timestamp<LEADERBOARD_START_TIME)return;
 
  const list=getLeaders();
@@ -1960,7 +1961,7 @@ async function end(){
   :'';
 
  overlay.innerHTML=`<div class="card"><h1>${hiddenEnding?'英雄結局達成！':'四章巡守完成'}</h1>
- <div class="versionTag">市警局 feat. 市場處｜V13.1</div>
+ <div class="versionTag">市警局 feat. 市場處｜V13.2</div>
  ${hiddenBanner}${specialBadge}<div class="rank">${rank}</div>
  <div class="resultMascotWrap ${specialClass}">
   <img class="resultMascot" src="${resultMascot.src}" alt="菜奇鴨與夜奇鴨結算鼓勵圖">
@@ -1975,7 +1976,7 @@ async function end(){
  <h3 style="color:#60358b;margin:12px 0 5px">🏅 本局成就圖鑑</h3>
  <div class="achievementGrid">${achievementHTML(hiddenEnding)}</div><div style="font-size:11px;color:#777;margin:-4px 0 10px">本區只顯示本局實際達成的成就；分數、答題及隱藏成就均以最終結算結果判定。</div>
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
- <div id="leaderPanel"><h3>🏆 活動本機排行榜</h3><div style="font-size:12px;color:#78684f;font-weight:800;margin:-4px 0 8px">僅顯示2026年8月10日（含）以後，於本裝置完成的前5名成績。</div>${leaderHTML()}</div>
+ <div id="leaderPanel"><h3>🏆 活動本機排行榜</h3><div style="font-size:12px;color:#78684f;font-weight:800;margin:-4px 0 8px">僅顯示2026年8月11日（含）以後，於本裝置完成的前5名成績。</div>${leaderHTML()}</div>
  <button id="again">再玩一次</button>
  <div id="inAppBrowserNotice" class="lineBrowserNotice" style="display:none">目前使用 App 內建瀏覽器。若沒有圖片長按選單，請使用預覽頁下方的「系統分享圖片」、「嘗試下載圖片」或「開啟原始圖片」。</div>
 <button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">📤 分享圖片</button><button id="saveScoreImage" style="background:#8a4dd6;box-shadow:0 6px 0 #5a2d99;margin-left:6px">📸 儲存圖片</button>
