@@ -513,7 +513,7 @@ font-size:12px;font-weight:900;color:#174f43}
 body.raw-image-open{overflow:hidden}
 
 
-/* V13.2 冠軍／英雄結算特效 */
+/* V13.3.1 冠軍／英雄結算特效 */
 .resultMascotWrap.champion{
  border:5px solid #f4c542;
  box-shadow:0 0 0 5px #fff4a5,0 0 26px #ffd44d,0 8px 0 #b97800;
@@ -1961,7 +1961,7 @@ async function end(){
   :'';
 
  overlay.innerHTML=`<div class="card"><h1>${hiddenEnding?'英雄結局達成！':'四章巡守完成'}</h1>
- <div class="versionTag">市警局 feat. 市場處｜V13.2</div>
+ <div class="versionTag">市警局 feat. 市場處｜V13.3.1</div>
  ${hiddenBanner}${specialBadge}<div class="rank">${rank}</div>
  <div class="resultMascotWrap ${specialClass}">
   <img class="resultMascot" src="${resultMascot.src}" alt="菜奇鴨與夜奇鴨結算鼓勵圖">
@@ -1977,7 +1977,8 @@ async function end(){
  <div class="achievementGrid">${achievementHTML(hiddenEnding)}</div><div style="font-size:11px;color:#777;margin:-4px 0 10px">本區只顯示本局實際達成的成就；分數、答題及隱藏成就均以最終結算結果判定。</div>
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
  <div id="leaderPanel"><h3>🏆 活動本機排行榜</h3><div style="font-size:12px;color:#78684f;font-weight:800;margin:-4px 0 8px">僅顯示2026年8月11日（含）以後，於本裝置完成的前5名成績。</div>${leaderHTML()}</div>
- <button id="again">再玩一次</button>
+ <button id="again">🔥 再挑戰一次</button>
+<button id="inviteFriend" style="background:#20b65a;box-shadow:0 6px 0 #117a39;margin-left:6px">📣 揪朋友來挑戰</button>
  <div id="inAppBrowserNotice" class="lineBrowserNotice" style="display:none">目前使用 App 內建瀏覽器。若沒有圖片長按選單，請使用預覽頁下方的「系統分享圖片」、「嘗試下載圖片」或「開啟原始圖片」。</div>
 <button id="shareScore" style="background:#1b7966;box-shadow:0 6px 0 #0f4d40;margin-left:6px">📤 分享圖片</button><button id="saveScoreImage" style="background:#8a4dd6;box-shadow:0 6px 0 #5a2d99;margin-left:6px">📸 儲存圖片</button>
  </div>`;
@@ -2402,6 +2403,57 @@ addEventListener('keyup',e=>{
   if(e.key==='ArrowLeft'&&basket.vx<0)basket.vx=0;
   if(e.key==='ArrowRight'&&basket.vx>0)basket.vx=0;
 });
+
+const inviteFriend=document.getElementById('inviteFriend');
+
+
+const GAME_PUBLIC_URL='https://hoper2233-ui.github.io/tainan-sweet-game/';
+const GAME_SHARE_TEXT='🎮《臺南甜甜接好運》\n🍬 接住甜甜好運，避開詐騙陷阱！\n🔥 你能突破 5,500 分嗎？一起來挑戰！\n'+GAME_PUBLIC_URL;
+
+async function inviteFriendOnLine(){
+ const lineShareUrl='https://line.me/R/msg/text/?'+encodeURIComponent(GAME_SHARE_TEXT);
+
+ // 1. 一般手機瀏覽器：優先使用系統分享，可直接選 LINE
+ try{
+  if(navigator.share){
+   await navigator.share({
+    title:'臺南甜甜接好運',
+    text:GAME_SHARE_TEXT
+   });
+   return;
+  }
+ }catch(err){
+  if(err && err.name==='AbortError') return;
+ }
+
+ // 2. 若系統分享不可用，直接導向 LINE 分享網址。
+ try{
+  window.location.href=lineShareUrl;
+  return;
+ }catch(err){}
+
+ // 3. 最後備援：複製文字
+ try{
+  if(navigator.clipboard && navigator.clipboard.writeText){
+   await navigator.clipboard.writeText(GAME_SHARE_TEXT);
+   alert('分享文字已複製，請貼到 LINE 傳送給朋友。');
+  }else{
+   alert(GAME_SHARE_TEXT);
+  }
+ }catch(e){
+  alert(GAME_SHARE_TEXT);
+ }
+}
+
+document.addEventListener('click',e=>{
+ const btn=e.target.closest('#inviteFriend');
+ if(btn){
+  e.preventDefault();
+  e.stopPropagation();
+  inviteFriendOnLine();
+ }
+});
+
 </script>
 </body>
 </html>
