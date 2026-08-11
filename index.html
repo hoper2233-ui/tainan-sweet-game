@@ -513,7 +513,7 @@ font-size:12px;font-weight:900;color:#174f43}
 body.raw-image-open{overflow:hidden}
 
 
-/* V13.3.1 冠軍／英雄結算特效 */
+/* V13.4 冠軍／英雄結算特效 */
 .resultMascotWrap.champion{
  border:5px solid #f4c542;
  box-shadow:0 0 0 5px #fff4a5,0 0 26px #ffd44d,0 8px 0 #b97800;
@@ -1961,7 +1961,7 @@ async function end(){
   :'';
 
  overlay.innerHTML=`<div class="card"><h1>${hiddenEnding?'英雄結局達成！':'四章巡守完成'}</h1>
- <div class="versionTag">市警局 feat. 市場處｜V13.3.1</div>
+ <div class="versionTag">市警局 feat. 市場處｜V13.4</div>
  ${hiddenBanner}${specialBadge}<div class="rank">${rank}</div>
  <div class="resultMascotWrap ${specialClass}">
   <img class="resultMascot" src="${resultMascot.src}" alt="菜奇鴨與夜奇鴨結算鼓勵圖">
@@ -2215,11 +2215,9 @@ async function buildFullResultImage(){
     const maxCanvasSide=14000;
     const scale=Math.max(1,Math.min(2,maxCanvasSide/Math.max(captureWidth,captureHeight)));
 
-    const canvas=await html2canvas(clone,{
-      backgroundColor:'#fffdf2',scale,useCORS:true,allowTaint:false,logging:false,
+    const canvas=await html2canvas(clone,{backgroundColor:'#fffdf2',scale,useCORS:true,allowTaint:false,
       width:captureWidth,height:captureHeight,windowWidth:captureWidth,
-      windowHeight:captureHeight,scrollX:0,scrollY:0
-    });
+      windowHeight:captureHeight,scrollX:0,scrollY:0,scale:getHDResultCaptureScale(),logging:false,useCORS:true,allowTaint:false,imageTimeout:15000});
 
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
     if(!blob)throw new Error('PNG 產生失敗');
@@ -2453,6 +2451,30 @@ document.addEventListener('click',e=>{
   inviteFriendOnLine();
  }
 });
+
+
+
+function getHDResultCaptureScale(){
+  const dpr=window.devicePixelRatio||1;
+  // 2x minimum; up to 3x on capable displays. Keeps older phones safer than a fixed huge canvas.
+  return Math.min(3,Math.max(2,dpr));
+}
+async function waitForResultAssets(root){
+  try{
+    if(document.fonts&&document.fonts.ready) await document.fonts.ready;
+  }catch(e){}
+  const imgs=[...(root||document).querySelectorAll('img')];
+  await Promise.all(imgs.map(img=>{
+    if(img.complete&&img.naturalWidth>0) return Promise.resolve();
+    return new Promise(resolve=>{
+      const done=()=>resolve();
+      img.addEventListener('load',done,{once:true});
+      img.addEventListener('error',done,{once:true});
+      setTimeout(done,2500);
+    });
+  }));
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+}
 
 </script>
 </body>
