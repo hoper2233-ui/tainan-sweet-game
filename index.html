@@ -424,7 +424,7 @@ font-size:12px;font-weight:900;color:#174f43}
 }
 
 
-/* 5,500 分以上：臉書帳號輸入欄位 */
+/* 5,500 分以上：Facebook 顯示名稱輸入欄位 */
 #facebookAccountOverlay{
  position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;
  padding:20px;background:rgba(16,38,43,.9)
@@ -513,7 +513,7 @@ font-size:12px;font-weight:900;color:#174f43}
 body.raw-image-open{overflow:hidden}
 
 
-/* V13.4 冠軍／英雄結算特效 */
+/* V13.5 冠軍／英雄結算特效 */
 .resultMascotWrap.champion{
  border:5px solid #f4c542;
  box-shadow:0 0 0 5px #fff4a5,0 0 26px #ffd44d,0 8px 0 #b97800;
@@ -662,10 +662,14 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 <div id="facebookAccountOverlay">
  <div class="facebookAccountCard">
   <h2>🎉 恭喜達成 5,500 分以上！</h2>
-  <p>請輸入臉書帳號，將顯示於本次成績結算畫面。</p>
+  <p>請輸入Facebook 顯示名稱，將顯示於本次成績結算畫面。</p>
   <input id="facebookAccountInput" type="text" maxlength="80"
-         placeholder="請輸入臉書帳號" autocomplete="off" aria-label="請輸入臉書帳號">
+         placeholder="例如：王小明" autocomplete="off" aria-label="請輸入Facebook 顯示名稱">
   <div id="facebookAccountError"></div>
+<div style="margin-top:7px;font-size:12px;color:#6e6254;font-weight:800;line-height:1.45">
+📌 請填寫您在 Facebook 上顯示的名稱，並與之後活動貼文留言所使用的名稱一致，以利抽獎資格核對。<br>
+🔒 請勿填寫登入Email、手機號碼或密碼。
+</div>
   <button id="facebookAccountConfirm" type="button">確認並查看成績</button>
  </div>
 </div>
@@ -1787,7 +1791,7 @@ function getScoreTier(score,hiddenEnding=false){
    min:5500,
    image:'five',
    rank:'👑 臺南反詐冠軍',
-   caption:'五星好評・冠軍版！恭喜取得抽獎資格，請輸入 Facebook 帳號並儲存完整成績圖片。',
+   caption:'五星好評・冠軍版！恭喜取得抽獎資格，請輸入 Facebook 顯示名稱並儲存完整成績圖片。',
    message:'甜甜好運與反詐實力都已登峰造極！',
    drawEligible:true
   };
@@ -1901,7 +1905,7 @@ function requestFacebookAccount(){
   const submit=()=>{
    const value=facebookAccountInput.value.trim();
    if(!value){
-    facebookAccountError.textContent='請先輸入臉書帳號。';
+    facebookAccountError.textContent='請先輸入Facebook 顯示名稱。';
     facebookAccountInput.focus();
     return;
    }
@@ -1957,11 +1961,11 @@ async function end(){
   ?`<div class="facebookAccountResult" style="border-color:#e59b16;background:#fff5c4;color:#9a4d00">🎁 已取得抽獎資格</div>`
   :'';
  const facebookAccountBlock=facebookAccount
-  ?`<div class="facebookAccountResult">📘 Facebook 帳號：${escapeHTML(facebookAccount)}</div>`
+  ?`<div class="facebookAccountResult">📘 Facebook 顯示名稱：${escapeHTML(facebookAccount)}</div>`
   :'';
 
  overlay.innerHTML=`<div class="card"><h1>${hiddenEnding?'英雄結局達成！':'四章巡守完成'}</h1>
- <div class="versionTag">市警局 feat. 市場處｜V13.4</div>
+ <div class="versionTag">市警局 feat. 市場處｜V13.5</div>
  ${hiddenBanner}${specialBadge}<div class="rank">${rank}</div>
  <div class="resultMascotWrap ${specialClass}">
   <img class="resultMascot" src="${resultMascot.src}" alt="菜奇鴨與夜奇鴨結算鼓勵圖">
