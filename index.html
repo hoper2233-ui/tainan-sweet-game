@@ -8,8 +8,8 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="description" content="臺南甜甜接好運 Release 11.0 Final－結合臺南特色、反詐知識、幸運道具、連擊寶箱與成就彩蛋的互動小遊戲。">
-<title>臺南甜甜接好運｜市警局 × 市場處聯名活動版</title>
+<meta name="description" content="臺南甜甜接好運・中元限定版－結合臺南特色、中元節平安元素、反詐知識、幸運道具、連擊寶箱與成就彩蛋的互動小遊戲。">
+<title>臺南甜甜接好運｜中元平安反詐限定版</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#132b34}
@@ -565,6 +565,29 @@ body.raw-image-open{overflow:hidden}
 }
 @keyframes championFall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
 
+
+/* 中元節限定視覺 */
+.ghostFestivalTag{display:inline-block;margin:0 auto 7px;padding:6px 13px;border-radius:999px;background:linear-gradient(90deg,#54246f,#8b3e79);color:#fff4b8;font-size:13px;font-weight:1000;box-shadow:0 4px 0 #341543;animation:ghostGlow 1.2s ease-in-out infinite alternate}
+@keyframes ghostGlow{from{filter:drop-shadow(0 0 2px #ffd76b)}to{filter:drop-shadow(0 0 9px #ffd76b)}}
+.ghostFestivalNote{margin:7px 0;padding:8px 10px;border:2px solid #d7aa48;border-radius:13px;background:#fff7d7;color:#694718;font-size:12px;font-weight:900;line-height:1.45}
+
+#ghostNightBadge{
+ position:absolute;left:50%;top:116px;transform:translateX(-50%);
+ z-index:8;display:none;pointer-events:none;white-space:nowrap;
+ padding:6px 12px;border:2px solid #ffe7a1;border-radius:999px;
+ background:rgba(53,25,80,.88);color:#fff2a8;font-size:12px;font-weight:1000;
+ box-shadow:0 0 16px rgba(255,206,90,.38);
+ animation:ghostNightPulse 1.1s ease-in-out infinite alternate
+}
+@keyframes ghostNightPulse{to{transform:translateX(-50%) scale(1.04);filter:brightness(1.12)}}
+
+
+#ghostBlessingOverlay{position:absolute;inset:0;z-index:36;display:none;align-items:center;justify-content:center;pointer-events:none;background:radial-gradient(circle,rgba(255,226,110,.24),rgba(73,32,91,.10) 48%,transparent 72%)}
+#ghostBlessingOverlay.show{display:flex;animation:ghostBlessingFade 1.55s ease both}
+#ghostBlessingCard{padding:17px 23px;border:3px solid #ffe39a;border-radius:22px;background:rgba(54,25,76,.94);color:#fff3ad;text-align:center;font-size:17px;font-weight:1000;box-shadow:0 0 30px rgba(255,215,92,.58),0 7px 0 rgba(31,12,43,.65)}
+#ghostBlessingCard strong{display:block;color:#fff;font-size:27px;margin-bottom:5px;text-shadow:0 0 12px #ffd75c}
+@keyframes ghostBlessingFade{0%{opacity:0;transform:scale(.68)}20%{opacity:1;transform:scale(1.08)}35%,72%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.08) translateY(-8px)}}
+.ghostFestivalResultStamp{display:inline-block;margin:10px auto 5px;padding:8px 14px;border:3px double #8a315e;border-radius:10px;background:#fff7d7;color:#7a2854;font-size:15px;font-weight:1000;line-height:1.3;transform:rotate(-2.5deg);box-shadow:0 3px 0 #d7aa48}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -609,10 +632,10 @@ body.raw-image-open{overflow:hidden}
 </div>
 <button id="soundBtn" aria-label="音效">🔊</button>
 <div id="brandBar">
-  <div class="brandChip">🚔 臺南市政府警察局｜165反詐</div>
+  <div class="brandChip">🏮 中元平安反詐｜165</div>
   <button id="shareBtn">分享遊戲</button>
 </div>
-<div id="toast"></div><div id="mapLabel">📍 安平古堡</div>
+<div id="toast"></div><div id="ghostNightBadge">🏮 中元夜境開啟｜好兄弟平安巡遊中</div><div id="mapLabel">📍 安平古堡</div>
 
 
 <div id="chapterMission">
@@ -644,7 +667,7 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 
 
 
-<div id="achievementToast"><strong>🏅 成就解鎖</strong><span id="achievementToastText"></span></div>
+<div id="achievementToast"><strong>🏅 成就解鎖</strong><span id="achievementToastText"></span></div><div id="ghostBlessingOverlay"><div id="ghostBlessingCard"><strong>✨ 中元平安加持 ✨</strong>平安帶回家，詐騙不上門！</div></div>
 <div id="finalFireworks"></div>
 <div id="pauseCurtain">⏸️ 遊戲暫停<br><small style="font-size:15px">回到畫面後自動繼續</small></div>
 
@@ -697,6 +720,7 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 <div id="overlay">
   <div class="card activityCard">
     <div class="collabLine">🚔 臺南市政府警察局 <span>×</span> 🛍️ 臺南市市場處</div>
+    <div class="ghostFestivalTag">🏮 中元限定・平安反詐祭｜夜境版 🏮</div>
     <h1 class="activityHeadline">🎮 臺南甜甜接好運</h1>
 
     <div class="activityHero">
@@ -705,7 +729,7 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 
     <div class="activitySlogan">
       走訪臺南地標・閃避詐騙<br>
-      挑戰防詐知識・接住甜甜好運
+      中元接平安・守住荷包好運
     </div>
 
     <div class="prizeBadge">
@@ -717,7 +741,7 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
       <div class="activityFeature">🏯 臺南地標巡守</div>
       <div class="activityFeature">🚨 閃避詐騙陷阱</div>
       <div class="activityFeature">🧠 防詐知識挑戰</div>
-      <div class="activityFeature">🎁 Combo 幸運寶箱</div>
+      <div class="activityFeature">🏮 中元平安彩蛋</div>
     </div>
 
     <button id="start">開始挑戰</button>
@@ -728,6 +752,7 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
       🔥 達成 50 Combo 開寶箱，100 Combo 啟動超級反詐模式
     </div>
 
+    <div class="ghostFestivalNote">🏮 中元角色只在「夜間場景」現身！進入赤崁樓中元夜，接住平安供品、遇見鬼火與好兄弟彩蛋。</div>
     <div class="footer165">可疑訊息先停、先查，再撥 165</div>
     <div class="activityNote">手機左右拖曳籃子；電腦可使用 ← → 方向鍵。抽獎方式及資格依主辦單位活動公告為準。</div>
   </div>
@@ -736,6 +761,8 @@ font-weight:900;font-size:14px;pointer-events:none;white-space:nowrap">👆 左�
 
 <script>
 const c=document.getElementById('c'),ctx=c.getContext('2d'),app=document.getElementById('app');
+const ghostNightBadge=document.getElementById('ghostNightBadge');
+const ghostBlessingOverlay=document.getElementById('ghostBlessingOverlay');
 const scoreEl=document.getElementById('score'),timeEl=document.getElementById('time'),comboEl=document.getElementById('comboN');
 const timeBadge=document.getElementById('timeBadge'),countdownOverlay=document.getElementById('countdownOverlay'),countdownNumber=document.getElementById('countdownNumber');
 const overlay=document.getElementById('overlay'),warning=document.getElementById('warning'),tip=document.getElementById('tip');
@@ -779,13 +806,14 @@ let brandHideTimer=null,chapterInfoHideTimer=null,quizCloseTimer=null,quizSafety
 
 
 let comboMilestonesHit=new Set();
-let chestsOpened=0,powerUpsUsed=0,superModesTriggered=0;
+let chestsOpened=0,powerUpsUsed=0,superModesTriggered=0,ghostFestivalCaught=0;
 let comboCelebrationTimer=null;
 
 let achievementToastTimer=null;
 let sessionAchievements=new Set();
 const achievementDefs=[
  {id:'firstCatch',icon:'🍬',name:'甜甜開張',desc:'接住第一個臺南好物',test:()=>goodCaught>=1},
+ {id:'ghostPeace',icon:'🏮',name:'中元平安王',desc:'接住中元限定平安供品',test:()=>ghostFestivalCaught>=1},
  {id:'combo25',icon:'🔥',name:'連擊新星',desc:'達成 25 Combo',test:()=>bestCombo>=25},
  {id:'combo50',icon:'🎁',name:'寶箱獵人',desc:'開啟幸運寶箱',test:()=>chestsOpened>=1},
  {id:'combo100',icon:'👑',name:'超級反詐',desc:'達成 100 Combo',test:()=>bestCombo>=100},
@@ -1066,6 +1094,11 @@ const goodDefs=[
  {emoji:'🍍',label:'臺南鳳梨',value:30,speed:192},
  {emoji:'⭐',label:'反詐之星',value:50,speed:198,type:'star'}
 ];
+const ghostFestivalDefs=[
+ {emoji:'🍪',label:'平安餅',value:77,speed:184,type:'festival'},
+ {emoji:'🍚',label:'平安米',value:77,speed:186,type:'festival'},
+ {emoji:'🏮',label:'平安燈',value:88,speed:182,type:'festival'}
+];
 const powerDefs=[
  {emoji:'🧲',label:'好運磁鐵',type:'magnet',value:30,speed:188},
  {emoji:'🛡️',label:'防詐護盾',type:'shield',value:30,speed:190},
@@ -1099,10 +1132,47 @@ scenePhotos.forEach(im=>{
 });
 resize();
 
+
+
+let ghostAmbienceTimer=null,ghostFestivalKinds=new Set(),ghostFestivalBlessed=false,ghostFestivalVisited=false;
+function ghostAudioAllowed(){return typeof soundOn==='undefined'?true:!!soundOn}
+function ghostSoftTone(freq=1200,dur=.035,gain=.0028){
+ if(!ghostAudioAllowed())return;
+ try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!window.__ghostFestivalAudio)window.__ghostFestivalAudio=new AC();const ac=window.__ghostFestivalAudio;if(ac.state==='suspended')ac.resume();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=freq;g.gain.setValueAtTime(gain,ac.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+dur);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+dur)}catch(e){}
+}
+function ghostTempleChime(){ghostSoftTone(392,.18,.010);setTimeout(()=>ghostSoftTone(523,.24,.007),130)}
+function startGhostNightAmbience(){if(ghostAmbienceTimer)return;ghostAmbienceTimer=setInterval(()=>{if(!isGhostFestivalNight()||!playing||!ghostAudioAllowed())return;if(Math.random()<.62){ghostSoftTone(1550+Math.random()*500,.028,.0019);setTimeout(()=>ghostSoftTone(1750+Math.random()*350,.024,.0015),65)}if(Math.random()<.09)ghostSoftTone(165,.42,.0045)},1450)}
+function stopGhostNightAmbience(){clearInterval(ghostAmbienceTimer);ghostAmbienceTimer=null}
+function registerGhostFestivalOffering(it){
+ if(!it||it.type!=='festival')return;
+ ghostFestivalKinds.add(it.label||it.icon||it.name||String(ghostFestivalKinds.size));
+ ghostTempleChime();
+ if(ghostFestivalKinds.size>=3&&!ghostFestivalBlessed){
+  ghostFestivalBlessed=true;ghostBlessingOverlay.classList.remove('show');void ghostBlessingOverlay.offsetWidth;ghostBlessingOverlay.classList.add('show');
+  setTimeout(()=>ghostBlessingOverlay.classList.remove('show'),1600);
+  showToast('✨ 中元平安加持｜平安帶回家，詐騙不上門！');
+  if(navigator.vibrate)navigator.vibrate([35,30,55]);
+ }
+}
+
+function isGhostFestivalNight(){return mapIndex===2}
+let ghostNightAnnounced=false;
+function updateGhostNightUI(){
+ const on=isGhostFestivalNight();
+ if(ghostNightBadge)ghostNightBadge.style.display=on?'block':'none';
+ if(on&&!ghostNightAnnounced){
+  ghostNightAnnounced=true;
+  setTimeout(()=>showToast('🏮 中元夜境開啟！好兄弟、鬼火與平安供品現身'),180);
+  setTimeout(()=>beep('star'),220);
+ }
+
+ if(on){ghostFestivalVisited=true;startGhostNightAmbience();}else stopGhostNightAmbience();
+}
+
 const maps=[
  {name:'安平古堡',icon:'🏯',weather:'晴朗上午',theme:'fort',chapter:'第一章',mission:'辨識假投資話術',voice:'守住荷包，投資前先查證！'},
  {name:'河樂廣場',icon:'🌉',weather:'明亮午後',theme:'canal',chapter:'第二章',mission:'破解網購與假客服',voice:'網購有疑問，使用官方管道查證！'},
- {name:'赤崁樓',icon:'🏛️',weather:'璀璨夜景',theme:'temple',chapter:'第三章',mission:'識破解除分期騙局',voice:'要求操作網銀，就是危險警訊！'},
+ {name:'赤崁樓',icon:'🏛️',weather:'中元燈火夜',theme:'temple',chapter:'第三章',mission:'識破解除分期騙局',voice:'要求操作網銀，就是危險警訊！'},
  {name:'臺南市政府',icon:'🏢',weather:'守護終章',theme:'city',chapter:'最終章',mission:'防範假檢警與假公務機關',voice:'公務機關不會要求監管帳戶！'}
 ];
 const quizBank=[
@@ -1134,8 +1204,8 @@ function chapterScamDef(){
 }
 
 function reset(){
- score=0;combo=0;
- comboMilestonesHit=new Set();sessionAchievements=new Set();chestsOpened=0;powerUpsUsed=0;superModesTriggered=0;bestCombo=0;goodCaught=0;scamCaught=0;scamAvoided=0;quizCorrect=0;quizAsked=0;timeLeft=60;starSpawned=false;starTipShown=false;shieldTime=0;shieldSpawnCooldown=0;shieldSpawnCount=0;magnetTime=0;
+ score=0;combo=0;ghostNightAnnounced=false;ghostFestivalKinds=new Set();ghostFestivalBlessed=false;ghostFestivalVisited=false;stopGhostNightAmbience();
+ comboMilestonesHit=new Set();sessionAchievements=new Set();chestsOpened=0;powerUpsUsed=0;superModesTriggered=0;ghostFestivalCaught=0;bestCombo=0;goodCaught=0;scamCaught=0;scamAvoided=0;quizCorrect=0;quizAsked=0;timeLeft=60;starSpawned=false;starTipShown=false;shieldTime=0;shieldSpawnCooldown=0;shieldSpawnCount=0;magnetTime=0;
  shieldChip.style.display='none';
  shieldChip.textContent='🛡️ 護盾';
  items=[];particles=[];devils=[];spawnAcc=0;devilAcc=0;shake=0;flash=0;mapIndex=0;quizActive=false;quizTriggered={30:false,15:false};usedQuizIndexes=[];magnetTime=0;doubleTime=0;bossActive=false;bossHp=100;bossSpawnAcc=0;bossDefeated=false;policeSweep=0;basket.x=W/2-basket.w/2;basket.vx=0;
@@ -1145,6 +1215,7 @@ function reset(){
 
 function updateMapLabel(showTransition=false){
  const m=maps[mapIndex];
+ updateGhostNightUI();
  if(mapLabel)mapLabel.textContent=`📍 ${m.icon} ${m.name}・${m.weather}`;
  chapterTitle.textContent=`${m.chapter}・${m.name}`;
  chapterTheme.textContent=m.mission;
@@ -1169,7 +1240,7 @@ function updateMapLabel(showTransition=false){
 }
 function startBoss(){
  if(bossActive||bossDefeated)return;
- bossActive=true;bossHp=bossMaxHp;bossHud.style.display='block';bossFill.style.width='100%';
+ bossActive=true;bossHp=bossMaxHp;bossHud.style.display='block';bossHud.childNodes[0].nodeValue='👹 詐騙集團 Boss ';bossFill.style.width='100%';
  showToast('👹 最後10秒！詐騙集團 Boss 登場');beep('devil');shake=.5;
 }
 function damageBoss(amount){
@@ -1242,6 +1313,8 @@ function answerQuiz(q,i){
  quizCloseTimer=setTimeout(closeQuiz,1800);
 }
 function pickNormalGood(){
+ // 中元限定：平安供品只在夜間章節出現
+ if(isGhostFestivalNight()&&Math.random()<.15)return ghostFestivalDefs[Math.floor(Math.random()*ghostFestivalDefs.length)];
  const stars=goodDefs.filter(g=>g.type==='star');
  const normals=goodDefs.filter(g=>g.type!=='star');
  if(stars.length&&Math.random()<(combo>=100?.13:(combo>=50?.10:.05)))return stars[Math.floor(Math.random()*stars.length)];
@@ -1395,6 +1468,12 @@ function catchItem(it){
   for(let i=items.length-1;i>=0;i--)if(items[i].type==='scam'){items.splice(i,1);cleared++;damageBoss(5)}
   showTip('🚨 警察支援','警方立即出動，清除畫面上的詐騙陷阱。');showScorePopup(it.x,it.y,'清除 '+cleared+' 個詐騙',false);
  }else{
+  if(it.type==='festival'){
+   ghostFestivalCaught++;
+   registerGhostFestivalOffering(it);
+   flash=.12;
+   showTip('🏮 中元平安供品',`接住${it.label}，平安加分！`);
+  }
   combo++;
   bestCombo=Math.max(bestCombo,combo);announceComboMilestones();goodCaught++;checkAchievements();mayorMood=combo>=5?'cheer':'happy';mayorMoodTime=.8;
   const bonus=combo>=10?15:combo>=5?5:0;let gain=it.value+bonus;if(doubleTime>0)gain*=2;
@@ -1503,6 +1582,65 @@ function bg(){
 
  // Animated ambience for each landmark.
  ctx.save();ctx.textBaseline='middle';
+ // 中元限定環境：只在赤崁樓「中元燈火夜」出現
+ if(isGhostFestivalNight()){
+  const ng=ctx.createLinearGradient(0,140,0,H);
+  ng.addColorStop(0,'rgba(18,17,55,.15)');
+  ng.addColorStop(.55,'rgba(20,12,52,.30)');
+  ng.addColorStop(1,'rgba(6,8,28,.44)');
+  ctx.fillStyle=ng;ctx.fillRect(0,0,W,H);
+
+  // 月亮與薄雲
+  ctx.save();ctx.globalAlpha=.86;ctx.font='48px serif';ctx.textAlign='center';
+  ctx.shadowColor='#fff1b0';ctx.shadowBlur=16;ctx.fillText('🌕',W-62,170);
+  ctx.shadowBlur=0;ctx.globalAlpha=.23;ctx.font='30px serif';
+  ctx.fillText('☁️',W-100+Math.sin(t*.35)*16,205);ctx.restore();
+
+  // 燈籠列
+  ctx.save();ctx.font='27px serif';ctx.textAlign='center';
+  for(let li=0;li<6;li++){
+   const lx=34+li*(W-68)/5,ly=190+Math.sin(t*2+li*.8)*4;
+   ctx.globalAlpha=.86;ctx.shadowColor='#ffb43b';ctx.shadowBlur=14;ctx.fillText('🏮',lx,ly);
+  }ctx.restore();
+
+  // 平安供桌與香火
+  ctx.save();ctx.textAlign='center';ctx.globalAlpha=.92;ctx.font='28px serif';
+  ctx.fillText('🍚',W*.42,H-230);ctx.fillText('🍪',W*.50,H-232);ctx.fillText('🍎',W*.58,H-230);
+  ctx.fillStyle='rgba(93,53,24,.88)';ctx.fillRect(W*.34,H-214,W*.32,9);
+  ctx.font='25px serif';
+  ctx.globalAlpha=.78+.18*Math.sin(t*5.2);ctx.shadowColor='#ffb43b';ctx.shadowBlur=8+4*Math.sin(t*4.5);
+  ctx.fillText('🕯️',W*.50,H-258);ctx.shadowBlur=0;ctx.font='19px serif';
+  for(let si=0;si<4;si++){
+   const sp=t*1.05+si*.72,sx=W*.50+Math.sin(sp)*8+Math.sin(sp*.43)*5,sy=H-282-si*14-(Math.sin(t*.8+si)+1)*2;
+   ctx.globalAlpha=.13+si*.025;ctx.save();ctx.translate(sx,sy);ctx.rotate(Math.sin(sp*.7)*.12);ctx.fillText('〰',0,0);ctx.restore();
+  }
+  ctx.restore();
+
+  // 好兄弟與夜巡角色：半透明、友善，不影響碰撞
+  ctx.save();ctx.textAlign='center';
+  const ghostChars=['👻','👻','🧟‍♂️'];
+  for(let gi=0;gi<3;gi++){
+   const gx=(gi*175+t*(11+gi*1.5))%(W+90)-45;
+   const gy=300+gi*88+Math.sin(t*1.7+gi)*13;
+   ctx.globalAlpha=.34+(gi===0?.08:0);ctx.font=(gi===2?'24px':'30px')+' serif';
+   ctx.shadowColor='#b48cff';ctx.shadowBlur=12;ctx.fillText(ghostChars[gi],gx,gy);
+  }ctx.restore();
+
+  // 鬼火
+  ctx.save();ctx.textAlign='center';ctx.shadowColor='#67fff0';ctx.shadowBlur=16;
+  for(let wi=0;wi<5;wi++){
+   const wx=(40+wi*97+Math.sin(t*.8+wi)*24)%W;
+   const wy=260+((wi*73)%250)+Math.sin(t*2.1+wi)*18;
+   ctx.globalAlpha=.38+.12*Math.sin(t*2+wi);ctx.font='18px serif';ctx.fillText('🔥',wx,wy);
+  }ctx.restore();
+
+  // 中元夜境標語
+  ctx.save();ctx.globalAlpha=.62;ctx.font='900 13px sans-serif';ctx.textAlign='center';
+  ctx.lineWidth=3;ctx.strokeStyle='rgba(29,15,58,.8)';
+  ctx.strokeText('🏮 中元平安夜・好兄弟可以來，詐騙不要來',W/2,240);
+  ctx.fillStyle='#fff0a6';ctx.fillText('🏮 中元平安夜・好兄弟可以來，詐騙不要來',W/2,240);
+  ctx.restore();
+ }
  if(mapIndex===0){
   ctx.globalAlpha=.8;ctx.font='22px serif';
   ctx.fillText('🕊️',((t*28)%(W+80))-40,275+Math.sin(t*2)*12);
@@ -1929,7 +2067,7 @@ function requestFacebookAccount(){
 }
 
 async function end(){
- playing=false;dragging=false;scoreFxLayer.innerHTML='';comboCelebration.style.display='none';clearInterval(timer);tip.style.display='none';
+ stopGhostNightAmbience();playing=false;dragging=false;scoreFxLayer.innerHTML='';comboCelebration.style.display='none';clearInterval(timer);tip.style.display='none';
  checkAchievements(true);
  const finalScore=Number(score)||0;
  const hiddenEnding=finalScore>=5500&&bestCombo>=100&&bossDefeated&&quizAsked>0&&quizCorrect===quizAsked;
@@ -1965,7 +2103,7 @@ async function end(){
   :'';
 
  overlay.innerHTML=`<div class="card"><h1>${hiddenEnding?'英雄結局達成！':'四章巡守完成'}</h1>
- <div class="versionTag">市警局 feat. 市場處｜V13.5</div>
+ <div class="versionTag">中元平安反詐限定版｜V13.6</div>
  ${hiddenBanner}${specialBadge}<div class="rank">${rank}</div>
  <div class="resultMascotWrap ${specialClass}">
   <img class="resultMascot" src="${resultMascot.src}" alt="菜奇鴨與夜奇鴨結算鼓勵圖">
@@ -1973,12 +2111,14 @@ async function end(){
  </div>
  <div style="font-size:52px;font-weight:900;color:#ed6539;margin:8px">${finalScore} 分</div>
  <div style="font-weight:900;color:#7a5b2a">${progressText}</div>
- <div class="stats"><div class="stat">接住好物<br>${goodCaught}</div><div class="stat">最高連擊<br>${bestCombo}</div><div class="stat">幸運寶箱<br>${chestsOpened}</div><div class="stat">道具啟動<br>${powerUpsUsed}</div><div class="stat">擊退 Boss<br>${bossDefeated?'成功':'未完成'}</div><div class="stat">知識答對<br>${quizCorrect}/${quizAsked}</div></div>
+ <div class="stats"><div class="stat">接住好物<br>${goodCaught}</div><div class="stat">中元平安物<br>${ghostFestivalCaught}</div><div class="stat">最高連擊<br>${bestCombo}</div><div class="stat">幸運寶箱<br>${chestsOpened}</div><div class="stat">道具啟動<br>${powerUpsUsed}</div><div class="stat">擊退 Boss<br>${bossDefeated?'成功':'未完成'}</div><div class="stat">知識答對<br>${quizCorrect}/${quizAsked}</div></div>
  ${drawEligibilityBlock}
  ${facebookAccountBlock}
  <p style="font-weight:900;color:#5a4430">${msg}</p>
  <h3 style="color:#60358b;margin:12px 0 5px">🏅 本局成就圖鑑</h3>
  <div class="achievementGrid">${achievementHTML(hiddenEnding)}</div><div style="font-size:11px;color:#777;margin:-4px 0 10px">本區只顯示本局實際達成的成就；分數、答題及隱藏成就均以最終結算結果判定。</div>
+ ${ghostFestivalVisited?'<div class="ghostFestivalResultStamp">🏮 中元限定<br>平安反詐認證</div>':''}
+ <div class="ghostFestivalNote">🏮 中元限定口號：好兄弟可以來，詐騙不要來！</div>
  <div class="rules" style="text-align:center">反詐三步驟：<br><b>先停一下・冷靜查證・撥打 165</b></div>
  <div id="leaderPanel"><h3>🏆 活動本機排行榜</h3><div style="font-size:12px;color:#78684f;font-weight:800;margin:-4px 0 8px">僅顯示2026年8月11日（含）以後，於本裝置完成的前5名成績。</div>${leaderHTML()}</div>
  <button id="again">🔥 再挑戰一次</button>
