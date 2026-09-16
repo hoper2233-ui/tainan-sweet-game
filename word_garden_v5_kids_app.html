@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Word Garden 英文單字花園</title>
+<style>
+:root{--bg:#f7fbef;--card:#fff;--ink:#24352a;--green:#65a85d;--soft:#e7f3d8;--gold:#ffd66b;--bad:#ffdfdf}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;background:linear-gradient(#dff3ff 0 32%,var(--bg) 32%);color:var(--ink)}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:18px 16px 90px}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:24px}.pill{background:#fff;padding:9px 13px;border-radius:20px;box-shadow:0 3px 10px #0001}
+.garden{height:245px;position:relative;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.tree{font-size:118px;filter:drop-shadow(0 7px 5px #0002);transition:.4s}.cloud{position:absolute;font-size:46px;top:20px;left:15px}.sun{position:absolute;font-size:55px;right:18px;top:15px}
+.card{background:var(--card);border-radius:26px;padding:20px;box-shadow:0 8px 25px #4b6b3b18;margin:12px 0}
+h1,h2,p{margin-top:0}.progress{height:13px;background:#edf0e9;border-radius:10px;overflow:hidden}.bar{height:100%;background:var(--green);transition:.3s}
+button{border:0;border-radius:18px;padding:15px;font-size:18px;font-weight:800;background:var(--soft);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.primary{background:var(--green);color:white;width:100%;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{min-height:95px;font-size:38px}.choice span{display:block;font-size:15px;margin-top:4px}
+.speaker{font-size:54px;width:100%;background:#e8f5ff}.letters{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:18px 0}.letter{min-width:52px;background:#fff2bd;font-size:24px}
+.answer{min-height:58px;border:3px dashed #b8c9a6;border-radius:18px;padding:8px;display:flex;gap:7px;justify-content:center;align-items:center}
+.feedback{text-align:center;font-weight:900;min-height:28px;margin-top:10px}.good{color:#34863d}.bad{color:#c34d4d}
+.small{font-size:14px;color:#65736a}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{text-align:center;background:#f4f8ef;border-radius:17px;padding:12px 5px}.num{font-size:25px;font-weight:900}
+.hidden{display:none!important}.nav{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;border-top:1px solid #ddd;padding:9px;display:flex;justify-content:center;gap:9px}.nav button{padding:9px 15px;font-size:14px}
+
+/* v2: child-friendly game layer */
+body{background:linear-gradient(#cfefff 0 30%,#f8f7d8 30% 100%)}
+.app{max-width:560px}
+.card{border:3px solid #ffffffaa}
+.mascot{font-size:68px;text-align:center;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(2deg)}}
+@keyframes pop{50%{transform:scale(1.12)}}
+@keyframes rain{0%{transform:translateY(-10px);opacity:0}100%{transform:translateY(25px);opacity:1}}
+.reward{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:9;font-size:70px;opacity:0}
+.reward.show{animation:reward .75s ease}
+@keyframes reward{0%{opacity:0;transform:scale(.3)}45%{opacity:1;transform:scale(1.25)}100%{opacity:0;transform:scale(1)}}
+.badges{display:flex;gap:7px;flex-wrap:wrap}.badge{background:#fff7d1;padding:8px 10px;border-radius:14px;font-weight:800}
+.mode{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.mode button{min-height:70px}
+.reviewtag{display:inline-block;background:#ffe2a8;border-radius:12px;padding:5px 9px;font-size:13px;font-weight:800;margin-bottom:8px}
+
+/* v3 adventure */
+.world{display:flex;gap:9px;overflow-x:auto;padding:8px 2px 15px;scrollbar-width:none}
+.level{min-width:105px;text-align:center;background:#fff;border-radius:20px;padding:12px 7px;box-shadow:0 5px 12px #0001}
+.level.lock{filter:grayscale(1);opacity:.55}.level .icon{font-size:38px}
+.petrow{display:flex;justify-content:center;gap:12px;font-size:38px;min-height:48px}
+.waterfx{position:absolute;font-size:38px;right:28%;bottom:85px;opacity:0}
+.waterfx.go{animation:water 1s ease}
+@keyframes water{0%{opacity:0;transform:translateY(-35px) rotate(-15deg)}40%{opacity:1}100%{opacity:0;transform:translateY(12px) rotate(10deg)}}
+.daily{background:linear-gradient(135deg,#fff8cf,#fff);border:2px solid #ffe08a}
+.stars{font-size:28px;letter-spacing:4px}.xp{font-weight:900}
+.mapTitle{display:flex;justify-content:space-between;align-items:center}
+
+/* V4 story quest */
+.quest{background:linear-gradient(180deg,#fff,#f7fff1);border:3px solid #d9efc8}
+.speech{background:white;border-radius:20px;padding:13px 16px;position:relative;margin:4px 0 14px;font-weight:800}
+.speech:after{content:"";position:absolute;left:34px;bottom:-10px;border:10px solid transparent;border-top-color:white;border-bottom:0}
+.seedShelf{display:flex;gap:10px;overflow:auto;padding:5px}.seed{min-width:78px;text-align:center;background:#fff7d6;border-radius:16px;padding:9px}.seed b{display:block;font-size:26px}
+.questpath{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.node{text-align:center;border-radius:16px;padding:10px 3px;background:#edf6e6;font-size:12px;font-weight:800}.node .nicon{font-size:28px}.node.active{outline:3px solid #ffd65e;animation:pop 1.3s infinite}.node.done{background:#fff3b9}
+.boss{background:linear-gradient(135deg,#fff0df,#fff);border-color:#ffd0a5}.bossface{font-size:58px;text-align:center}
+.combo{font-size:14px;font-weight:900;background:#fff0a9;padding:5px 9px;border-radius:12px;display:inline-block}
+
+/* V5 polished kid-game art */
+.heroScene{height:250px;position:relative;overflow:hidden;border-radius:28px;background:linear-gradient(#8edcff 0 58%,#a9df77 58% 100%);box-shadow:inset 0 -20px 0 #86c85c}
+.hill{position:absolute;width:260px;height:110px;background:#78c35b;border-radius:50%;bottom:-55px}.h1{left:-60px}.h2{right:-70px;bottom:-35px}
+.artTree{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);width:34px;height:95px;background:#98663f;border-radius:20px}
+.artTree:before,.artTree:after{content:"";position:absolute;background:#55a94e;border-radius:50%}
+.artTree:before{width:120px;height:100px;left:-43px;top:-48px}.artTree:after{width:90px;height:80px;left:-68px;top:-22px}
+.bunny{position:absolute;right:25px;bottom:27px;width:76px;height:88px;background:#fff8ef;border-radius:48% 48% 42% 42%;box-shadow:0 5px 0 #0001}
+.bunny:before,.bunny:after{content:"";position:absolute;width:22px;height:58px;background:#fff8ef;border-radius:50%;top:-39px}
+.bunny:before{left:10px;transform:rotate(-9deg)}.bunny:after{right:10px;transform:rotate(9deg)}
+.face{position:absolute;top:28px;left:18px;font-size:25px;letter-spacing:5px;z-index:2}.scarf{position:absolute;bottom:15px;left:10px;font-size:31px}
+.flowerbed{position:absolute;left:16px;bottom:17px;font-size:32px;letter-spacing:4px}
+.themeGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.themeCard{text-align:center;min-height:105px;background:#fff;border:2px solid #e8efdf}.themeCard .ti{font-size:39px;display:block}.themeCard.selected{outline:4px solid #ffd35d}
+.chest{font-size:65px;text-align:center;cursor:pointer;animation:bob 2s infinite}.chestNote{text-align:center;font-weight:800}
+.wordpic{font-size:62px;display:block}
+</style></head>
+<body><main class="app">
+<div class="top"><div class="brand">🌱 Word Garden</div><div class="pill">💧 <b id="drops">0</b></div></div>
+<section id="home">
+<div class="heroScene"><div class="hill h1"></div><div class="hill h2"></div><div class="artTree" id="artTree"></div><div class="bunny"><div class="face">•ᴗ•</div><div class="scarf">🧣</div></div><div class="flowerbed" id="flowerbed">🌱🌱🌱</div><div id="waterfx" class="waterfx">💦</div></div><div id="tree" class="hidden">🌱</div>
+<div class="mascot">🐰</div><div class="speech" id="speech">嗨！我是米米兔 🐰 今天一起找回花園的單字種子吧！</div><div class="petrow" id="pets"></div>
+<div class="card quest"><h2>🌱 今日種子任務</h2><div class="questpath" id="questpath"></div><p class="small" style="margin:10px 0 0">完成學習 → 得到種子 → 澆水 → 開花！</p></div>
+<div class="card"><h2>🌻 我的種子收藏</h2><div class="seedShelf" id="seedShelf"></div></div><div class="card"><h2>📚 選擇今天的單字世界</h2><div class="themeGrid" id="themeGrid"></div></div>
+<div class="card"><div class="chest" onclick="openChest()" id="chest">🎁</div><div class="chestNote" id="chestNote">完成每日任務，可以開寶箱！</div></div>
+<div class="card daily"><div class="mapTitle"><h2>🔥 每日冒險</h2><b id="streakTop">1 天</b></div><div class="stars" id="dailyStars">☆☆☆☆☆</div><p class="small">每天完成 5 題，連續學習讓花園更熱鬧！</p></div>
+<div class="card"><h2>今天的小任務 🌟</h2><p class="small">每天一點點，讓單字慢慢長大。</p><div class="progress"><div class="bar" id="homebar" style="width:0%"></div></div><p style="margin:10px 0"><b id="done">0</b> / 5 題完成</p><button class="primary" onclick="startGame()">開始今天的學習 ▶</button>
+<div class="mode"><button onclick="startGame()">🌱 新單字</button><button onclick="startReview()">🔁 錯題複習</button></div></div>
+<div class="card"><div class="mapTitle"><h2>🗺️ 單字冒險地圖</h2><span class="xp" id="xp">0 XP</span></div><div class="world" id="world"></div></div>
+<div class="card"><h2>🏅 我的收藏</h2><div class="badges" id="badges"></div></div><div class="card"><h2>家長小報告</h2><div class="stats"><div class="stat"><div class="num" id="learned">0</div><div class="small">學過單字</div></div><div class="stat"><div class="num" id="correctRate">—</div><div class="small">正確率</div></div><div class="stat"><div class="num" id="streak">1</div><div class="small">今日學習</div></div></div></div>
+</section>
+<section id="game" class="hidden">
+<div class="card"><div class="progress"><div class="bar" id="gamebar"></div></div><p class="small" id="qcount"></p><div id="listen">
+<h2>🔊 聽一聽，選出正確圖片</h2><button class="speaker" onclick="speakCurrent()">🔊<span style="display:block;font-size:14px">再聽一次</span></button><div class="grid" id="choices" style="margin-top:14px"></div></div>
+<div id="spell" class="hidden"><h2 id="spellPrompt">把單字拼出來</h2><div class="answer" id="answer"></div><div class="letters" id="letters"></div><button onclick="resetLetters()" style="width:100%">重新排列 ↻</button></div>
+<div class="feedback" id="feedback"></div></div>
+</section>
+<section id="finish" class="hidden"><div class="garden"><div class="sun">☀️</div><div class="tree" id="finishTree">🌳</div></div><div class="card boss" style="text-align:center"><div class="bossface">🐲</div><h2>Boss 複習關完成！</h2><div class="combo" id="combo">COMBO × 0</div><h1>🎉 今天完成了！</h1><p>你幫單字花園澆水了。</p><div class="stats"><div class="stat"><div class="num" id="fCorrect">0</div><div class="small">答對</div></div><div class="stat"><div class="num" id="fDrops">0</div><div class="small">水滴</div></div><div class="stat"><div class="num">5</div><div class="small">完成題數</div></div></div><br><button class="primary" onclick="goHome()">回到花園 🌿</button></div></section>
+<div id="reward" class="reward">⭐</div></main>
+<div class="nav"><button onclick="goHome()">🌳 花園</button><button onclick="startGame()">📚 學習</button><button onclick="showReport()">👨‍👩‍👧 報告</button></div>
+<script>
+const themeWords={
+"動物":[{en:"cat",zh:"貓",emoji:"🐱"},{en:"dog",zh:"狗",emoji:"🐶"},{en:"fish",zh:"魚",emoji:"🐟"},{en:"bird",zh:"鳥",emoji:"🐦"},{en:"duck",zh:"鴨子",emoji:"🦆"},{en:"frog",zh:"青蛙",emoji:"🐸"}],
+"食物":[{en:"apple",zh:"蘋果",emoji:"🍎"},{en:"cake",zh:"蛋糕",emoji:"🍰"},{en:"milk",zh:"牛奶",emoji:"🥛"},{en:"egg",zh:"蛋",emoji:"🥚"},{en:"rice",zh:"飯",emoji:"🍚"},{en:"bread",zh:"麵包",emoji:"🍞"}],
+"交通":[{en:"car",zh:"汽車",emoji:"🚗"},{en:"bus",zh:"公車",emoji:"🚌"},{en:"bike",zh:"腳踏車",emoji:"🚲"},{en:"train",zh:"火車",emoji:"🚆"},{en:"ship",zh:"船",emoji:"🚢"},{en:"taxi",zh:"計程車",emoji:"🚕"}],
+"生活":[{en:"shoe",zh:"鞋子",emoji:"👟"},{en:"book",zh:"書",emoji:"📕"},{en:"bed",zh:"床",emoji:"🛏️"},{en:"cup",zh:"杯子",emoji:"🥤"},{en:"hat",zh:"帽子",emoji:"🧢"},{en:"key",zh:"鑰匙",emoji:"🔑"}],
+"學校":[{en:"pen",zh:"筆",emoji:"🖊️"},{en:"book",zh:"書",emoji:"📘"},{en:"bag",zh:"書包",emoji:"🎒"},{en:"desk",zh:"書桌",emoji:"🪑"},{en:"clock",zh:"時鐘",emoji:"🕐"},{en:"school",zh:"學校",emoji:"🏫"}]
+};let selectedTheme=localStorage.theme||"動物";let words=themeWords[selectedTheme];
+let reviewMode=false, wrong=JSON.parse(localStorage.wrong||"[]"); let q=0, correct=0, drops=Number(localStorage.drops||0), attempts=Number(localStorage.attempts||0), totalCorrect=Number(localStorage.correct||0), current=null, picked=[];
+const $=id=>document.getElementById(id);
+function hideAll(){["home","game","finish"].forEach(x=>$(x).classList.add("hidden"))}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function updateBadges(){let b=[];if(drops>=3)b.push("🌼 小芽新手");if(drops>=8)b.push("🌳 單字園丁");if(drops>=15)b.push("🦋 花園朋友");if(drops>=25)b.push("👑 單字高手");$("badges").innerHTML=b.length?b.map(x=>`<span class="badge">${x}</span>`).join(""):'<span class="small">繼續學習，就會解鎖徽章喔！</span>'}
+function renderThemes(){let icons={"動物":"🐶","食物":"🍎","交通":"🚌","生活":"🏠","學校":"🎒"};$("themeGrid").innerHTML=Object.keys(themeWords).map(k=>`<button class="themeCard ${k===selectedTheme?"selected":""}" onclick="chooseTheme('${k}')"><span class="ti">${icons[k]}</span>${k}</button>`).join("")}
+function chooseTheme(k){selectedTheme=k;localStorage.theme=k;words=themeWords[k];renderThemes();$("speech").textContent=`今天要去「${k}世界」冒險！準備好了嗎？`}
+function openChest(){if(Number(localStorage.todayDone||0)>=5){if(localStorage.chestDate===new Date().toISOString().slice(0,10)){$("chestNote").textContent="今天的寶箱已經領過囉！"}else{drops+=3;localStorage.chestDate=new Date().toISOString().slice(0,10);$("chest").textContent="✨";$("chestNote").textContent="得到 3 滴魔法水！💧💧💧";save();celebrate();updateHome()}}else{$("chestNote").textContent="再完成今天 5 題，就能打開寶箱！"}}
+function renderQuest(){let d=Math.min(5,Number(localStorage.todayDone||0));let nodes=[["🖼️","看圖認字"],["🔊","聽音辨字"],["🔤","拼字挑戰"],["🐲","Boss複習"]];$("questpath").innerHTML=nodes.map((n,i)=>`<div class="node ${d>=i+1?"done":(Math.min(3,d)===i?"active":"")}"><div class="nicon">${d>=i+1?"✅":n[0]}</div>${n[1]}</div>`).join("");let seeds=Math.floor(drops/2);let flowers=["🌱","🌷","🌻","🌼","🌹","🪻"];$("seedShelf").innerHTML=flowers.map((f,i)=>`<div class="seed"><b>${seeds>i?f:"🔒"}</b>${seeds>i?"已解鎖":"種子 "+(i+1)}</div>`).join("");let sp=d===0?"嗨！我是米米兔 🐰 今天一起找回花園的單字種子吧！":d<5?`太棒了！今天已完成 ${d} 題，再加油一下！`:"今天的花園任務完成啦！🌸";$("speech").textContent=sp}
+function renderWorld(){let learned=Number(localStorage.learned||0);let lv=Math.max(1,Math.floor(drops/5)+1);let zones=[["🌼","芽芽村",1],["🌳","森林谷",2],["🐝","蜜蜂原野",3],["🏰","單字城堡",4],["🌈","彩虹島",5]];$("world").innerHTML=zones.map(z=>`<div class="level ${lv<z[2]?"lock":""}"><div class="icon">${lv<z[2]?"🔒":z[0]}</div><b>${z[1]}</b><div class="small">Lv.${z[2]}</div></div>`).join("");$("xp").textContent=(drops*10)+" XP";$("pets").innerHTML=(drops>=8?"🦋 ":"")+(drops>=15?"🐝 ":"")+(drops>=25?"🐿️":"");$("dailyStars").textContent="★".repeat(Math.min(5,Number(localStorage.todayDone||0)))+"☆".repeat(5-Math.min(5,Number(localStorage.todayDone||0)));$("streakTop").textContent=(Number(localStorage.streakDays||1))+" 天";renderQuest();renderThemes();let d=Math.min(5,Number(localStorage.todayDone||0));$("flowerbed").textContent=d<2?"🌱🌱🌱":d<4?"🌱🌷🌱":"🌷🌻🌼";if(localStorage.chestDate===new Date().toISOString().slice(0,10)){$("chest").textContent="✨";$("chestNote").textContent="今天的寶箱已領取！"}}
+function waterTree(){let w=$("waterfx");if(!w)return;w.classList.remove("go");void w.offsetWidth;w.classList.add("go")}
+function celebrate(){let r=$("reward");r.classList.remove("show");void r.offsetWidth;r.classList.add("show")}
+function updateHome(){ $("drops").textContent=drops; let d=Math.min(5,Number(localStorage.todayDone||0));$("done").textContent=d;$("homebar").style.width=(d/5*100)+"%";$("learned").textContent=Math.min(words.length,Number(localStorage.learned||0));$("correctRate").textContent=attempts?Math.round(totalCorrect/attempts*100)+"%":"—";let stage=d<2?"🌱":d<4?"🌿":"🌳";$("tree").textContent=stage;updateBadges();renderWorld()}
+function goHome(){hideAll();$("home").classList.remove("hidden");updateHome()}
+function startGame(){reviewMode=false;q=0;correct=0;hideAll();$("game").classList.remove("hidden");next()}
+function startReview(){let db=JSON.parse(localStorage.reviewDB||"{}");let due=Object.keys(db).filter(k=>db[k].due<=Date.now());if(due.length)wrong=[...new Set([...due,...wrong])];reviewMode=true;q=0;correct=0;hideAll();$("game").classList.remove("hidden");next()}
+function next(){let limit=reviewMode?Math.max(1,Math.min(5,wrong.length)):5;if(q>=limit)return finish();$("feedback").textContent="";$("listen").classList.remove("hidden");$("spell").classList.add("hidden");let pool=shuffle(words);current=reviewMode && wrong.length ? Object.values(themeWords).flat().find(w=>w.en===wrong[q%wrong.length])||pool[q%pool.length] : (q===4 && wrong.length ? Object.values(themeWords).flat().find(w=>w.en===wrong[0])||pool[0] : pool[q%pool.length]);$("qcount").innerHTML=(reviewMode?`<span class="reviewtag">🔁 錯題再見面</span><br>`:"")+`第 ${q+1} 題 / ${reviewMode?Math.max(1,Math.min(5,wrong.length)):5}`;$("gamebar").style.width=(q/5*100)+"%";renderChoices();setTimeout(speakCurrent,250)}
+function renderChoices(){let opts=shuffle([current,...shuffle(words.filter(w=>w!==current)).slice(0,3)]);$("choices").innerHTML=opts.map(w=>`<button class="choice" onclick="choose('${w.en}')"><span class="wordpic">${w.emoji}</span><span>${w.zh}</span></button>`).join("")}
+function speakCurrent(){if("speechSynthesis" in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(current.en);u.lang="en-US";u.rate=.72;speechSynthesis.speak(u)}}
+function choose(en){attempts++;if(en===current.en){correct++;totalCorrect++;drops++;wrong=wrong.filter(x=>x!==current.en);localStorage.wrong=JSON.stringify(wrong);markReview(current.en,true);celebrate();waterTree();$("feedback").innerHTML='<span class="good">答對了！找到一滴魔法水 💧 +1</span>';setTimeout(startSpell,600)}else{if(!wrong.includes(current.en))wrong.push(current.en);localStorage.wrong=JSON.stringify(wrong);markReview(current.en,false);$("feedback").innerHTML='<span class="bad">再聽一次看看 🔊</span>';speakCurrent()}save()}
+function startSpell(){$("listen").classList.add("hidden");$("spell").classList.remove("hidden");$("feedback").textContent="";$("spellPrompt").textContent=`🔤 ${current.zh}，把英文拼出來`;picked=[];resetLetters()}
+function resetLetters(){picked=[];$("answer").innerHTML="";let chars=shuffle(current.en.split(""));$("letters").innerHTML=chars.map((c,i)=>`<button class="letter" data-c="${c}" onclick="pick(this)">${c.toUpperCase()}</button>`).join("")}
+function pick(btn){picked.push(btn.dataset.c);btn.disabled=true;btn.style.opacity=.35;$("answer").innerHTML=picked.map(c=>`<b>${c.toUpperCase()}</b>`).join(" ");if(picked.length===current.en.length){attempts++;if(picked.join("")===current.en){correct++;totalCorrect++;drops++;wrong=wrong.filter(x=>x!==current.en);localStorage.wrong=JSON.stringify(wrong);markReview(current.en,true);celebrate();waterTree();$("feedback").innerHTML='<span class="good">拼對了！單字種子發芽啦 🌱✨</span>';q++;localStorage.todayDone=Math.min(5,q);localStorage.learned=Math.max(Number(localStorage.learned||0),q);save();setTimeout(next,700)}else{if(!wrong.includes(current.en))wrong.push(current.en);localStorage.wrong=JSON.stringify(wrong);markReview(current.en,false);$("feedback").innerHTML='<span class="bad">差一點，再排一次！</span>';setTimeout(resetLetters,650);save()}}}
+function markReview(en,ok){let db=JSON.parse(localStorage.reviewDB||"{}");let r=db[en]||{box:0,due:Date.now()};if(ok){r.box=Math.min(5,r.box+1);let days=[0,1,2,4,7,14][r.box];r.due=Date.now()+days*86400000}else{r.box=0;r.due=Date.now()+5*60000}db[en]=r;localStorage.reviewDB=JSON.stringify(db)}
+function save(){localStorage.drops=drops;localStorage.attempts=attempts;localStorage.correct=totalCorrect;$("drops").textContent=drops}
+function finish(){hideAll();$("finish").classList.remove("hidden");$("fCorrect").textContent=correct;$("fDrops").textContent=drops;$("combo").textContent="COMBO × "+correct;$("finishTree").textContent=drops<3?"🌱":drops<8?"🌿":"🌳";localStorage.todayDone=5;let today=new Date().toISOString().slice(0,10),last=localStorage.lastFinish;if(last!==today){let y=new Date(Date.now()-86400000).toISOString().slice(0,10);localStorage.streakDays=(last===y?Number(localStorage.streakDays||1)+1:1);localStorage.lastFinish=today}save()}
+function showReport(){goHome();document.querySelector("#home .card:last-child").scrollIntoView({behavior:"smooth"})}
+updateHome();
+</script></body></html>
